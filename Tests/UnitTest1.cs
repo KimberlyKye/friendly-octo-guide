@@ -18,6 +18,7 @@ public class Tests
 
         var result = _domainTestClass.TestMethod();
 
-        Assert.AreEqual(expectedValue, result);
+        Assert.That(result, Is.EqualTo(expectedValue));
     }
+
 }
