@@ -1,11 +1,10 @@
 using System.Text.RegularExpressions;
-using Domain.Defaults;
 
-namespace Domain.Models;
+namespace Domain.ValueObjects;
 /// <summary>
 /// Полное имя пользователя.
 /// </summary>
-public class FullName : Entity<int>
+public class FullName : IValueObject
 {
     /// <summary>
     /// Имя.
@@ -76,7 +75,7 @@ public class FullName : Entity<int>
     /// <summary>
     /// Геттеры.
     /// </summary>
-    public string FirstName { get { return _firstName; } }
+    public string FirstName { get { return _firstName; } } // можно стрелочную запись
     public string LastName { get { return _lastName; } }
 
     /// <summary>

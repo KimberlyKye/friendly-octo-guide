@@ -1,6 +1,6 @@
-using Domain.Models;
+using Domain.ValueObjects;
 
-namespace Tests.Domain.Modelss;
+namespace Tests.Domain.ValueObjects;
 public class FullNameTests
 {
     [Test]
