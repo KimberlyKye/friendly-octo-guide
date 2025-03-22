@@ -1,3 +1,4 @@
+using Domain.ValueObjects.Base;
 using System.Text.RegularExpressions;
 
 namespace Domain.ValueObjects;

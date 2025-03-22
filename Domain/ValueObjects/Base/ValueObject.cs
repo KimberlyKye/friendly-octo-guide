@@ -1,4 +1,4 @@
-namespace Domain.ValueObjects;
+namespace Domain.ValueObjects.Base;
 
 /// <summary>
 /// Общий класс для терминов нашей экспертной области.
