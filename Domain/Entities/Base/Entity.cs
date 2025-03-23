@@ -7,7 +7,6 @@ namespace Domain.Entities.Base;
 public abstract class Entity<T> : IEntity<T>
 {
     public T Id { get; }
-
     protected Entity(T id)
     {
         Id = id;
