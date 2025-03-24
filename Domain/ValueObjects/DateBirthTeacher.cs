@@ -1,48 +1,97 @@
 ﻿using Domain.ValueObjects.Base;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ValueObjects
 {
     /// <summary>
-    /// День рождения преподавателя.
+    /// Дата рождения преподавателя.
+    /// Гарантирует валидность даты (возраст от 18 до 100 лет).
     /// </summary>
-    public class DateBirthTeacher : IValueObject
+    public readonly struct TeacherBirthDate : IValueObject, IEquatable<TeacherBirthDate>
     {
-        /// <summary>
-        /// День рождения.
-        /// </summary>
-        private DateOnly _date;
+        private readonly DateOnly _date;
+        private const int MinTeacherAge = 18;
+        private const int MaxTeacherAge = 100;
 
         /// <summary>
-        ///  Конструктор.
-        /// </summary>
-        /// <param name="date">День рождения.</param>
-        /// <exception cref="ArgumentException"></exception>
-        public DateBirthTeacher(DateOnly date)
-        {
-            // Получаем текущую дату
-            var today = DateOnly.FromDateTime(DateTime.Now);
-
-            // Проверка на минимальный возраст (8 лет)
-            if (date > today.AddYears(-18))
-            {
-                throw new ArgumentException("Возраст преподавателя не может быть меньше 18 лет", nameof(date));
-            }
-
-            // Проверка на максимальный возраст (100 лет)
-            if (date < today.AddYears(-100))
-            {
-                throw new ArgumentException("Возраст студента не может быть больше 100 лет", nameof(date));
-            }
-            _date = date;
-        }
-        // <summary>
-        /// Геттеры.
+        /// Дата рождения
         /// </summary>
         public DateOnly Date => _date;
+
+        /// <summary>
+        /// Текущий возраст преподавателя
+        /// </summary>
+        public int Age
+        {
+            get
+            {
+                var today = DateOnly.FromDateTime(DateTime.Now);
+                var age = today.Year - _date.Year;
+                if (_date > today.AddYears(-age)) age--;
+                return age;
+            }
+        }
+
+        /// <summary>
+        /// Создает новую дату рождения преподавателя
+        /// </summary>
+        /// <param name="date">Дата рождения</param>
+        /// <exception cref="ArgumentException">
+        /// Возникает если возраст меньше 18 или больше 100 лет
+        /// </exception>
+        public TeacherBirthDate(DateOnly date)
+        {
+            var today = DateOnly.FromDateTime(DateTime.Now);
+
+            if (date > today.AddYears(-MinTeacherAge))
+                throw new ArgumentException(
+                    $"Преподаватель должен быть старше {MinTeacherAge} лет",
+                    nameof(date));
+
+            if (date < today.AddYears(-MaxTeacherAge))
+                throw new ArgumentException(
+                    $"Преподаватель должен быть моложе {MaxTeacherAge} лет",
+                    nameof(date));
+
+            _date = date;
+        }
+
+        /// <summary>
+        /// Проверяет валидность даты рождения для преподавателя
+        /// </summary>
+        public static bool IsValid(DateOnly date)
+        {
+            var today = DateOnly.FromDateTime(DateTime.Now);
+            return date <= today.AddYears(-MinTeacherAge) &&
+                   date >= today.AddYears(-MaxTeacherAge);
+        }
+
+        /// <summary>
+        /// Возвращает строковое представление даты в формате "dd.MM.yyyy"
+        /// </summary>
+        public override string ToString() => _date.ToString("dd.MM.yyyy");
+
+        /// <summary>
+        /// Преобразует в DateTime (для совместимости с устаревшими системами)
+        /// </summary>
+        public DateTime ToDateTime() => _date.ToDateTime(TimeOnly.MinValue);
+
+        // Реализация IEquatable<T>
+        public bool Equals(TeacherBirthDate other) => _date == other._date;
+        public override bool Equals(object? obj) => obj is TeacherBirthDate other && Equals(other);
+        public override int GetHashCode() => _date.GetHashCode();
+
+        public static bool operator ==(TeacherBirthDate left, TeacherBirthDate right) => left.Equals(right);
+        public static bool operator !=(TeacherBirthDate left, TeacherBirthDate right) => !(left == right);
+
+        /// <summary>
+        /// Неявное преобразование в DateOnly
+        /// </summary>
+        public static implicit operator DateOnly(TeacherBirthDate date) => date._date;
+
+        /// <summary>
+        /// Явное преобразование из DateOnly с проверкой возраста
+        /// </summary>
+        public static explicit operator TeacherBirthDate(DateOnly date) => new(date);
     }
 }
