@@ -2,10 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Domain.ValueObjects;
 using Domain.ValueObjects.Base;
 
-namespace ValueObjects
+namespace Domain.ValueObjects
 {
     public class Person : IValueObject
     {
@@ -13,7 +12,7 @@ namespace ValueObjects
         public FullName Name { get; private set; }
         public PhoneNumber PhoneNumber { get; private set; }
         public Email Email { get; private set; }
-        public DateBirth DateOfBirth { get; private set; }
+        public BirthDate DateOfBirth { get; private set; }
         public List<Course> Courses { get; private set; }
 
         public Person(int id, FullName name, PhoneNumber phoneNumber, Email email)
@@ -40,7 +39,7 @@ namespace ValueObjects
             return Email;
         }
 
-        public DateBirth GetDateOfBirth()
+        public BirthDate GetDateOfBirth()
         {
             return DateOfBirth;
         }
@@ -77,7 +76,7 @@ namespace ValueObjects
         }
 
 
-        public void SetDateOfBirth(DateBirth dateOfBirth)
+        public void SetDateOfBirth(BirthDate dateOfBirth)
         {
             DateOfBirth = dateOfBirth;
         }

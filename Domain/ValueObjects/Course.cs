@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Domain.ValueObjects.Base;
 
-namespace ValueObjects
+namespace Domain.ValueObjects
 {
     public class Course : IValueObject
     {

@@ -1,7 +1,7 @@
 ﻿using Domain.ValueObjects.Base;
 using System;
 
-namespace ValueObjects
+namespace Domain.ValueObjects
 {
     /// <summary>
     /// Неизменяемый временной период с фиксированными начальной и конечной датами.

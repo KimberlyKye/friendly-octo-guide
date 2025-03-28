@@ -2,7 +2,7 @@
 
 namespace Tests.Domain.ValueObjects
 {
-    class FileName
+    class FullNameTests
     {
         [Test]
         public void FullName_Constructor_ThrowsArgumentNullException_WhenFirstNameIsNull()

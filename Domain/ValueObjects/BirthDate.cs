@@ -6,12 +6,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace ValueObjects
+namespace Domain.ValueObjects
 {
     /// <summary>
     /// День рождения.
     /// </summary>
-    public class DateBirth : IValueObject
+    public class BirthDate : IValueObject
     {
         /// <summary>
         /// День рождения.
@@ -23,7 +23,7 @@ namespace ValueObjects
         /// </summary>
         /// <param name="date">День рождения.</param>
         /// <exception cref="ArgumentException"></exception>
-        public DateBirth(DateOnly date)
+        public BirthDate(DateOnly date)
         {
             // Получаем текущую дату
             var today = DateOnly.FromDateTime(DateTime.Now);

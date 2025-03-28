@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Domain.ValueObjects;
 
 
-namespace ValueObjects
+namespace Domain.ValueObjects
 {
     public class Teacher : Person
     {

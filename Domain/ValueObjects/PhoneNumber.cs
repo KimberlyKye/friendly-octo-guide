@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ValueObjects
+namespace Domain.ValueObjects
 {
     /// <summary>
     /// Класс для работы с номерами мобильных телефонов российских операторов.

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ValueObjects
+namespace Domain.ValueObjects
 {
     /// <summary>
     /// Название курса.
