@@ -57,7 +57,7 @@ namespace Tests.Domain.ValueObjects
         {
             var expectedName = "FirstName LastName";
             var fullName = new FullName("FirstName", "LastName");
-            Assert.That(fullName.GetFullName(), Is.EqualTo(expectedName));
+            Assert.That(fullName.Name, Is.EqualTo(expectedName));
         }
     }
 }

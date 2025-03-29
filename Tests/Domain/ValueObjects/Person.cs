@@ -55,7 +55,7 @@ namespace Tests.Domain.ValueObjects
             _person.SetDateOfBirth(expectedDateOfBirth);
             var actualDateOfBirth = _person.GetDateOfBirth();
 
-            Assert.AreEqual(expectedDateOfBirth, actualDateOfBirth);
+            Assert.That(actualDateOfBirth, Is.EqualTo(expectedDateOfBirth));
         }
 
         [Test]
@@ -64,7 +64,7 @@ namespace Tests.Domain.ValueObjects
             var expectedCourses = new List<Course>();
             var actualCourses = _person.GetCourses();
 
-            Assert.AreEqual(expectedCourses, actualCourses);
+            Assert.That(actualCourses, Is.EqualTo(expectedCourses));
         }
 
         [Test]
@@ -91,7 +91,7 @@ namespace Tests.Domain.ValueObjects
             _person.SetPhoneNumber(expectedPhoneNumber);
             var actualPhoneNumber = _person.GetPhoneNumber();
 
-            Assert.AreEqual(expectedPhoneNumber, actualPhoneNumber);
+            Assert.That(actualPhoneNumber, Is.EqualTo(expectedPhoneNumber));
         }
 
         [Test]
@@ -101,7 +101,7 @@ namespace Tests.Domain.ValueObjects
             _person.SetEmail(expectedEmail);
             var actualEmail = _person.GetEmail();
 
-            Assert.AreEqual(expectedEmail, actualEmail);
+            Assert.That(actualEmail, Is.EqualTo(expectedEmail));
         }
 
         [Test]
@@ -111,7 +111,7 @@ namespace Tests.Domain.ValueObjects
             _person.SetDateOfBirth(expectedDateOfBirth);
             var actualDateOfBirth = _person.GetDateOfBirth();
 
-            Assert.AreEqual(expectedDateOfBirth, actualDateOfBirth);
+            Assert.That(actualDateOfBirth, Is.EqualTo(expectedDateOfBirth));
         }
     }
 

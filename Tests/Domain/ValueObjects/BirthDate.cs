@@ -37,7 +37,7 @@ namespace Tests.Domain.ValueObjects
             var date = DateOnly.FromDateTime(DateTime.Now.AddYears(-10));
             var dateBirth = new BirthDate(date);
 
-            Assert.AreEqual(date, dateBirth.Date);
+            Assert.That(dateBirth.Date, Is.EqualTo(date));
         }
     }
 

@@ -11,7 +11,7 @@ namespace Domain.ValueObjects
     /// <summary>
     /// День рождения.
     /// </summary>
-    public class BirthDate : IValueObject
+    public class BirthDate : ValueObject<DateOnly>
     {
         /// <summary>
         /// День рождения.
@@ -23,7 +23,7 @@ namespace Domain.ValueObjects
         /// </summary>
         /// <param name="date">День рождения.</param>
         /// <exception cref="ArgumentException"></exception>
-        public BirthDate(DateOnly date)
+        public BirthDate(DateOnly date) : base(date)
         {
             // Получаем текущую дату
             var today = DateOnly.FromDateTime(DateTime.Now);

@@ -8,11 +8,11 @@ namespace Domain.Entities.Base
 {
     public class Person : Entity<int>
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Email { get; set; }
-        public DateTime BirthDate { get; set; }
-        public RoleEnum Role { get; set; }
+        public int Id { get; private set; }
+        public string Name { get; private set; }
+        public string Email { get; private set; }
+        public DateTime BirthDate { get; private set; }
+        public RoleEnum Role { get; private set; }
 
         protected Person(int id, string name, string email, DateTime birthDate, RoleEnum role) : base(id)
         {

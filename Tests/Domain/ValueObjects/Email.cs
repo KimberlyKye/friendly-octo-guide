@@ -40,7 +40,7 @@ namespace Tests.Domain.ValueObjects
             var email = "valid-email@example.com";
             var emailObject = new Email(email);
 
-            Assert.AreEqual(email, emailObject.Value);
+            Assert.That(emailObject.Value, Is.EqualTo(email));
         }
     }
 

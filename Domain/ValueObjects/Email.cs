@@ -4,13 +4,14 @@ using System.Linq;
 using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
+using Domain.ValueObjects.Base;
 
 namespace Domain.ValueObjects
 {
     /// <summary>
     /// Электронная почта.
     /// </summary>
-    public class Email
+    public class Email : ValueObject<string>
     {
         /// <summary>
         /// Электронная почта.
@@ -23,7 +24,7 @@ namespace Domain.ValueObjects
         /// <param name="email">Электронная почта.</param>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="ArgumentException"></exception>
-        public Email(string email)
+        public Email(string email) : base(email)
         {
             //Проверка на пустое значение.
             if (string.IsNullOrWhiteSpace(email))
