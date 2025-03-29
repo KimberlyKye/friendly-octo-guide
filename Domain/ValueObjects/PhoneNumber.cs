@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Domain.ValueObjects.Base;
 
-namespace ValueObjects
+namespace Domain.ValueObjects
 {
     /// <summary>
     /// Класс для работы с номерами мобильных телефонов российских операторов.
     /// Обеспечивает валидацию и нормализацию номеров.
     /// </summary>
-    public class PhoneNumber
+    public class PhoneNumber : ValueObject<string>
     {
         /// <summary>
         /// Нормализованный номер телефона в формате +7XXXXXXXXXX
@@ -29,7 +30,7 @@ namespace ValueObjects
         /// <param name="phoneNumber">Номер телефона в произвольном формате</param>
         /// <exception cref="ArgumentNullException">Выбрасывается, если передан пустой номер</exception>
         /// <exception cref="ArgumentException">Выбрасывается, если номер не соответствует формату российских мобильных номеров</exception>
-        public PhoneNumber(string phoneNumber)
+        public PhoneNumber(string phoneNumber) : base(phoneNumber)
         {
             // Проверка на null или пустую строку
             if (string.IsNullOrWhiteSpace(phoneNumber))

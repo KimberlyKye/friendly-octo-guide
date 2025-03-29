@@ -19,6 +19,18 @@ namespace Domain.ValueObjects
         private string _lastName;
 
         /// <summary>
+        /// Геттеры.
+        /// </summary>
+        public string FirstName => _firstName;
+        public string LastName => _lastName;
+
+        /// <summary>
+        /// Метод получения полного имени.
+        /// </summary>
+        /// <returns></returns>
+        public string Name => FirstName + " " + LastName;
+
+        /// <summary>
         ///  Конструктор.
         /// </summary>
         /// <param name="firstName">Имя.</param>
@@ -74,19 +86,6 @@ namespace Domain.ValueObjects
             _lastName = lastName;
         }
 
-        /// <summary>
-        /// Геттеры.
-        /// </summary>
-        public string FirstName { get { return _firstName; } } // можно стрелочную запись
-        public string LastName { get { return _lastName; } }
 
-        /// <summary>
-        /// Метод получения полного имени.
-        /// </summary>
-        /// <returns></returns>
-        public string GetFullName()
-        {
-            return FirstName + " " + LastName;
-        }
     }
 }
