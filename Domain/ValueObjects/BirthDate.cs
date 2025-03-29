@@ -28,10 +28,10 @@ namespace Domain.ValueObjects
             // Получаем текущую дату
             var today = DateOnly.FromDateTime(DateTime.Now);
 
-            // Проверка на минимальный возраст (8 лет)
-            if (date > today.AddYears(-8))
+            // Проверка на минимальный возраст (18 лет)
+            if (date > today.AddYears(-18))
             {
-                throw new ArgumentException("Возраст не может быть меньше 8 лет", nameof(date));
+                throw new ArgumentException("Возраст не может быть меньше 18 лет", nameof(date));
             }
 
             // Проверка на максимальный возраст (130 лет)
