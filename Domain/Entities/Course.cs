@@ -1,7 +1,7 @@
 ﻿using Domain.Entities.Base;
-using ValueObjects;
+using Domain.ValueObjects;
 
-namespace Entities.Base
+namespace Entities
 {
     public class Course : Entity<int>
     {
@@ -19,7 +19,7 @@ namespace Entities.Base
 
         private List<Student> _students;
         //public Course(int id) : base(id);
-        public Course(int id,Teacher teacher,
+        public Course(int id, Teacher teacher,
                       CourseName courseName,
                       string description,
                       Duration duration,

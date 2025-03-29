@@ -5,11 +5,10 @@ using System.Threading.Tasks;
 using Domain.Entities.Base;
 using Domain.ValueObjects;
 
-namespace Domain.Entities
+namespace Entities
 {
     public class Person : Entity<int>
     {
-        // public int Id { get; }
         public FullName Name { get; }
         public PhoneNumber PhoneNumber { get; private set; }
         public Email Email { get; private set; }

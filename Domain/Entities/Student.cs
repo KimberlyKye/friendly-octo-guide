@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Domain.ValueObjects;
 
-namespace Domain.Entities
+namespace Entities
 {
     public class Student : Person
     {

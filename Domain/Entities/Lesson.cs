@@ -1,9 +1,9 @@
 ﻿using Domain.Entities.Base;
-using ValueObjects;
+using Domain.ValueObjects;
 
-namespace Entities.Base
+namespace Entities
 {
-    public class Lesson : Entity<Lesson>
+    public class Lesson : Entity<int>
     {
 
         private LessonName _lessonName;
@@ -12,15 +12,15 @@ namespace Entities.Base
 
         private DateTime _date;
 
-        private ValueObjects.File _material;
+        private Domain.ValueObjects.File _material;
 
         private List<HomeTask> _homeTasks;
 
-        public Lesson(LessonName lessonName,
+        public Lesson(int id,LessonName lessonName,
                       string description,
                       DateTime date,
-                      ValueObjects.File material,
-                      List<HomeTask> homeTasks)
+                      Domain.ValueObjects.File material,
+                      List<HomeTask> homeTasks) : base(id)
         {
             _lessonName = lessonName;
             _description = description;
@@ -42,7 +42,7 @@ namespace Entities.Base
         public (LessonName lessonName,
                 string description,
                 DateTime date,
-                ValueObjects.File material,
+                Domain.ValueObjects.File material,
                 IReadOnlyList<HomeTask> homeTasks) GetLesson()
         {
             return (_lessonName,

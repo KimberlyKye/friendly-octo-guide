@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Entities.Base
+namespace Entities
 {
     public class HomeWork
     {
