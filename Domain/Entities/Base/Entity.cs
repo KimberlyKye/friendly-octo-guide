@@ -11,9 +11,4 @@ public abstract class Entity<T> : IEntity<T>
     {
         Id = id;
     }
-
-    // protected Entity(Entity<T> entity)
-    // {
-    //     Id = entity.Id;
-    // }
 }
