@@ -10,7 +10,7 @@ namespace ValueObjects
     /// <summary>
     /// Название курса.
     /// </summary>
-    public class CourseName : IValueObject
+    public class CourseName : ValueObject<string>
     {
         /// <summary>
         /// Название курса.
@@ -23,7 +23,7 @@ namespace ValueObjects
         /// <param name="firstName">Название курса.</param>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="ArgumentException"></exception>
-        public CourseName(string name)
+        public CourseName(string name) : base(name)
         {            
             //Проверка на пустое значение.           
             if (string.IsNullOrEmpty(name))

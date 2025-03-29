@@ -7,7 +7,7 @@ namespace ValueObjects
     /// Дата рождения студента.
     /// Гарантирует валидность даты (возраст от 8 до 100 лет).
     /// </summary>
-    public readonly struct StudentBirthDate : IValueObject, IEquatable<StudentBirthDate>
+    public readonly struct StudentBirthDate : ValueObject<DateOnly>, IEquatable<StudentBirthDate>
     {
         private readonly DateOnly _date;
         private const int MinStudentAge = 8;

@@ -3,7 +3,7 @@ using ValueObjects;
 
 namespace Entities.Base
 {
-    public class Course : Entity<Course>
+    public class Course : Entity<int>
     {
         private int _state;
 
@@ -15,29 +15,29 @@ namespace Entities.Base
 
         private Duration _duration;
 
-        private List<Lesson> _lessons;
+        public List<Lesson> Lessons { get; }
 
         private List<Student> _students;
-
-        public Course(Teacher teacher,
+        //public Course(int id) : base(id);
+        public Course(int id,Teacher teacher,
                       CourseName courseName,
                       string description,
                       Duration duration,
                       List<Lesson> lessons,
-                      List<Student> students)
+                      List<Student> students) : base(id)
         {
             _teacher = teacher;
             _courseName = courseName;
             _description = description;
             _duration = duration;
-            _lessons = lessons;
+            Lessons = lessons;
             _students = students;
         }
 
-        public List<Lesson> GetLessonList()
-        {
-            return _lessons;
-        }
+        //public List<Lesson> GetLessonList()
+        //{
+        //    return _lessons;
+        //}
 
         public Teacher GetTeacherInfo()
         {
@@ -53,15 +53,15 @@ namespace Entities.Base
         {
             return _description;
         }
-        public (Teacher teacher, CourseName courseName, string description, Duration duration, IReadOnlyList<Lesson> lessons, IReadOnlyList<Student> students) GetCourse()
-        {
-            return (_teacher,
-                    _courseName,
-                    _description,
-                    _duration,
-                    _lessons.AsReadOnly(),
-                    _students.AsReadOnly());
-        }
+        //public (Teacher teacher, CourseName courseName, string description, Duration duration, IReadOnlyList<Lesson> lessons, IReadOnlyList<Student> students) GetCourse()
+        //{
+        //    return (_teacher,
+        //            _courseName,
+        //            _description,
+        //            _duration,
+        //            _lessons.AsReadOnly(),
+        //            _students.AsReadOnly());
+        //}
 
     }
 }
