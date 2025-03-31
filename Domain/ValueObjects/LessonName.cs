@@ -15,8 +15,8 @@ namespace Domain.ValueObjects
     /// </remarks>
     public class LessonName : ValueObject<string>
     {
-        private const int MinLength = 2;
-        private const int MaxLength = 100;
+        public const int MinLength = 2;
+        public const int MaxLength = 100;
         private static readonly Regex ValidCharsRegex = new(@"^[\p{L}\d\s\-,.:;!?()]+$", RegexOptions.Compiled);
         private string _name;
 

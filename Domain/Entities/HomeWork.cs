@@ -1,7 +1,8 @@
 ﻿using Domain.Entities.Base;
 using Domain.ValueObjects;
-using System;
 using ValueObjects;
+using File = Domain.ValueObjects.File;
+
 
 namespace Entities
 {
@@ -17,7 +18,7 @@ namespace Entities
         private readonly Student _student;
         private Score _score;
         private readonly TaskCompletionDate _completionDate;
-        private Domain.ValueObjects.File? _material;
+        private File? _material;
         private string? _studentComment;
         private string? _teacherComment;
         private readonly HomeTask _homeTask;
@@ -72,7 +73,7 @@ namespace Entities
         /// <summary>
         /// Прикрепленный материал (может быть null)
         /// </summary>
-        public Domain.ValueObjects.File? Material
+        public File? Material
         {
             get => _material;
             set => _material = value;

@@ -1,6 +1,7 @@
 ﻿using Domain.Entities.Base;
 using Domain.ValueObjects;
 using System.Collections.ObjectModel;
+using File = Domain.ValueObjects.File;
 
 namespace Entities
 {
@@ -16,7 +17,7 @@ namespace Entities
         private readonly LessonName _lessonName;
         private string _description;
         private DateTime _date;
-        private Domain.ValueObjects.File? _material;
+        private File? _material;
         private readonly List<HomeTask> _homeTasks = new();
 
         /// <summary>
@@ -35,7 +36,7 @@ namespace Entities
                      LessonName lessonName,
                      string description,
                      DateTime date,
-                     Domain.ValueObjects.File? material = null,
+                     File? material = null,
                      IEnumerable<HomeTask>? homeTasks = null) : base(id)
         {
             _lessonName = lessonName ?? throw new ArgumentNullException(nameof(lessonName));
@@ -78,7 +79,7 @@ namespace Entities
         /// <summary>
         /// Учебный материал (может быть null)
         /// </summary>
-        public Domain.ValueObjects.File? Material
+        public File? Material
         {
             get => _material;
             set => _material = value;

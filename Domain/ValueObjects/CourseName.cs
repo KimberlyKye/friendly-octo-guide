@@ -42,6 +42,8 @@ namespace Domain.ValueObjects
         /// <summary>
         /// Геттеры.
         /// </summary>
-        public string Name => _name;        
+        public string Name => _name;
+        public static implicit operator string(CourseName courseName) => courseName._name;
+
     }
 }
