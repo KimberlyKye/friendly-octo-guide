@@ -22,7 +22,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Domain\Domain.csproj" />
+    <ProjectReference Include="..\Domain\ValueObjects\ValueObjects.csproj" />
+    <ProjectReference Include="..\Domain\Entities\Entities.csproj" />
   </ItemGroup>
 
 </Project>
