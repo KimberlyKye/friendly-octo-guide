@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.DataModels
 {
-    public class HomeWorks
+    public class HomeWork
     {
         public int Id { get; set; }
         public int HomeTaskId { get; set; }

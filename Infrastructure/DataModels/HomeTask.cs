@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.DataModels
 {
-    public class Lessons
+    public class HomeTask
     {
         public int Id { get; set; }
-        public int CourseId { get; set; }
-        public string Title { get; set; }
+        public int LessonId { get; set; }
+        public string Title { get; set; }        
         public string Description { get; set; }
-        public DateTime Date { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
         public byte[] Material { get; set; }
-
     }
 }

@@ -18,7 +18,11 @@ namespace Infrastructure.Contexts
         }
 
         #region тут модельки Кирилла (задача 19)
-
+        public DbSet<Course> Courses { get; set; }
+        public DbSet<State> States { get; set; }
+        public DbSet<HomeTask> HomeTasks { get; set; }
+        public DbSet<HomeWork> HomeWorks { get; set; }
+        public DbSet<Lesson> Lessons { get; set; }
         #endregion
 
         #region тут модельки Насти (задача 20)

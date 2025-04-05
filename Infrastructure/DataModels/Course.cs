@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.DataModels
 {
-    public class Courses
+    public class Course
     {
         public int Id { get; set; }
         public int StateId {  get; set; }
