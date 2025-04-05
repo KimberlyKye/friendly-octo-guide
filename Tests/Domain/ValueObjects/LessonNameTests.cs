@@ -7,7 +7,7 @@ namespace Tests.Domain.ValueObjects
     [TestFixture]
     public class LessonNameTests
     {
-        private const string ValidName = "Основы C#: структуры данных";
+        private const string ValidName = "Основы C sharp: структуры данных";
         private const string LongName = "Это очень длинное название урока, которое явно превышает максимально допустимую длину в сто символов и поэтому должно вызывать ошибку валидации при попытке создания";
 
         [Test]

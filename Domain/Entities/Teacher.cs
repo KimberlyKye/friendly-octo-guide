@@ -23,7 +23,7 @@ namespace Entities
             // Реализация метода
         }
 
-        public void UpdateLessonInfo(Lesson lesson)
+        public void UpdateLessonInfo(Lesson lesson, Course course)
         {
             // Реализация метода
         }

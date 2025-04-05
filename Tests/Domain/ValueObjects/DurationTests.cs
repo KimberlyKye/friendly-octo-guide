@@ -22,7 +22,7 @@ namespace Tests.Domain.ValueObjects
             var date = new DateOnly(2023, 01, 01);
             Assert.That(
                 () => new Duration(date, date),
-                Throws.ArgumentException.With.Message.Contain("начальная дата периода должна быть строго меньше"));
+                Throws.ArgumentException.With.Message.Contain("Начальная дата периода должна быть строго меньше"));
         }
 
         [Test]
@@ -30,7 +30,7 @@ namespace Tests.Domain.ValueObjects
         {
             Assert.That(
                 () => new Duration(_validEndDate, _validStartDate),
-                Throws.ArgumentException.With.Message.Contain("начальная дата периода должна быть строго меньше"));
+                Throws.ArgumentException.With.Message.Contain("Начальная дата периода должна быть строго меньше"));
         }
 
         [Test]

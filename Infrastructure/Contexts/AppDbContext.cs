@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Infrastructure.DataModels;
 
 namespace Infrastructure.Contexts
 {
@@ -21,7 +22,11 @@ namespace Infrastructure.Contexts
         #endregion
 
         #region тут модельки Насти (задача 20)
-
+        public DbSet<User> Users { get; set; }
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<StudentCourse> StudentCourses { get; set; }
+        public DbSet<StudentFavoriteCourse> StudentFavoriteCourses { get; set; }
+        public DbSet<LessonScore> LessonScores { get; set; }
         #endregion
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

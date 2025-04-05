@@ -27,14 +27,14 @@ namespace Tests.Domain.ValueObjects
         [Test]
         public void Constructor_ShouldNotThrowException_WhenDateIsBetween8And130YearsAgo()
         {
-            var date = DateOnly.FromDateTime(DateTime.Now.AddYears(-10));
+            var date = DateOnly.FromDateTime(DateTime.Now.AddYears(-19));
             Assert.DoesNotThrow(() => new BirthDate(date));
         }
 
         [Test]
         public void Date_ShouldReturnCorrectDate()
         {
-            var date = DateOnly.FromDateTime(DateTime.Now.AddYears(-10));
+            var date = DateOnly.FromDateTime(DateTime.Now.AddYears(-19));
             var dateBirth = new BirthDate(date);
 
             Assert.That(dateBirth.Date, Is.EqualTo(date));
