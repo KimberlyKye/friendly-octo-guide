@@ -34,14 +34,19 @@ namespace Infrastructure.Contexts
         #endregion
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            var connectionString = _configuration.GetConnectionString("PgConnectionString");
-            optionsBuilder.UseNpgsql(connectionString);
-        }
+        { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            #region настройки таблиц Кирилла с использованием  Fluent API (вынести в отдельную папку, например Configuration и реализовывать интерфейс IEntityTypeConfiguration)
+
+            #endregion
+
+            #region настройки таблиц Насти с использованием  Fluent API (вынести в отдельную папку, например Configuration и реализовывать интерфейс IEntityTypeConfiguration)
+
+            #endregion
         }
     }
 }
