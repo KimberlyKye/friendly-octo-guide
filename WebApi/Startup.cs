@@ -38,6 +38,18 @@ namespace WebApi
             }
 
             app.UseHttpsRedirection();
+
+            // Включение системы маршрутизации
+            // Определяет, какой endpoint должен обрабатывать запрос
+            app.UseRouting();
+
+            app.UseEndpoints(endpoints =>
+            {
+                // Для API контроллеров (WebAPI)
+                // Автоматически сопоставляет URL с действиями контроллеров
+                // Пример: /api/products -> ProductsController
+                endpoints.MapControllers();
+            });
         }
     }
 }

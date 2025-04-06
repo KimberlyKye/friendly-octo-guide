@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Infrastructure.DataModels;
+using Infrastructure.Configurations;
 
 namespace Infrastructure.Contexts
 {
@@ -41,6 +42,12 @@ namespace Infrastructure.Contexts
             base.OnModelCreating(modelBuilder);
 
             #region настройки таблиц Кирилла с использованием  Fluent API (вынести в отдельную папку, например Configuration и реализовывать интерфейс IEntityTypeConfiguration)
+            modelBuilder
+                .ApplyConfiguration(new CoursesConfiguration())
+                .ApplyConfiguration(new LessonConfiguration())
+                .ApplyConfiguration(new HomeTaskConfiguration())
+                .ApplyConfiguration(new HomeWorkConfiguration());
+
 
             #endregion
 
