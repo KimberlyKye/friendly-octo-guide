@@ -23,7 +23,8 @@ namespace Infrastructure.Configurations
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.Property(hw => hw.Score)
-                .IsRequired(false); // допускаем NULL, преподаватель ставит оценку после проверки
+                .IsRequired() // Обязательное поле
+                .HasDefaultValue(0); // Значение по умолчанию 0
 
             builder.Property(hw => hw.TaskCompletionDate)
                 .IsRequired();

@@ -12,10 +12,8 @@ namespace Infrastructure.Contexts
     public class AppDbContext : DbContext
     {
         private readonly IConfiguration _configuration;
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
-        {
-        }
-        public AppDbContext(IConfiguration configuration)
+        
+        public AppDbContext(DbContextOptions<AppDbContext> options, IConfiguration configuration) : base(options)
         {
             _configuration = configuration;
         }
