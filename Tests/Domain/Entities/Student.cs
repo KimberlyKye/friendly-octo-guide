@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Domain.ValueObjects;
 using Entities;
 using NUnit.Framework;
+using ValueObjects;
 
 namespace Tests.Domain.ValueObjects
 {
@@ -22,10 +23,18 @@ namespace Tests.Domain.ValueObjects
         [Test]
         public void AddHomeWork_ShouldAddHomeWorkToList()
         {
-            var homeTask = new HomeTask();
-            var homeWork = new HomeWork();
+            var homeTask = new HomeTask(1, new HomeTaskName("HomeTask1"), "Description", new Duration(new DateOnly(), new DateOnly())); ;
+            var homeWork = new HomeWork(1,
+                      _student,
+                       homeTask,
+                      new TaskCompletionDate(new DateOnly()),
+                      new Score(100));
             _student.AddHomeWork(homeTask, homeWork);
 
+            var actualHomeWork = _student.GetCourses();
+
+            Assert.IsNotEmpty(actualHomeWork);
+            Assert.Contains(homeWork, (System.Collections.ICollection?)actualHomeWork);
             Assert.DoesNotThrow(() => _student.GetListOfHomeWork());
         }
 

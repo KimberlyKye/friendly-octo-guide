@@ -64,7 +64,7 @@ namespace Tests.Domain.ValueObjects
             var courseName = "Test Course";
             var courseNameObject = new CourseName(courseName);
 
-            Assert.AreEqual(courseName, courseNameObject.ToString());
+            Assert.AreEqual(courseName, courseNameObject.Value);
         }
 
         [Test]

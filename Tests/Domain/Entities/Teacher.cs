@@ -6,6 +6,7 @@ using Domain.ValueObjects;
 using Entities;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
+using ValueObjects;
 
 namespace Tests.Domain.ValueObjects
 {
@@ -23,18 +24,40 @@ namespace Tests.Domain.ValueObjects
         [Test]
         public void UpdateCourseInfo_ShouldUpdateCourseInfo()
         {
-            var course = new Course();
-            Assert.DoesNotThrow(() => _teacher.UpdateCourseInfo(course));
+            var course = new Course(1, new Teacher(new FullName("name", "surname"),
+                                               new PhoneNumber("+79994567890"),
+                                               new Email("jane.doe@example.com")),
+                                               new CourseName("name"), "description",
+                                               new Duration(new DateOnly(2020, 01, 01), new DateOnly(2020, 01, 02)));
 
+
+            _teacher.UpdateCourseInfo(course);
+            var actualCourses = _teacher.GetCourses();
+
+            Assert.IsNotEmpty(actualCourses);
+            Assert.Contains(course, (System.Collections.ICollection?)actualCourses);
             // Проверка того, что информация о курсе была обновлена
         }
 
         [Test]
         public void UpdateLessonInfo_ShouldUpdateLessonInfo()
         {
-            var lesson = new Lesson();
-            Assert.DoesNotThrow(() => _teacher.UpdateLessonInfo(lesson));
+            var lesson = new Lesson(1,
+                     new LessonName("lesson name"),
+                      "description",
+                     new DateTime());
+            var course = new Course(1, new Teacher(new FullName("name", "surname"),
+                                    new PhoneNumber("+79994567890"),
+                                    new Email("jane.doe@example.com")),
+                                    new CourseName("course name"), "description",
+                                    new Duration(new DateOnly(2020, 01, 01), new DateOnly(2020, 01, 02)));
+            _teacher.UpdateLessonInfo(lesson, course);
 
+            var actualCourses = _teacher.GetCourses();
+            var currentCourse = actualCourses.First(c => c.Id.Equals(course.Id));
+            var lessons = currentCourse.Lessons;
+            Assert.IsNotEmpty(lessons);
+            Assert.Contains(lesson, lessons);
             // Проверка того, что информация о уроке была обновлена
         }
 
@@ -42,7 +65,10 @@ namespace Tests.Domain.ValueObjects
         public void SetLessonScore_ShouldSetLessonScore()
         {
             var student = new Student(1, new FullName("Jane", "Doe"), new PhoneNumber("+79994567890"), new Email("jane.doe@example.com"));
-            var lesson = new Lesson();
+            var lesson = new Lesson(1,
+                     new LessonName("lesson name"),
+                      "description",
+                     new DateTime());
             Assert.DoesNotThrow(() => _teacher.SetLessonScore(student, lesson));
 
             // Проверка того, что оценка за урок была установлена
@@ -51,7 +77,8 @@ namespace Tests.Domain.ValueObjects
         [Test]
         public void UpdateHomeTask_ShouldUpdateHomeTask()
         {
-            var homeTask = new HomeTask();
+            var homeTask = new HomeTask(1, new HomeTaskName("HomeTask1"), "Description", new Duration(new DateOnly(2020, 01, 01), new DateOnly(2020, 01, 02)));
+
             Assert.DoesNotThrow(() => _teacher.UpdateHomeTask(homeTask));
 
             // Проверка того, что домашнее задание было обновлено
@@ -60,8 +87,13 @@ namespace Tests.Domain.ValueObjects
         [Test]
         public void CheckHomeWork_ShouldCheckHomeWork()
         {
-            var homeWork = new HomeWork();
-            var score = new Score(10);
+            var student = new Student(1, new FullName("John", "Doe"), new PhoneNumber("+79994567890"), new Email("john.doe@example.com"));
+            var homeTask = new HomeTask(1, new HomeTaskName("HomeTask1"), "Description", new Duration(new DateOnly(2020, 01, 01), new DateOnly(2020, 01, 02)));
+            var homeWork = new HomeWork(1,
+                                 student,
+                                  homeTask,
+                                 new TaskCompletionDate(new DateOnly()),
+                                 new Score(100)); var score = new Score(10);
             var comment = "Good job!";
             Assert.DoesNotThrow(() => _teacher.CheckHomeWork(homeWork, score, comment));
 
