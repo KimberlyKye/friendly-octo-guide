@@ -1,4 +1,4 @@
-﻿namespace WebApi.Controllers
+﻿namespace Dto
 {
     public class Class1
     {
