@@ -1,18 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Infrastructure.Configurations;
+using Infrastructure.DataModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Infrastructure.DataModels;
-using Infrastructure.Configurations;
 
 namespace Infrastructure.Contexts
 {
     public class AppDbContext : DbContext
     {
         private readonly IConfiguration _configuration;
-        
+
         public AppDbContext(DbContextOptions<AppDbContext> options, IConfiguration configuration) : base(options)
         {
             _configuration = configuration;
@@ -52,7 +48,10 @@ namespace Infrastructure.Contexts
             #endregion
 
             #region настройки таблиц Насти с использованием  Fluent API (вынести в отдельную папку, например Configuration и реализовывать интерфейс IEntityTypeConfiguration)
-
+            modelBuilder
+                .ApplyConfiguration(new UsersConfiguration())
+                .ApplyConfiguration(new StudentFavoriteCoursesConfiguration())
+                .ApplyConfiguration(new LessonsScoresConfiguration());
             #endregion
         }
     }

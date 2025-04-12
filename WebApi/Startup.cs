@@ -25,6 +25,8 @@ namespace WebApi
 
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
+
+            services.AddControllers();
         }
 
 
