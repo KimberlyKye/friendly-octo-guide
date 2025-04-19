@@ -14,6 +14,6 @@ namespace Infrastructure.DataModels
         public string Title { get; set; }
         public string Description { get; set; }
         public DateTime Date { get; set; }
-        public byte[] Material { get; set; }
+        public string Material { get; set; }
     }
 }

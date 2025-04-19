@@ -15,12 +15,13 @@ namespace Entities
         public BirthDate DateOfBirth { get; private set; }
         public List<Course> Courses { get; }
 
-        public Person(int id, FullName name, PhoneNumber phoneNumber, Email email) : base(id)
+        public Person(int id, FullName name, PhoneNumber phoneNumber, Email email, BirthDate birthDate) : base(id)
         {
             Name = name;
             PhoneNumber = phoneNumber;
             Email = email;
             Courses = new List<Course>();
+            DateOfBirth = birthDate;
         }
 
         public FullName GetName()

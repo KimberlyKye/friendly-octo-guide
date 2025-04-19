@@ -9,7 +9,6 @@ namespace WebApi
         {
             var host = CreateHostBuilder(args).Build();
 
-            // ѕримен€ем миграции перед запуском приложени€
             using (var scope = host.Services.CreateScope())
             {
                 var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();

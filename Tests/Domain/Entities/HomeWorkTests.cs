@@ -24,7 +24,9 @@ namespace Tests.Domain.Entities
             var studentName = new FullName("Иван", "Иванов");
             var studentPhone = new PhoneNumber("+79001234567");
             var studentEmail = new Email("ivan@example.com");
-            _testStudent = new Student(1, studentName, studentPhone, studentEmail);
+            var birthDate = new BirthDate(new DateOnly(2000, 1, 10));
+
+            _testStudent = new Student(1, studentName, studentPhone, studentEmail, birthDate);
 
             var homeTaskName = new HomeTaskName("Домашнее задание 1");
             var duration = new Duration(

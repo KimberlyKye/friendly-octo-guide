@@ -17,7 +17,7 @@ namespace Tests.Domain.ValueObjects
         [SetUp]
         public void SetUp()
         {
-            _student = new Student(1, new FullName("John", "Doe"), new PhoneNumber("+79994567890"), new Email("john.doe@example.com"));
+            _student = new Student(1, new FullName("John", "Doe"), new PhoneNumber("+79994567890"), new Email("john.doe@example.com"), new BirthDate(new DateOnly(2000, 1, 1)));
         }
 
         [Test]

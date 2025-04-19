@@ -10,14 +10,14 @@ namespace Entities
     {
         public List<HomeWork> HomeWorks { get; private set; }
 
-        public Student(int id, FullName name, PhoneNumber phoneNumber, Email email)
-            : base(id, name, phoneNumber, email)
+        public Student(int id, FullName name, PhoneNumber phoneNumber, Email email, BirthDate birthDate)
+            : base(id, name, phoneNumber, email, birthDate)
         {
             HomeWorks = new List<HomeWork>();
         }
 
-        public Student(FullName name, PhoneNumber phoneNumber, Email email)
-            : base(0, name, phoneNumber, email)
+        public Student(FullName name, PhoneNumber phoneNumber, Email email, BirthDate birthDate)
+            : base(0, name, phoneNumber, email, birthDate)
         {
             HomeWorks = new List<HomeWork>();
         }

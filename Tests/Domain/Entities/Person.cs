@@ -16,7 +16,7 @@ namespace Tests.Domain.ValueObjects
         [SetUp]
         public void SetUp()
         {
-            _person = new Person(1, new FullName("John", "Doe"), new PhoneNumber("+79994567890"), new Email("john.doe@example.com"));
+            _person = new Person(1, new FullName("John", "Doe"), new PhoneNumber("+79994567890"), new Email("john.doe@example.com"), new BirthDate(new DateOnly(2022, 1, 1)));
         }
 
         [Test]
@@ -73,7 +73,7 @@ namespace Tests.Domain.ValueObjects
         {
             var course = new Course(1, new Teacher(new FullName("name", "surname"),
                                     new PhoneNumber("+79994567890"),
-                                    new Email("jane.doe@example.com")),
+                                    new Email("jane.doe@example.com"), new BirthDate(new DateOnly(2000, 1, 1))),
                                     new CourseName("name"), "description",
                                     new Duration());
             _person.SetCourse(course);
@@ -89,7 +89,7 @@ namespace Tests.Domain.ValueObjects
             var course = new Course(1,
                       new Teacher(new FullName("name", "surname"),
                       new PhoneNumber("+79994567890"),
-                      new Email("jane.doe@example.com")),
+                      new Email("jane.doe@example.com"), new BirthDate(new DateOnly(2000, 1, 1))),
                      new CourseName("name"),
                       "description",
                      new Duration(new DateOnly(), new DateOnly()));

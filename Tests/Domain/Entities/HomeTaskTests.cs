@@ -34,7 +34,9 @@ namespace Tests.Domain.Entities
             var fullName = new FullName("Иван", "Иванов");
             var phoneNumber = new PhoneNumber("+79001234567");
             var email = new Email("ivan@example.com");
-            _testStudent = new Student(1, fullName, phoneNumber, email);
+            var birthDate = new BirthDate(new DateOnly(2000, 1, 10));
+
+            _testStudent = new Student(1, fullName, phoneNumber, email, birthDate);
 
             _testCompletionDate = new TaskCompletionDate(DateOnly.FromDateTime(DateTime.Now));
         }
@@ -122,12 +124,14 @@ namespace Tests.Domain.Entities
             var homeTask = new HomeTask(TestId, _validName, _validDescription, _validDuration);
             var score = new Score(90);
             var homeWork1 = new HomeWork(1, _testStudent, homeTask, _testCompletionDate, score);
+            var birthDate = new DateOnly(2000, 1, 10);
 
             // Создаем нового студента для второй работы
             var anotherStudent = new Student(2,
                 new FullName("Петр", "Петров"),
                 new PhoneNumber("+79007654321"),
-                new Email("petr@example.com"));
+                new Email("petr@example.com"),
+                new BirthDate(birthDate));
 
             var homeWork2 = new HomeWork(1, anotherStudent, homeTask, _testCompletionDate, score);
 

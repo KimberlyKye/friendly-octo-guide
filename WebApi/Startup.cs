@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Infrastructure.Contexts;
+using Infrastructure.Factories;
+using Infrastructure.Factories.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
 
@@ -27,6 +29,12 @@ namespace WebApi
             services.AddSwaggerGen();
 
             services.AddControllers();
+
+            services.AddTransient<IStudentFactory, StudentFactory>();
+            services.AddTransient<ICourseFactory, CourseFactory>();
+            services.AddTransient<ILessonFactory, LessonFactory>();
+            services.AddTransient<IHomeTaskFactory, HomeTaskFactory>();
+            services.AddTransient<ITeacherFactory, TeacherFactory>();
         }
 
 
@@ -41,15 +49,10 @@ namespace WebApi
 
             app.UseHttpsRedirection();
 
-            // Включение системы маршрутизации
-            // Определяет, какой endpoint должен обрабатывать запрос
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
             {
-                // Для API контроллеров (WebAPI)
-                // Автоматически сопоставляет URL с действиями контроллеров
-                // Пример: /api/products -> ProductsController
                 endpoints.MapControllers();
             });
         }
