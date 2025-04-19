@@ -15,7 +15,6 @@ namespace WebApi
                 var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
                 db.Database.Migrate();
             }
-
             host.Run();
         }
 

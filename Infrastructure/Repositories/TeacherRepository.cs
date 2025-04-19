@@ -22,6 +22,7 @@ public class TeacherRepository : ITeacherRepository
         {
             var lessonsWithTasks = await (
                 from course in _context.Courses
+                .AsNoTracking()
                 from lesson in _context.Lessons
                     .Where(l => l.CourseId == course.Id
                              && DateOnly.FromDateTime(l.Date) >= requestDto.date
