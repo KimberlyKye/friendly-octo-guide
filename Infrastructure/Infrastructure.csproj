@@ -19,7 +19,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Dto\Dto.csproj" />
+    <ProjectReference Include="..\Domain\Entities\Entities.csproj" />
+    <ProjectReference Include="..\Domain\ValueObjects\ValueObjects.csproj" />
   </ItemGroup>
 
 </Project>

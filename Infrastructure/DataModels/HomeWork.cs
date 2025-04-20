@@ -13,7 +13,7 @@ namespace Infrastructure.DataModels
         public int StudentId { get; set; }
         public int Score { get; set; } = 0;
         public DateTime TaskCompletionDate { get; set; }
-        public byte[] Material { get; set; }
+        public string Material { get; set; }
         public string StudentComment { get; set; }
         public string TeacherComment { get; set;}
     }

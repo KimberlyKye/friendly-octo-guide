@@ -8,13 +8,13 @@ namespace Entities
 {
     public class Teacher : Person
     {
-        public Teacher(int id, FullName name, PhoneNumber phoneNumber, Email email)
-            : base(id, name, phoneNumber, email)
+        public Teacher(int id, FullName name, PhoneNumber phoneNumber, Email email, BirthDate dateOfBirth)
+            : base(id, name, phoneNumber, email, dateOfBirth)
         {
         }
 
-        public Teacher(FullName name, PhoneNumber phoneNumber, Email email)
-            : base(0, name, phoneNumber, email)
+        public Teacher(FullName name, PhoneNumber phoneNumber, Email email, BirthDate dateOfBirth)
+            : base(0, name, phoneNumber, email, dateOfBirth)
         {
         }
 
