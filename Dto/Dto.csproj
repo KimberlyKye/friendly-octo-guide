@@ -5,5 +5,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+    <ProjectReference Include="..\Domain\Entities\Entities.csproj" />
 
+  <ItemGroup>
+	  <ProjectReference Include="..\ValueObjects\ValueObjects.csproj" />
+  </ItemGroup>
+		  <ProjectReference Include="..\Domain\ValueObjects\ValueObjects.csproj" />
 </Project>

@@ -15,5 +15,9 @@ public class TeacherService : ITeacherService
     public async Task<CalendarResponseDto> GetCalendarData(GetCalendarDataRequestDto requestDto)
     {
         return await _teacherRepository.GetCalendarData(requestDto);
-    }    
+    }
+    public async Task<CalendarResponseDto> CreateLesson(GetCalendarDataRequestDto requestDto)
+    {
+        return await _teacherRepository.CreateLesson(requestDto);
+    }
 }
