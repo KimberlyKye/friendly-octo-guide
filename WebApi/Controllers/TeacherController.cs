@@ -15,14 +15,20 @@ namespace WebApi.Controllers
         [HttpGet]
         public async Task<IActionResult> GetCalendarData(GetCalendarDataRequestDto requestDto)
         {
-            if(requestDto is null 
-                || requestDto.userId <=0
+            if (requestDto is null
+                || requestDto.userId <= 0
                 || requestDto.date <= new DateOnly(2000, 1, 1))
             {
                 return BadRequest();
             }
             var result = await _teacherService.GetCalendarData(requestDto);
             return Ok(result);
+        }
+        [HttpPost]
+        public async Task<IActionResult> CreateLesson(CreateLessonRequestDto requestDto)
+        {
+            var result = await _teacherService.CreateLesson(requestDto);
+            return  Ok(1);
         }
     }
 }

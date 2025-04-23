@@ -1,14 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<Nullable>enable</Nullable>
-	</PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Domain\Entities\Entities.csproj" />
+    <ProjectReference Include="..\Domain\ValueObjects\ValueObjects.csproj" />
+  </ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Domain\Entities\Entities.csproj" />
-		<ProjectReference Include="..\Domain\ValueObjects\ValueObjects.csproj" />
+	  <Folder Include="Teacher\Responses\" />
+	  <Folder Include="Teacher\Requests\" />
 	</ItemGroup>
 
 </Project>

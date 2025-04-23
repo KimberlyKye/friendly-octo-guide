@@ -1,27 +1,27 @@
 ﻿
 namespace Dto
 {
-    public class CalendarResponseDto
+    public record CalendarResponseDto
     {
-        public CalendarLessonDto[] calendarLessonDtos {  get; set; } = new CalendarLessonDto[0];
+        public CalendarLessonDto[] CalendarLessonDtos {  get; set; } = new CalendarLessonDto[0];
 
-        public CalendarHomeTaskDto[] calendarHomeTaskDtos { get; set; } = new CalendarHomeTaskDto[0];
+        public CalendarHomeTaskDto[] CalendarHomeTaskDtos { get; set; } = new CalendarHomeTaskDto[0];
     }
     public class CalendarLessonDto
     {
-        public int courseId { get; set; }
-        public string courseName { get; set; }
-        public DateTime date { get; set; }
-        public string name { get; set; }
+        public int CourseId { get; set; }
+        public string CourseName { get; set; }
+        public DateTime Date { get; set; }
+        public string Name { get; set; }
     }
     public class CalendarHomeTaskDto
     {
-        public int courseId { get; set; }
-        public string courseName { get; set; }
-        public int lessonId { get; set; }
-        public string lessonName { get; set; }
-        public DateTime dateStart { get; set; }
-        public DateTime dateEnd { get; set; }
-        public string name { get; set; }
+        public int CourseId { get; set; }
+        public string CourseName { get; set; }
+        public int LessonId { get; set; }
+        public string LessonName { get; set; }
+        public DateTime LateStart { get; set; }
+        public DateTime LateEnd { get; set; }
+        public string Name { get; set; }
     }
 }

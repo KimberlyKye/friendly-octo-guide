@@ -16,8 +16,12 @@ public class TeacherService : ITeacherService
     {
         return await _teacherRepository.GetCalendarData(requestDto);
     }
-    //public async Task<CalendarResponseDto> CreateLesson(GetCalendarDataRequestDto requestDto)
-    //{
-    //    return await _teacherRepository.CreateLesson(requestDto);
-    //}
+    public async Task<int> CreateLesson(GetCalendarDataRequestDto requestDto)
+    {
+        // DTO ----> Model
+        //Teacher ----> Teacher.AddLesson(courseId, lessonData) ---> Lesson(Domain)
+        //var result = await _teacherRepository.CreateLesson(Lesson(Domain);
+
+        return 1;
+    }
 }

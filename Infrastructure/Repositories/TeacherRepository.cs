@@ -74,4 +74,11 @@ public class TeacherRepository : ITeacherRepository
         }
 
     }
+
+    public async Task<Lesson> AddLesson(Domain.Lesson lesson) // возвращаем модель Lesson
+    {
+        //Domain.lesson  --->  DataModels.lesson(фабрикаМаппинг)
+
+        return 1;//
+    }
 }
