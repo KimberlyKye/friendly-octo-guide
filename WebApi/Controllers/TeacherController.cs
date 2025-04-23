@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Dto;
 using Application.Services.Abstractions;
+using Dto.Teacher.Requests;
 
 namespace WebApi.Controllers
 {

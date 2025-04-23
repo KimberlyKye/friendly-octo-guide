@@ -1,7 +1,7 @@
 ﻿using Entities;
 using Domain.ValueObjects;
 
-namespace Dto
+namespace Dto.Teacher.Requests
 {
     public class CreateLessonRequestDto
     {

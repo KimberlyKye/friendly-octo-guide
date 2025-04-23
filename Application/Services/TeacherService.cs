@@ -1,6 +1,7 @@
-﻿using Dto;
-using Infrastructure.Repositories.Abstractions;
+﻿using Infrastructure.Repositories.Abstractions;
 using Application.Services.Abstractions;
+using Dto.Teacher.Requests;
+using Dto.Teacher.Responses;
 
 namespace Application.Services;
 
@@ -16,7 +17,7 @@ public class TeacherService : ITeacherService
     {
         return await _teacherRepository.GetCalendarData(requestDto);
     }
-    public async Task<int> CreateLesson(GetCalendarDataRequestDto requestDto)
+    public async Task<int> CreateLesson(CreateLessonRequestDto requestDto)
     {
         // DTO ----> Model
         //Teacher ----> Teacher.AddLesson(courseId, lessonData) ---> Lesson(Domain)

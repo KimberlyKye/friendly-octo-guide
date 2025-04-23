@@ -11,9 +11,4 @@
     <ProjectReference Include="..\Domain\ValueObjects\ValueObjects.csproj" />
   </ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="Teacher\Responses\" />
-	  <Folder Include="Teacher\Requests\" />
-	</ItemGroup>
-
 </Project>

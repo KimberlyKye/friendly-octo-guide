@@ -1,9 +1,11 @@
-﻿using Dto;
-using Infrastructure.Contexts;
+﻿using Entities;
 using Infrastructure.DataModels;
+using Infrastructure.Contexts;
 using Infrastructure.Repositories.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
+using Dto.Teacher.Responses;
+using Dto.Teacher.Requests;
 
 namespace Infrastructure.Repositories;
 
@@ -41,26 +43,26 @@ public class TeacherRepository : ITeacherRepository
 
             var result = new CalendarResponseDto
             {
-                calendarLessonDtos = lessonsWithTasks
+                CalendarLessonDtos = lessonsWithTasks
                     .Select(x => new CalendarLessonDto
                     {
-                        courseId = x.Course.Id,
-                        courseName = x.Course.Title,
-                        date = x.Lesson.Date,
-                        name = x.Lesson.Title
+                        CourseId = x.Course.Id,
+                        CourseName = x.Course.Title,
+                        Date = x.Lesson.Date,
+                        Name = x.Lesson.Title
                     }).ToArray(),
 
-                calendarHomeTaskDtos = lessonsWithTasks
+                CalendarHomeTaskDtos = lessonsWithTasks
                     .Where(x => x.HomeTask != null)
                     .Select(x => new CalendarHomeTaskDto
                     {
-                        courseId = x.Course.Id,
-                        courseName = x.Course.Title,
-                        lessonId = x.Lesson.Id,
-                        lessonName = x.Lesson.Title,
-                        dateStart = x.HomeTask.StartDate,
-                        dateEnd = x.HomeTask.EndDate,
-                        name = x.HomeTask.Title
+                        CourseId = x.Course.Id,
+                        CourseName = x.Course.Title,
+                        LessonId = x.Lesson.Id,
+                        LessonName = x.Lesson.Title,
+                        DateStart = x.HomeTask.StartDate,
+                        DateEnd = x.HomeTask.EndDate,
+                        Name = x.HomeTask.Title
                     }).ToArray()
             };
 
@@ -75,10 +77,10 @@ public class TeacherRepository : ITeacherRepository
 
     }
 
-    public async Task<Lesson> AddLesson(Domain.Lesson lesson) // возвращаем модель Lesson
+    public async Task<int> AddLesson(Entities.Lesson lesson) //<Entities.Lesson>
     {
         //Domain.lesson  --->  DataModels.lesson(фабрикаМаппинг)
 
-        return 1;//
+        return 1;
     }
 }

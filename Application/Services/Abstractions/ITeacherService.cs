@@ -1,5 +1,6 @@
 ﻿using Entities;
-using Dto;
+using Dto.Teacher.Requests;
+using Dto.Teacher.Responses;
 
 namespace Application.Services.Abstractions
 {

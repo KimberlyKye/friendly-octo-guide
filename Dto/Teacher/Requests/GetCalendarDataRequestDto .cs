@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Dto
+namespace Dto.Teacher.Requests
 {
     public class GetCalendarDataRequestDto
     {

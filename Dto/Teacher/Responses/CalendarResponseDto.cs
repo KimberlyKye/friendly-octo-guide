@@ -1,7 +1,6 @@
-﻿
-namespace Dto
+﻿namespace Dto.Teacher.Responses
 {
-    public record CalendarResponseDto
+    public class CalendarResponseDto
     {
         public CalendarLessonDto[] CalendarLessonDtos {  get; set; } = new CalendarLessonDto[0];
 
@@ -20,8 +19,8 @@ namespace Dto
         public string CourseName { get; set; }
         public int LessonId { get; set; }
         public string LessonName { get; set; }
-        public DateTime LateStart { get; set; }
-        public DateTime LateEnd { get; set; }
+        public DateTime DateStart { get; set; }
+        public DateTime DateEnd { get; set; }
         public string Name { get; set; }
     }
 }
