@@ -2,9 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Application.Services;
+using Application.Services.Abstractions;
 using Infrastructure.Contexts;
 using Infrastructure.Factories;
 using Infrastructure.Factories.Abstractions;
+using Infrastructure.Repositories;
+using Infrastructure.Repositories.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
 
@@ -35,6 +39,11 @@ namespace WebApi
             services.AddTransient<ILessonFactory, LessonFactory>();
             services.AddTransient<IHomeTaskFactory, HomeTaskFactory>();
             services.AddTransient<ITeacherFactory, TeacherFactory>();
+
+            services.AddTransient<IStudentRepository, StudentRepository>();
+
+            services.AddTransient<ICreateStudentProfileService, CreateStudentProfileService>();
+            services.AddTransient<IUpdateStudentProfileService, UpdateStudentProfileService>();
         }
 
 

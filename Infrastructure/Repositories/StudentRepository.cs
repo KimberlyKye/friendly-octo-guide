@@ -82,5 +82,40 @@ namespace Infrastructure.Repositories
 
             return (lessons, homeTasks);
         }
+
+        Task<List<Entities.HomeTask>> IStudentRepository.GetHomeTasksByDeadlineRangeAndStudentAsync(int studentId, DateTime startDate, DateTime endDate)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<(List<Entities.Lesson> Lessons, List<Entities.HomeTask> HomeTasks)> IStudentRepository.GetMonthlyDataForStudentAsync(int studentId, DateTime monthStart, DateTime monthEnd)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Entities.Student> CreateAsync(Entities.Student profile)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Entities.Student> GetByIdAsync(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> ExistsWithEmailAsync(string email)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> ExistsWithPhoneAsync(string phoneNumber)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task UpdateAsync(Entities.Student profile)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

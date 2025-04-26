@@ -6,152 +6,70 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Infrastructure.Contexts;
-using Infrastructure.DataModels;
+using Application.Services.Abstractions;
+using Dto;
+using WebApi.Exceptions;
 
 namespace WebApi.Controllers
 {
     public class StudentController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly ICreateStudentProfileService _createService;
+        private readonly IUpdateStudentProfileService _updateService;
 
-        public StudentController(AppDbContext context)
+        public StudentController(AppDbContext context, ICreateStudentProfileService createService,
+        IUpdateStudentProfileService updateService)
         {
             _context = context;
+            _createService = createService;
+            _updateService = updateService;
         }
 
-        // GET: Users
-        public async Task<IActionResult> Index()
-        {
-            return View(await _context.Users.ToListAsync());
-        }
-
-        // GET: Users/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var user = await _context.Users
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            return View(user);
-        }
-
-        // GET: Users/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Users/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        /// <summary>
+        /// Метод для создания профиля студента
+        /// </summary>
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,RoleId,Name,Surname,Email,Password,PhoneNumber,DateOfBirth")] User user)
+        public async Task<IActionResult> Create([FromBody][Bind("Id,RoleId,Name,Surname,Email,Password,PhoneNumber,DateOfBirth")] CreateStudentProfileRequest request)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            try
             {
-                _context.Add(user);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                var response = await _createService.Execute(request);
+                return CreatedAtAction(nameof(Create), new { id = response.Id }, request);
             }
-            return View(user);
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message);
+            }
         }
 
-        // GET: Users/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        /// <summary>
+        /// Метод для редактирования профиля студента
+        /// </summary>
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update([FromBody][Bind("Id,RoleId,Name,Surname,Email,Password,PhoneNumber,DateOfBirth")] UpdateStudentProfileRequest request)
         {
-            if (id == null)
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            request.Id = request.Id;
+
+            try
             {
-                return NotFound();
+                await _updateService.Execute(request);
+                return NoContent(); // Код статуса 204 означает успешное обновление без возврата тела
             }
-
-            var user = await _context.Users.FindAsync(id);
-            if (user == null)
+            catch (NotFoundException ex)
             {
-                return NotFound();
+                return NotFound(ex.Message);
             }
-            return View(user);
-        }
-
-        // POST: Users/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,RoleId,Name,Surname,Email,Password,PhoneNumber,DateOfBirth")] User user)
-        {
-            if (id != user.Id)
+            catch (InvalidOperationException ex)
             {
-                return NotFound();
+                return Conflict(ex.Message);
             }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(user);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!UserExists(user.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(user);
-        }
-
-        // GET: Users/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var user = await _context.Users
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            return View(user);
-        }
-
-        // POST: Users/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var user = await _context.Users.FindAsync(id);
-            if (user != null)
-            {
-                _context.Users.Remove(user);
-            }
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool UserExists(int id)
-        {
-            return _context.Users.Any(e => e.Id == id);
         }
     }
 }
