@@ -16,10 +16,6 @@ namespace Dto
         [Required(ErrorMessage = "Фамилия обязательна.")]
         public string LastName { get; set; }
 
-        [Required(ErrorMessage = "Адрес электронной почты обязателен.")]
-        [EmailAddress(ErrorMessage = "Некорректный адрес электронной почты.")]
-        public string Email { get; set; }
-
         [Required(ErrorMessage = "Телефонный номер обязателен.")]
         [RegularExpression(@"^\+?\d+$", ErrorMessage = "Формат телефонного номера неверен.")]
         public string PhoneNumber { get; set; }

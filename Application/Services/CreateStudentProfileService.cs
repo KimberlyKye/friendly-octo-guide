@@ -1,12 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Application.Services.Abstractions;
 using Domain.ValueObjects;
 using Dto;
 using Entities;
 using Infrastructure.Repositories.Abstractions;
+using System.Globalization;
 
 namespace Application.Services
 {
@@ -28,7 +25,11 @@ namespace Application.Services
             if (await _studentRepository.ExistsWithPhoneAsync(request.PhoneNumber))
                 throw new InvalidOperationException("Пользователь с указанным телефонным номером уже зарегистрирован");
 
-            var newProfile = new Student(new FullName(request.FirstName, request.LastName), new PhoneNumber(request.PhoneNumber), new Email(request.Email), new BirthDate(request.BirthDate));
+            var birthDate = DateOnly.ParseExact(request.BirthDate,
+                                         "MM/dd/yyyy hh:mm:ss tt",
+                                         CultureInfo.InvariantCulture);
+            var newProfile = new Student(new FullName(request.FirstName, request.LastName), new PhoneNumber(request.PhoneNumber), new Email(request.Email),
+                                                                        new BirthDate(birthDate));
             await _studentRepository.CreateAsync(newProfile);
             return newProfile;
         }

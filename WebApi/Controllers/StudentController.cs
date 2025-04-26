@@ -30,7 +30,8 @@ namespace WebApi.Controllers
         /// Метод для создания профиля студента
         /// </summary>
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody][Bind("Id,RoleId,Name,Surname,Email,Password,PhoneNumber,DateOfBirth")] CreateStudentProfileRequest request)
+        [Route("create")]
+        public async Task<IActionResult> Create([FromBody][Bind("Name,Surname,Email,Password,PhoneNumber,DateOfBirth")] CreateStudentProfileRequest request)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -49,8 +50,9 @@ namespace WebApi.Controllers
         /// <summary>
         /// Метод для редактирования профиля студента
         /// </summary>
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update([FromBody][Bind("Id,RoleId,Name,Surname,Email,Password,PhoneNumber,DateOfBirth")] UpdateStudentProfileRequest request)
+        [HttpPut]
+        [Route("update")]
+        public async Task<IActionResult> Update([FromBody][Bind("Id,Name,Surname,PhoneNumber")] UpdateStudentProfileRequest request)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Entities;
 using Infrastructure.DataModels;
 
-namespace Infrastructure.Factories.Abstractions
+namespace Domain.Factories.Abstractions
 {
     public interface IStudentFactory
     {

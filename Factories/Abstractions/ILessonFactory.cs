@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Factories.Abstractions
+namespace Domain.Factories.Abstractions
 {
-    public interface ICourseFactory
+    public interface ILessonFactory
     {
         
     }

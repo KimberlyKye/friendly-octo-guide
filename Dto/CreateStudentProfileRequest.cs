@@ -23,6 +23,6 @@ namespace Dto
         public string PhoneNumber { get; set; }
 
         [Required(ErrorMessage = "Дата рождения обязательна.")]
-        public DateOnly BirthDate { get; set; }
+        public string BirthDate { get; set; }
     }
 }

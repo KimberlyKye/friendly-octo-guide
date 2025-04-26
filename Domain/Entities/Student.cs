@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Domain.ValueObjects;
 
 namespace Entities
@@ -42,42 +37,5 @@ namespace Entities
             return this;
         }
 
-        public void UpdateProfile(FullName fullName, PhoneNumber phoneNumber, Email email)
-        {
-            Validate(fullName, email, phoneNumber);
-            FirstName = fullName.FirstName;
-            LastName = fullName.LastName;
-            Email = email.Value;
-            PhoneNumber = phoneNumber;
-        }
-
-        private void Validate(FullName fullName, Email email, string phoneNumber)
-        {
-            if (string.IsNullOrWhiteSpace(fullName.Name))
-                throw new ArgumentException("Имя должно быть заполнено.");
-            if (!IsValidEmail(email.Value))
-                throw new ArgumentException("Некорректный адрес электронной почты.");
-            if (!IsValidPhone(phoneNumber))
-                throw new ArgumentException("Номер телефона некорректен.");
-        }
-
-        private bool IsValidEmail(string email)
-        {
-            try
-            {
-                var addr = new System.Net.Mail.MailAddress(email);
-                return addr.Address == email;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        private bool IsValidPhone(string phoneNumber)
-        {
-            const string pattern = @"^\+?[1-9]\d{1,14}$";
-            return Regex.IsMatch(phoneNumber, pattern);
-        }
     }
 }
