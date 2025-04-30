@@ -1,3 +1,4 @@
+using Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +8,6 @@ namespace Infrastructure.Factories.Abstractions
 {
     public interface ICourseFactory
     {
-        
+        Task<Course> CreateFrom(DataModels.Course courseModel, DataModels.User teacher);
     }
 }

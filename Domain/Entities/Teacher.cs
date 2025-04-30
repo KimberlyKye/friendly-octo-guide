@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Domain.ValueObjects;
+using File = Domain.ValueObjects.File;
 
 namespace Entities
 {
@@ -47,6 +48,26 @@ namespace Entities
         {
             return this;
         }
-    }
+        public async Task<Lesson> CreateLesson(int id,
+                                                    LessonName lessonName,
+                                                    string description,
+                                                    DateTime date,
+                                                    File? material = null,
+                                                    IEnumerable<HomeTask>? homeTasks = null)
+        {
+            // Проверки параметров
+            if (lessonName == null)
+                throw new ArgumentNullException(nameof(lessonName));
 
+            // Доп.проверки???
+
+            return await Task.Run(() => new Lesson(
+                id,
+                lessonName,
+                description,
+                date,
+                material,
+                homeTasks));
+        }
+    }
 }

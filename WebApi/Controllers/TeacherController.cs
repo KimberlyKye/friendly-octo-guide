@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Application.Services.Abstractions;
 using Dto.Teacher.Requests;
+using Application.Dto.Teacher;
+using Humanizer;
+using Domain.ValueObjects;
 
 namespace WebApi.Controllers
 {
@@ -27,8 +30,34 @@ namespace WebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateLesson(CreateLessonRequestDto requestDto)
         {
-            var result = await _teacherService.CreateLesson(requestDto);
-            return  Ok(1);
+            // Проверка на null
+            if (requestDto is null)
+            {
+                return BadRequest("Request data cannot be null");
+            }
+
+            try
+            {   LessonName lessonName = new LessonName(requestDto.LessonName);
+
+                var requestModel = new CreateLessonModel
+                {
+                    TeacherId = requestDto.TeacherId,
+                    CourseId = requestDto.CourseId,
+                    LessonName = lessonName,
+                    LessonDescription = requestDto.LessonDescription,
+                    LessonStartDate = requestDto.LessonStartDate,
+                    Material = requestDto.Material,
+                    HomeTasks = requestDto.HomeTasks
+                };
+
+                var result = await _teacherService.CreateLesson(requestModel);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                // Логирование ошибки (можно добавить _logger)
+                return StatusCode(500, $"Internal server error: {ex}");
+            }
         }
     }
 }

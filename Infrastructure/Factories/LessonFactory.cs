@@ -1,3 +1,4 @@
+// Infrastructure/Factories/LessonFactory.cs
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,10 +13,14 @@ namespace Infrastructure.Factories
     public class LessonFactory : ILessonFactory
     {
         private readonly IHomeTaskFactory _homeTaskFactory;
+        private readonly IFileFactory _fileFactory;
 
-        public LessonFactory(IHomeTaskFactory homeTaskFactory)
+        public LessonFactory(
+            IHomeTaskFactory homeTaskFactory,
+            IFileFactory fileFactory)
         {
             _homeTaskFactory = homeTaskFactory ?? throw new ArgumentNullException(nameof(homeTaskFactory));
+            _fileFactory = fileFactory ?? throw new ArgumentNullException(nameof(fileFactory));
         }
 
         public async Task<Entities.Lesson> CreateAsync(Lesson dataModel, IEnumerable<HomeTask>? homeTasks = null)
@@ -23,10 +28,7 @@ namespace Infrastructure.Factories
             if (dataModel == null)
                 throw new ArgumentNullException(nameof(dataModel));
 
-            // Создание объекта File из полного пути Material
-            File? material = null;            
-
-            // Асинхронное создание HomeTasks
+            var material = _fileFactory.Create(dataModel.Material);
             var domainHomeTasks = homeTasks != null
                 ? await CreateHomeTasksAsync(homeTasks)
                 : null;
@@ -45,12 +47,11 @@ namespace Infrastructure.Factories
             if (domainEntity == null)
                 throw new ArgumentNullException(nameof(domainEntity));
 
-            var materialPath = domainEntity.Material?.GetFullPath();
+            var materialPath = _fileFactory.GetFullPath(domainEntity.Material);
 
             return Task.FromResult(new Lesson
             {
                 Id = domainEntity.Id,
-                //CourseId = domainEntity.CourseId,
                 Title = domainEntity.Name.Value,
                 Description = domainEntity.Description,
                 Date = domainEntity.Date,
@@ -60,12 +61,11 @@ namespace Infrastructure.Factories
 
         private async Task<List<Entities.HomeTask>> CreateHomeTasksAsync(IEnumerable<HomeTask> homeTasks)
         {
-            var result = new List<Entities.HomeTask>();
-            foreach (var ht in homeTasks.Where(h => h != null))
-            {
-                result.Add(await _homeTaskFactory.CreateAsync(ht));
-            }
-            return result;
-        }        
+            var tasks = homeTasks
+                .Where(h => h != null)
+                .Select(ht => _homeTaskFactory.CreateAsync(ht));
+
+            return (await Task.WhenAll(tasks)).ToList();
+        }
     }
 }

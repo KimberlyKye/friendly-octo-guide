@@ -35,6 +35,8 @@ namespace WebApi
             services.AddTransient<ILessonFactory, LessonFactory>();
             services.AddTransient<IHomeTaskFactory, HomeTaskFactory>();
             services.AddTransient<ITeacherFactory, TeacherFactory>();
+            services.AddTransient<IFileFactory, FileFactory>();
+
         }
 
 

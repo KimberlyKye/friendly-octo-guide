@@ -1,13 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Entities;
+using Infrastructure.DataModels;
 
 namespace Infrastructure.Factories.Abstractions
 {
     public interface ITeacherFactory
     {
-        public Teacher CreateFrom(DataModels.User user);
+        public Task<Teacher> CreateFrom(User user);
+        public Task<User> CreateDataModelAsync(Teacher teacher);        
     }
 }

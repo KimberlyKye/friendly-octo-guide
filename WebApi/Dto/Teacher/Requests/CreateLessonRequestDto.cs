@@ -2,7 +2,7 @@
 using Domain.ValueObjects;
 using System.ComponentModel.DataAnnotations;
 
-namespace Dto.Teacher.Requests
+namespace WebApi.Dto.Teacher.Requests
 {
     public class CreateLessonRequestDto
     {
@@ -13,7 +13,7 @@ namespace Dto.Teacher.Requests
         [Required]
         public required string LessonName {  get; set; }
         [Required]
-        public required string LessonDescription { get; set; }
+        public string LessonDescription { get; set; } = string.Empty;
         [Required]
         public DateTime LessonStartDate {  get; set; }
         [Required]

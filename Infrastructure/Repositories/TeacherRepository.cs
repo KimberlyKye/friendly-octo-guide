@@ -6,18 +6,79 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using Dto.Teacher.Responses;
 using Dto.Teacher.Requests;
+using Infrastructure.Factories.Abstractions;
+using Infrastructure.Factories;
 
 namespace Infrastructure.Repositories;
 
 public class TeacherRepository : ITeacherRepository
 {
     private readonly AppDbContext _context;
+    private readonly ITeacherFactory _teacherFactory;
+    private readonly ILessonFactory _lessonFactory;
 
-    public TeacherRepository(AppDbContext context)
+    public TeacherRepository(
+        AppDbContext context,
+        ITeacherFactory teacherFactory,
+        ILessonFactory lessonFactory)
     {
         _context = context;
+        _teacherFactory = teacherFactory;
+        _lessonFactory = lessonFactory;
     }
+    public async Task<Teacher> GetTeacherById(int teacherId)
+    {
+        if (teacherId <= 0)
+            throw new ArgumentException("Invalid teacher ID", nameof(teacherId));
 
+        try
+        {
+            var teacherInfo = await _context.Users
+                .Where(teacher => teacher.Id == teacherId && teacher.RoleId == 0)
+                .FirstOrDefaultAsync();
+            
+            if (teacherInfo == null) { throw new Exception(); }
+
+            return await _teacherFactory.CreateFrom(teacherInfo);
+        }
+        catch
+        {
+            //_logger.LogError(ex, "Error while getting teacher by ID {TeacherId}", teacherId);
+            throw;
+        }
+    }
+    public async Task<bool> CheckIsRealCourseById(int courseId)
+    {
+        return await _context.Courses
+                        .AsNoTracking()
+                        .Where(c => c.Id == courseId)
+                        .AnyAsync();
+    }
+    public async Task<int> AddLesson(Entities.Lesson lesson) //<Entities.Lesson>
+    {
+        if (lesson == null)
+            throw new ArgumentNullException(nameof(lesson));
+
+        try
+        {
+            // Преобразуем доменную модель в DataModel
+            var lessonDataModel = await _lessonFactory.CreateDataModelAsync(lesson);
+
+            // Добавляем в контекст EF Core
+            await _context.Lessons.AddAsync(lessonDataModel);
+
+            // Сохраняем изменения
+            await _context.SaveChangesAsync();
+
+            // Возвращаем ID созданной записи
+            return lessonDataModel.Id;
+        }
+        catch (Exception ex)
+        {
+            //_logger.LogError(ex, "Error while adding lesson");
+            throw; // Перебрасываем исключение для обработки на уровне выше
+        }
+    }
     public async Task<CalendarResponseDto> GetCalendarData(GetCalendarDataRequestDto requestDto)
     {
         try
@@ -74,13 +135,5 @@ public class TeacherRepository : ITeacherRepository
             Console.WriteLine($"Error getting calendar data: {ex.Message}");
             return new CalendarResponseDto(); // Возвращаем пустой объект при ошибках ??
         }
-
-    }
-
-    public async Task<int> AddLesson(Entities.Lesson lesson) //<Entities.Lesson>
-    {
-        //Domain.lesson  --->  DataModels.lesson(фабрикаМаппинг)
-
-        return 1;
     }
 }

@@ -2,6 +2,9 @@
 using Application.Services.Abstractions;
 using Dto.Teacher.Requests;
 using Dto.Teacher.Responses;
+using Entities;
+using Application.Dto.Teacher;
+using Domain.ValueObjects;
 
 namespace Application.Services;
 
@@ -17,12 +20,24 @@ public class TeacherService : ITeacherService
     {
         return await _teacherRepository.GetCalendarData(requestDto);
     }
-    public async Task<int> CreateLesson(CreateLessonRequestDto requestDto)
+    public async Task<int> CreateLesson(CreateLessonModel requestDto)
     {
-        // DTO ----> Model
-        //Teacher ----> Teacher.AddLesson(courseId, lessonData) ---> Lesson(Domain)
-        //var result = await _teacherRepository.CreateLesson(Lesson(Domain);
+        Teacher teacher = await _teacherRepository.GetTeacherById(requestDto.TeacherId);
 
-        return 1;
+        if (!await _teacherRepository.CheckIsRealCourseById(requestDto.CourseId))
+            { return -1; }    
+        
+        Lesson newLesson = await teacher.CreateLesson(0,
+                                                            requestDto.LessonName,
+                                                            requestDto.LessonDescription,
+                                                            requestDto.LessonStartDate,
+                                                            requestDto.Material,
+                                                            requestDto.HomeTasks);
+
+        return await _teacherRepository.AddLesson(newLesson);
+    }
+    public async Task<Teacher> GetTeacherById(int teacherId)
+    {
+        return await _teacherRepository.GetTeacherById(teacherId);
     }
 }
