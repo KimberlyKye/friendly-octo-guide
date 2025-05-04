@@ -7,6 +7,8 @@ using Domain.ValueObjects;
 
 namespace WebApi.Controllers
 {
+    [ApiController]
+    [Route("api/[controller]")]
     public class TeacherController : ControllerBase
     {
         private readonly ITeacherService _teacherService;
@@ -15,7 +17,7 @@ namespace WebApi.Controllers
         {
             _teacherService = teacherService;
         }
-        [HttpGet]
+        [HttpGet("calendar-data")]
         public async Task<IActionResult> GetCalendarData(GetCalendarDataRequestDto requestDto)
         {
             if (requestDto is null
@@ -27,7 +29,7 @@ namespace WebApi.Controllers
             var result = await _teacherService.GetCalendarData(requestDto);
             return Ok(result);
         }
-        [HttpPost]
+        [HttpPost("create-lesson")]
         public async Task<IActionResult> CreateLesson(CreateLessonRequestDto requestDto)
         {
             // Проверка на null

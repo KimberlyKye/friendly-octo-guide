@@ -24,8 +24,8 @@ public class TeacherService : ITeacherService
     {
         Teacher teacher = await _teacherRepository.GetTeacherById(requestDto.TeacherId);
 
-        if (!await _teacherRepository.CheckIsRealCourseById(requestDto.CourseId))
-            { return -1; }    
+        //if (!await _teacherRepository.CheckIsRealCourseById(requestDto.CourseId))
+        //    { return -1; }    
         
         Lesson newLesson = await teacher.CreateLesson(0,
                                                             requestDto.LessonName,
