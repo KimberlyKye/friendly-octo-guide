@@ -9,6 +9,8 @@ using Infrastructure.Factories;
 using Infrastructure.Factories.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
+using Infrastructure.Repositories.Abstractions;
+using Infrastructure.Repositories;
 
 namespace WebApi
 {
@@ -27,6 +29,7 @@ namespace WebApi
             // 1. Инфраструктура
             services.AddDbContext<AppDbContext>(options =>
                  options.UseNpgsql(Configuration.GetConnectionString("PgConnectionString")));
+            services.AddScoped<ITeacherRepository, TeacherRepository>();
 
             // 2. Swagger
             services.AddEndpointsApiExplorer();
