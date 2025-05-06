@@ -4,6 +4,7 @@ using Dto.Teacher.Requests;
 using Application.Dto.Teacher;
 using Humanizer;
 using Domain.ValueObjects;
+using File = Domain.ValueObjects.File;
 
 namespace WebApi.Controllers
 {
@@ -40,16 +41,17 @@ namespace WebApi.Controllers
 
             try
             {   LessonName lessonName = new LessonName(requestDto.LessonName);
+                //File file = new File(requestDto.Material, string.Empty, string.Empty); // <===========
 
                 var requestModel = new CreateLessonModel
                 {
-                    TeacherId = requestDto.TeacherId,
-                    CourseId = requestDto.CourseId,
+                    TeacherId = (int)requestDto.TeacherId,
+                    CourseId = (int)requestDto.CourseId,
                     LessonName = lessonName,
                     LessonDescription = requestDto.LessonDescription,
                     LessonStartDate = requestDto.LessonStartDate,
                     Material = requestDto.Material,
-                    HomeTasks = requestDto.HomeTasks
+                    //HomeTasks = requestDto.HomeTasks
                 };
 
                 var result = await _teacherService.CreateLesson(requestModel);

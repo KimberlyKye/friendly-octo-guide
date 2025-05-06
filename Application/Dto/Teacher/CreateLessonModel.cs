@@ -17,6 +17,6 @@ namespace Application.Dto.Teacher
         public required string LessonDescription { get; init; }        
         public required DateTime LessonStartDate { get; init; }
         public required Domain.ValueObjects.File? Material { get; init; }
-        public required List<HomeTask> HomeTasks { get; init; } = [];
+        public List<HomeTask>? HomeTasks { get; init; }
     }
 }
