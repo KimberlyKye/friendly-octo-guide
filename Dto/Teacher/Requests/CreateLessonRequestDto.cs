@@ -16,10 +16,7 @@ namespace Dto.Teacher.Requests
         [Required]
         public required string LessonDescription { get; set; }
         [Required]
-        public DateTime LessonStartDate {  get; set; }
-        [Required]
+        public DateTime LessonStartDate {  get; set; }        
         public File? Material { get; set; }
-
-        //public List<HomeTask>? HomeTasks { get; set; }
     }
 }

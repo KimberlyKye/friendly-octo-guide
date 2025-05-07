@@ -7,7 +7,7 @@ namespace Infrastructure.Repositories.Abstractions
     public interface ITeacherRepository
     {
         public Task<Teacher> GetTeacherById(int teacherId);
-        Task<bool> CheckIsRealCourseById(int courseId);
+        Task<bool> CheckIsCourseExistAndActiveById(int courseId);
         Task<int> AddLesson(Entities.Lesson lesson);
         public Task<CalendarResponseDto> GetCalendarData(GetCalendarDataRequestDto requestDto);
 

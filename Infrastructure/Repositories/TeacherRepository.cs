@@ -8,6 +8,8 @@ using Dto.Teacher.Responses;
 using Dto.Teacher.Requests;
 using Infrastructure.Factories.Abstractions;
 using Infrastructure.Factories;
+using Domain.ValueObjects.Enums;
+using ValueObjects.Enums;
 
 namespace Infrastructure.Repositories;
 
@@ -34,7 +36,7 @@ public class TeacherRepository : ITeacherRepository
         try
         {
             var teacherInfo = await _context.Users
-                .Where(teacher => teacher.Id == teacherId && teacher.RoleId == 0)
+                .Where(teacher => teacher.Id == teacherId && teacher.RoleId == (int)RoleEnum.Teacher)
                 .FirstOrDefaultAsync();
             
             if (teacherInfo == null) { throw new Exception(); }
@@ -47,12 +49,15 @@ public class TeacherRepository : ITeacherRepository
             throw;
         }
     }
-    public async Task<bool> CheckIsRealCourseById(int courseId)
+    public async Task<bool> CheckIsCourseExistAndActiveById(int courseId)
     {
         return await _context.Courses
                         .AsNoTracking()
-                        .Where(c => c.Id == courseId)
+                        .Where(c => c.Id == courseId
+                                 && c.StateId == (int)CourseState.Active)
                         .AnyAsync();
+        //FirstOrDefaultAsync()
+        //if()
     }
     public async Task<int> AddLesson(Entities.Lesson lesson) //<Entities.Lesson>
     {

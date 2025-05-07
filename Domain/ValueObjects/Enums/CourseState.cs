@@ -8,7 +8,7 @@ namespace ValueObjects.Enums
 {
     public enum CourseState
     {
-        Archive,
-        Active
+        Archive = 1,
+        Active = 2
     }
 }
