@@ -1,24 +1,22 @@
 ﻿using Entities;
 using Domain.ValueObjects;
 using System.ComponentModel.DataAnnotations;
+using File = Domain.ValueObjects.File;
 
 namespace WebApi.Dto.Teacher.Requests
 {
     public class CreateLessonRequestDto
     {
         [Required]
-        public int TeacherId { get; set; }
+        public long TeacherId { get; set; }
         [Required]
-        public int CourseId { get; set; }
+        public long CourseId { get; set; }
         [Required]
-        public required string LessonName {  get; set; }
+        public required string LessonName { get; set; }
         [Required]
-        public string LessonDescription { get; set; } = string.Empty;
+        public required string LessonDescription { get; set; }
         [Required]
-        public DateTime LessonStartDate {  get; set; }
-        [Required]
-        public Domain.ValueObjects.File? Material { get; set; }
-        [Required]
-        public required List<HomeTask> HomeTasks { get; set; }
+        public DateTime LessonStartDate { get; set; }
+        public File? Material { get; set; }
     }
 }

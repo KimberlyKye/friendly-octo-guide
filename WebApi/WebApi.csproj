@@ -22,12 +22,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Application\Application.csproj" />
-    <ProjectReference Include="..\Dto\Dto.csproj" />
+    <Folder Include="Dto\Student\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Dto\Student\" />
+    <ProjectReference Include="..\Application\Application.csproj" />
   </ItemGroup>
 
 </Project>

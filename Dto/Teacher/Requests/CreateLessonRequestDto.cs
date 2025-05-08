@@ -12,11 +12,11 @@ namespace Dto.Teacher.Requests
         [Required]
         public long CourseId { get; set; }
         [Required]
-        public required string LessonName {  get; set; }
+        public required string LessonName { get; set; }
         [Required]
         public required string LessonDescription { get; set; }
         [Required]
-        public DateTime LessonStartDate {  get; set; }        
+        public DateTime LessonStartDate { get; set; }
         public File? Material { get; set; }
     }
 }

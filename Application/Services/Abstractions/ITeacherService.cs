@@ -1,14 +1,14 @@
 ﻿using Entities;
-using Dto.Teacher.Requests;
-using Dto.Teacher.Responses;
-using Application.Dto.Teacher;
+using Application.Models.Teacher.Requests;
+using Application.Models.Teacher.Responses;
 
 namespace Application.Services.Abstractions
 {
     public interface ITeacherService
-    {
-        public Task<CalendarResponseDto> GetCalendarData(GetCalendarDataRequestDto requestDto);
+    {        
         public Task<int> CreateLesson(CreateLessonModel requestDto);
         public Task<Teacher> GetTeacherById(int teacherId);
+
+        //public Task<CalendarResponseModel> GetCalendarData(GetCalendarDataRequestModel requestDto);
     }
 }

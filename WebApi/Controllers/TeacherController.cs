@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using WebApi.Dto.Teacher.Requests;
 using Application.Services.Abstractions;
-using Dto.Teacher.Requests;
-using Application.Dto.Teacher;
+using Application.Models.Teacher.Requests;
+using Application.Models.Teacher.Responses;
 using Humanizer;
 using Domain.ValueObjects;
 using File = Domain.ValueObjects.File;
@@ -19,17 +20,17 @@ namespace WebApi.Controllers
             _teacherService = teacherService;
         }
         [HttpGet("calendar-data")]
-        public async Task<IActionResult> GetCalendarData(GetCalendarDataRequestDto requestDto)
-        {
-            if (requestDto is null
-                || requestDto.userId <= 0
-                || requestDto.date <= new DateOnly(2000, 1, 1))
-            {
-                return BadRequest();
-            }
-            var result = await _teacherService.GetCalendarData(requestDto);
-            return Ok(result);
-        }
+        //public async Task<IActionResult> GetCalendarData(GetCalendarDataRequestDto requestDto)
+        //{
+        //    if (requestDto is null
+        //        || requestDto.userId <= 0
+        //        || requestDto.date <= new DateOnly(2000, 1, 1))
+        //    {
+        //        return BadRequest();
+        //    }
+        //    var result = await _teacherService.GetCalendarData(requestDto);
+        //    return Ok(result);
+        //}
         [HttpPost("create-lesson")]
         public async Task<IActionResult> CreateLesson(CreateLessonRequestDto requestDto)
         {
@@ -51,7 +52,7 @@ namespace WebApi.Controllers
                     LessonDescription = requestDto.LessonDescription,
                     LessonStartDate = requestDto.LessonStartDate,
                     Material = requestDto.Material,
-                    //HomeTasks = requestDto.HomeTasks
+                    //HomeTasks = requestDto.HomeTasks 
                 };
 
                 var result = await _teacherService.CreateLesson(requestModel);

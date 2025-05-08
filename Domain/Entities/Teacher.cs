@@ -49,11 +49,12 @@ namespace Entities
             return this;
         }
         public async Task<Lesson> CreateLesson(int id,
-                                                    LessonName lessonName,
-                                                    string description,
-                                                    DateTime date,
-                                                    File? material = null,
-                                                    IEnumerable<HomeTask>? homeTasks = null)
+                                               int courseId,
+                                               LessonName lessonName,
+                                               string description,
+                                               DateTime date,
+                                               File? material = null,
+                                               IEnumerable<HomeTask>? homeTasks = null)
         {
             // Проверки параметров
             if (lessonName == null)
@@ -63,6 +64,7 @@ namespace Entities
 
             return await Task.Run(() => new Lesson(
                 id,
+                courseId,
                 lessonName,
                 description,
                 date,

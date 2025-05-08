@@ -1,10 +1,9 @@
 ﻿using Infrastructure.Repositories.Abstractions;
 using Application.Services.Abstractions;
-using Dto.Teacher.Requests;
-using Dto.Teacher.Responses;
 using Entities;
-using Application.Dto.Teacher;
 using Domain.ValueObjects;
+using Application.Models.Teacher.Requests;
+using Application.Models.Teacher.Responses;
 
 namespace Application.Services;
 
@@ -16,23 +15,24 @@ public class TeacherService : ITeacherService
     {
         _teacherRepository = teacherRepository;
     }
-    public async Task<CalendarResponseDto> GetCalendarData(GetCalendarDataRequestDto requestDto)
-    {
-        return await _teacherRepository.GetCalendarData(requestDto);
-    }
+    //public async Task<CalendarResponseModel> GetCalendarData(GetCalendarDataRequestModel requestDto)
+    //{
+    //    return await _teacherRepository.GetCalendarData(requestDto);
+    //}
     public async Task<int> CreateLesson(CreateLessonModel requestDto)
     {
         Teacher teacher = await _teacherRepository.GetTeacherById(requestDto.TeacherId);
 
-        //if (!await _teacherRepository.CheckIsRealCourseById(requestDto.CourseId))
-        //    { return -1; }    
-        
-        Lesson newLesson = await teacher.CreateLesson(0,
-                                                            requestDto.LessonName,
-                                                            requestDto.LessonDescription,
-                                                            requestDto.LessonStartDate,
-                                                            requestDto.Material,
-                                                            requestDto.HomeTasks);
+        if (!await _teacherRepository.CheckIsCourseExistAndActiveById(requestDto.CourseId))
+        { return -1; }
+
+        Lesson newLesson = await teacher.CreateLesson(  0,
+                                                        requestDto.CourseId,
+                                                        requestDto.LessonName,
+                                                        requestDto.LessonDescription,
+                                                        requestDto.LessonStartDate,
+                                                        requestDto.Material,
+                                                        requestDto.HomeTasks);
 
         return await _teacherRepository.AddLesson(newLesson);
     }

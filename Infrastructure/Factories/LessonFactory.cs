@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Domain.ValueObjects;
+using Entities;
 using Infrastructure.DataModels;
 using Infrastructure.Factories.Abstractions;
 using File = Domain.ValueObjects.File;
@@ -23,7 +24,7 @@ namespace Infrastructure.Factories
             _fileFactory = fileFactory ?? throw new ArgumentNullException(nameof(fileFactory));
         }
 
-        public async Task<Entities.Lesson> CreateAsync(Lesson dataModel, IEnumerable<HomeTask>? homeTasks = null)
+        public async Task<Entities.Lesson> CreateAsync(DataModels.Lesson dataModel, IEnumerable<DataModels.HomeTask>? homeTasks = null)
         {
             if (dataModel == null)
                 throw new ArgumentNullException(nameof(dataModel));
@@ -35,6 +36,7 @@ namespace Infrastructure.Factories
 
             return new Entities.Lesson(
                 id: dataModel.Id,
+                courseId : dataModel.CourseId,
                 lessonName: new LessonName(dataModel.Title),
                 description: dataModel.Description,
                 date: dataModel.Date,
@@ -42,16 +44,17 @@ namespace Infrastructure.Factories
                 homeTasks: domainHomeTasks);
         }
 
-        public Task<Lesson> CreateDataModelAsync(Entities.Lesson domainEntity)
+        public Task<DataModels.Lesson> CreateDataModelAsync(Entities.Lesson domainEntity)
         {
             if (domainEntity == null)
                 throw new ArgumentNullException(nameof(domainEntity));
 
             var materialPath = _fileFactory.GetFullPath(domainEntity.Material);
 
-            return Task.FromResult(new Lesson
+            return Task.FromResult(new DataModels.Lesson
             {
                 Id = domainEntity.Id,
+                CourseId = domainEntity.CourseId,
                 Title = domainEntity.Name.Value,
                 Description = domainEntity.Description,
                 Date = domainEntity.Date,
@@ -59,7 +62,7 @@ namespace Infrastructure.Factories
             });
         }
 
-        private async Task<List<Entities.HomeTask>> CreateHomeTasksAsync(IEnumerable<HomeTask> homeTasks)
+        private async Task<List<Entities.HomeTask>> CreateHomeTasksAsync(IEnumerable<DataModels.HomeTask> homeTasks)
         {
             var tasks = homeTasks
                 .Where(h => h != null)

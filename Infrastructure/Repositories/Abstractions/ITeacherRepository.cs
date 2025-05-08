@@ -1,6 +1,4 @@
-﻿using Dto.Teacher.Requests;
-using Dto.Teacher.Responses;
-using Entities;
+﻿using Entities;
 
 namespace Infrastructure.Repositories.Abstractions
 {
@@ -9,7 +7,7 @@ namespace Infrastructure.Repositories.Abstractions
         public Task<Teacher> GetTeacherById(int teacherId);
         Task<bool> CheckIsCourseExistAndActiveById(int courseId);
         Task<int> AddLesson(Entities.Lesson lesson);
-        public Task<CalendarResponseDto> GetCalendarData(GetCalendarDataRequestDto requestDto);
+        //public Task<CalendarResponseModel> GetCalendarData(GetCalendarDataRequestModel requestDto);
 
     }
 }
