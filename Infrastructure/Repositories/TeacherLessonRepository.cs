@@ -7,17 +7,16 @@ using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using Infrastructure.Factories.Abstractions;
 using Infrastructure.Factories;
 using Domain.ValueObjects.Enums;
-using ValueObjects.Enums;
 
 namespace Infrastructure.Repositories;
 
-public class TeacherRepository : ITeacherRepository
+public class TeacherLessonRepository : ITeacherLessonRepository
 {
     private readonly AppDbContext _context;
     private readonly ITeacherFactory _teacherFactory;
     private readonly ILessonFactory _lessonFactory;
 
-    public TeacherRepository(
+    public TeacherLessonRepository(
         AppDbContext context,
         ITeacherFactory teacherFactory,
         ILessonFactory lessonFactory)
@@ -25,38 +24,9 @@ public class TeacherRepository : ITeacherRepository
         _context = context;
         _teacherFactory = teacherFactory;
         _lessonFactory = lessonFactory;
-    }
-    public async Task<Teacher> GetTeacherById(int teacherId)
-    {
-        if (teacherId <= 0)
-            throw new ArgumentException("Invalid teacher ID", nameof(teacherId));
-
-        try
-        {
-            var teacherInfo = await _context.Users
-                .Where(teacher => teacher.Id == teacherId && teacher.RoleId == (int)RoleEnum.Teacher)
-                .FirstOrDefaultAsync();
-            
-            if (teacherInfo == null) { throw new Exception(); }
-
-            return await _teacherFactory.CreateFrom(teacherInfo);
-        }
-        catch
-        {
-            //_logger.LogError(ex, "Error while getting teacher by ID {TeacherId}", teacherId);
-            throw;
-        }
-    }
-    public async Task<bool> CheckIsCourseExistAndActiveById(int courseId)
-    {
-        return await _context.Courses
-            .AnyAsync(c => c.Id == courseId && c.StateId == (int)CourseState.Active);
-    }
+    }    
     public async Task<int> AddLesson(Entities.Lesson lesson) //<Entities.Lesson>
-    {
-        if (lesson == null)
-            throw new ArgumentNullException(nameof(lesson));
-
+    {        
         try
         {
             // Преобразуем доменную модель в DataModel

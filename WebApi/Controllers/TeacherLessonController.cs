@@ -11,11 +11,11 @@ namespace WebApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class TeacherController : ControllerBase
+    public class TeacherLessonController : ControllerBase
     {
-        private readonly ITeacherService _teacherService;
+        private readonly ITeacherLessonService _teacherService;
 
-        public TeacherController(ITeacherService teacherService)
+        public TeacherLessonController(ITeacherLessonService teacherService)
         {
             _teacherService = teacherService;
         }
@@ -33,16 +33,9 @@ namespace WebApi.Controllers
         //}
         [HttpPost("create-lesson")]
         public async Task<IActionResult> CreateLesson(CreateLessonRequestDto requestDto)
-        {
-            // Проверка на null
-            if (requestDto is null)
-            {
-                return BadRequest("Request data cannot be null");
-            }
-
+        {           
             try
             {   LessonName lessonName = new LessonName(requestDto.LessonName);
-                //File file = new File(requestDto.Material, string.Empty, string.Empty); // <===========
 
                 var requestModel = new CreateLessonModel
                 {
@@ -52,7 +45,6 @@ namespace WebApi.Controllers
                     LessonDescription = requestDto.LessonDescription,
                     LessonStartDate = requestDto.LessonStartDate,
                     Material = requestDto.Material,
-                    //HomeTasks = requestDto.HomeTasks 
                 };
 
                 var result = await _teacherService.CreateLesson(requestModel);

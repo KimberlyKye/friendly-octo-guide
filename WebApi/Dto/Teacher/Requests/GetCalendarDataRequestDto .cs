@@ -5,8 +5,8 @@ namespace WebApi.Dto.Teacher.Requests
     public class GetCalendarDataRequestDto
     {
         [Required]
-        public int userId {  get; set; }
+        public int UserId {  get; set; }
         [Required]
-        public DateOnly date {  get; set; }
+        public DateOnly Date {  get; set; }
     }
 }

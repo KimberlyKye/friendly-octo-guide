@@ -7,13 +7,20 @@ using Application.Models.Teacher.Responses;
 
 namespace Application.Services;
 
-public class TeacherService : ITeacherService
+public class TeacherLessonService : ITeacherLessonService
 {
-    private readonly ITeacherRepository _teacherRepository;
+    private readonly ITeacherLessonRepository _teacherLessonRepository;
+    private readonly ICourseInfoRepository _courseInfoRepository;
+    private readonly ITeacherInfoRepository _teacherInfoRepository;
 
-    public TeacherService(ITeacherRepository teacherRepository)
+    public TeacherLessonService(
+        ITeacherLessonRepository teacherLessonRepository, 
+        ICourseInfoRepository courseInfoRepository,
+        ITeacherInfoRepository teacherInfoRepository)
     {
-        _teacherRepository = teacherRepository;
+        _teacherLessonRepository = teacherLessonRepository;
+        _courseInfoRepository = courseInfoRepository;
+        _teacherInfoRepository = teacherInfoRepository;
     }
     //public async Task<CalendarResponseModel> GetCalendarData(GetCalendarDataRequestModel requestDto)
     //{
@@ -21,9 +28,9 @@ public class TeacherService : ITeacherService
     //}
     public async Task<int> CreateLesson(CreateLessonModel requestDto)
     {
-        Teacher teacher = await _teacherRepository.GetTeacherById(requestDto.TeacherId);
+        Teacher teacher = await _teacherInfoRepository.GetTeacherById(requestDto.TeacherId);
 
-        if (!await _teacherRepository.CheckIsCourseExistAndActiveById(requestDto.CourseId))
+        if (!await _courseInfoRepository.CheckIsCourseExistAndActiveById(requestDto.CourseId))
         { return -1; }
 
         Lesson newLesson = await teacher.CreateLesson(  0,
@@ -34,10 +41,6 @@ public class TeacherService : ITeacherService
                                                         requestDto.Material,
                                                         requestDto.HomeTasks);
 
-        return await _teacherRepository.AddLesson(newLesson);
-    }
-    public async Task<Teacher> GetTeacherById(int teacherId)
-    {
-        return await _teacherRepository.GetTeacherById(teacherId);
-    }
+        return await _teacherLessonRepository.AddLesson(newLesson);
+    }    
 }

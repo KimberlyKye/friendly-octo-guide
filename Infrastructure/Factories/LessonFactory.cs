@@ -26,9 +26,6 @@ namespace Infrastructure.Factories
 
         public async Task<Entities.Lesson> CreateAsync(DataModels.Lesson dataModel, IEnumerable<DataModels.HomeTask>? homeTasks = null)
         {
-            if (dataModel == null)
-                throw new ArgumentNullException(nameof(dataModel));
-
             var material = _fileFactory.Create(dataModel.Material);
             var domainHomeTasks = homeTasks != null
                 ? await CreateHomeTasksAsync(homeTasks)

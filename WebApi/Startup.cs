@@ -29,14 +29,17 @@ namespace WebApi
             // 1. Инфраструктура
             services.AddDbContext<AppDbContext>(options =>
                  options.UseNpgsql(Configuration.GetConnectionString("PgConnectionString")));
-            services.AddScoped<ITeacherRepository, TeacherRepository>();
+            services.AddScoped<ITeacherInfoRepository, TeacherInfoRepository>();
+            services.AddScoped<ITeacherLessonRepository, TeacherLessonRepository>();
+            services.AddScoped<ICourseInfoRepository, CourseInfoRepository>();
 
             // 2. Swagger
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
                         
             // 3. Основные сервисы приложения
-            services.AddScoped<ITeacherService, TeacherService>();
+            services.AddScoped<ITeacherLessonService, TeacherLessonService>();
+            services.AddScoped<ITeacherInfoService, TeacherInfoService>();
 
             // 4. Фабрики
             services.AddTransient<IStudentFactory, StudentFactory>();
