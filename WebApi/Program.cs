@@ -1,5 +1,6 @@
 using Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
+using Application.Services;
 
 namespace WebApi
 {
@@ -14,7 +15,6 @@ namespace WebApi
                 var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
                 db.Database.Migrate();
             }
-
             host.Run();
         }
 
