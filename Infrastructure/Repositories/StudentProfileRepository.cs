@@ -32,6 +32,12 @@ namespace Infrastructure.Repositories
         public async Task<Entities.Student> GetUserProfileAsync(long studentId)
         {
             var user = await _context.Users.FirstOrDefaultAsync(c => c.Id == studentId && c.RoleId == (int)RoleEnum.Student);
+
+            if (user == null)
+            {
+                throw new InvalidOperationException("Профиль студента не найден.");
+            }
+
             return await _studentFactory.CreateFromAsync(user);
         }
 

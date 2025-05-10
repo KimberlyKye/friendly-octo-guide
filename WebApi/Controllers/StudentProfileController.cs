@@ -17,6 +17,10 @@ namespace WebApi.Controllers
         //private readonly ILogger<StudentProfileController> _logger; // TODO: раскомментировать, когда добавим логгер в проект - https://github.com/KimberlyKye/friendly-octo-guide/issues/34
         private IStudentProfileService _studentProfileService;
 
+        /// <summary>
+        /// Контроллер
+        /// </summary>
+        /// <param name="profileService"></param>
         public StudentProfileController(
             //ILogger<StudentProfileController> logger, ; // TODO: раскомментировать, когда добавим логгер в проект - https://github.com/KimberlyKye/friendly-octo-guide/issues/34
             IStudentProfileService profileService
@@ -87,7 +91,7 @@ namespace WebApi.Controllers
         /// <summary>
         /// Метод получения информации в профиле студента
         /// </summary>
-        /// <param name="request"></param>
+        /// <param name="id"></param>
         /// <returns>Модель пользователя</returns>
         /// <remarks>
         /// Пример запроса:

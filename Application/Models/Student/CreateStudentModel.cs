@@ -6,18 +6,39 @@ using System.Threading.Tasks;
 
 namespace Application.Models.Student
 {
+    /// <summary>
+    /// Модель для создания профиля студента
+    /// </summary>
     public class CreateStudentModel
     {
-        public string Email { get; set; }
+        /// <summary>
+        /// Пароль для создания профиля
+        /// </summary>
+        public required string Password { get; set; }
 
-        public string Password { get; set; }
+        /// <summary>
+        /// Адрес электронной почты
+        /// </summary>
+        public required string Email { get; set; }
 
-        public string PhoneNumber { get; set; }
+        /// <summary>
+        /// Номер телефона
+        /// </summary>
+        public required string PhoneNumber { get; set; }
 
-        public string FirstName { get; set; }
+        /// <summary>
+        /// Имя студента
+        /// </summary>
+        public required string FirstName { get; set; }
 
-        public string LastName { get; set; }
+        /// <summary>
+        /// Фамилия студента
+        /// </summary>
+        public required string LastName { get; set; }
 
+        /// <summary>
+        /// Дата рождения студента
+        /// </summary>
         public DateTime BirthDate { get; set; }
     }
 }
