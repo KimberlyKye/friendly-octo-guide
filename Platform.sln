@@ -3,21 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\Application.csproj", "{565ECCDA-1F85-44D9-8F13-914C9A78F304}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "Application\Application.csproj", "{565ECCDA-1F85-44D9-8F13-914C9A78F304}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{614BAB92-3A1B-4A2F-99DE-587867ABACA2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{614BAB92-3A1B-4A2F-99DE-587867ABACA2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi", "WebApi\WebApi.csproj", "{3183B2E4-615A-43FE-A5D6-203C46C6ACC9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi", "WebApi\WebApi.csproj", "{3183B2E4-615A-43FE-A5D6-203C46C6ACC9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{037D4B85-C49E-417A-AAA3-11F0CB69190C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{037D4B85-C49E-417A-AAA3-11F0CB69190C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{99EC633F-4CBA-4C7F-A289-CD1E5CE7DA48}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValueObjects", "Domain\ValueObjects\ValueObjects.csproj", "{4B77C7D8-EA00-4996-AD9B-C27BF1214B68}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ValueObjects", "Domain\ValueObjects\ValueObjects.csproj", "{4B77C7D8-EA00-4996-AD9B-C27BF1214B68}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entities", "Domain\Entities\Entities.csproj", "{5C2ED862-5C49-4BE8-BFD2-94DBA6E809C7}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dto", "Dto\Dto.csproj", "{906C423B-1EF9-42EB-BDF7-806442E988F5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entities", "Domain\Entities\Entities.csproj", "{5C2ED862-5C49-4BE8-BFD2-94DBA6E809C7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,10 +47,6 @@ Global
 		{5C2ED862-5C49-4BE8-BFD2-94DBA6E809C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5C2ED862-5C49-4BE8-BFD2-94DBA6E809C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5C2ED862-5C49-4BE8-BFD2-94DBA6E809C7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{906C423B-1EF9-42EB-BDF7-806442E988F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{906C423B-1EF9-42EB-BDF7-806442E988F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{906C423B-1EF9-42EB-BDF7-806442E988F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{906C423B-1EF9-42EB-BDF7-806442E988F5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -60,7 +54,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{4B77C7D8-EA00-4996-AD9B-C27BF1214B68} = {99EC633F-4CBA-4C7F-A289-CD1E5CE7DA48}
 		{5C2ED862-5C49-4BE8-BFD2-94DBA6E809C7} = {99EC633F-4CBA-4C7F-A289-CD1E5CE7DA48}
-		{906C423B-1EF9-42EB-BDF7-806442E988F5} = {99EC633F-4CBA-4C7F-A289-CD1E5CE7DA48}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2328DB31-442C-49C6-A46B-4ADAACE6716C}

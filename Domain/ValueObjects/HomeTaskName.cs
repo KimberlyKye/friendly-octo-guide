@@ -17,7 +17,7 @@ namespace Domain.ValueObjects
     {
         private const int MinLength = 2;
         private const int MaxLength = 100;
-        private static readonly Regex ValidCharsRegex = new(@"^[\p{L}\d\s\-]+$", RegexOptions.Compiled);
+        private static readonly Regex ValidCharsRegex = new(@"^[\p{L}\d\s\-_№]+$", RegexOptions.Compiled);
         private string _name;
 
         /// <summary>

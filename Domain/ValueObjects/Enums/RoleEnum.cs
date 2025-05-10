@@ -2,7 +2,8 @@ namespace Domain.ValueObjects.Enums
 {
     public enum RoleEnum
     {
-        Student,
-        Teacher
+        Teacher = 1,
+        Student = 2,
+        
     }
 }

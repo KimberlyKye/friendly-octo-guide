@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ValueObjects.Enums
+﻿namespace Domain.ValueObjects.Enums
 {
     public enum CourseState
     {
-        Archive,
-        Active
+        Archive = 1,
+        Active = 2
     }
 }

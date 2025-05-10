@@ -1,7 +1,7 @@
 ﻿using Domain.Entities.Base;
 using Domain.ValueObjects;
+using Domain.ValueObjects.Enums;
 using System.Collections.ObjectModel;
-using ValueObjects.Enums;
 
 namespace Entities
 {

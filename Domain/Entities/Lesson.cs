@@ -14,6 +14,7 @@ namespace Entities
     /// </remarks>
     public class Lesson : Entity<int>
     {
+        private readonly int _courseId;
         private readonly LessonName _lessonName;
         private string _description;
         private DateTime _date;
@@ -33,12 +34,14 @@ namespace Entities
         /// Возникает при передаче null для обязательных параметров
         /// </exception>
         public Lesson(int id,
+                     int courseId,
                      LessonName lessonName,
                      string description,
                      DateTime date,
                      File? material = null,
                      IEnumerable<HomeTask>? homeTasks = null) : base(id)
         {
+            _courseId = courseId;
             _lessonName = lessonName ?? throw new ArgumentNullException(nameof(lessonName));
             _description = description ?? throw new ArgumentNullException(nameof(description));
             _date = date;
@@ -50,6 +53,7 @@ namespace Entities
             }
         }
 
+        public int CourseId => _courseId;
         /// <summary>
         /// Название занятия (только для чтения)
         /// </summary>
