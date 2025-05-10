@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Domain.Entities.Base;
@@ -14,6 +15,8 @@ namespace Entities
         public Email Email { get; private set; }
         public BirthDate DateOfBirth { get; private set; }
         public List<Course> Courses { get; }
+        public string Password { get; private set; }
+
 
         public Person(int id, FullName name, PhoneNumber phoneNumber, Email email, BirthDate birthDate) : base(id)
         {
@@ -22,6 +25,16 @@ namespace Entities
             Email = email;
             Courses = new List<Course>();
             DateOfBirth = birthDate;
+        }
+
+        public Person(int id, FullName name, PhoneNumber phoneNumber, Email email, BirthDate birthDate, string password) : base(id)
+        {
+            Name = name;
+            PhoneNumber = phoneNumber;
+            Email = email;
+            Courses = new List<Course>();
+            DateOfBirth = birthDate;
+            Password = password;
         }
 
         public FullName GetName()

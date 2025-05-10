@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Domain.ValueObjects;
+using System.ComponentModel;
 
 namespace Entities
 {
@@ -15,9 +12,20 @@ namespace Entities
         {
             HomeWorks = new List<HomeWork>();
         }
-
         public Student(FullName name, PhoneNumber phoneNumber, Email email, BirthDate birthDate)
             : base(0, name, phoneNumber, email, birthDate)
+        {
+            HomeWorks = new List<HomeWork>();
+        }
+
+        public Student(int id, FullName name, PhoneNumber phoneNumber, Email email, BirthDate birthDate, string password)
+            : base(id, name, phoneNumber, email, birthDate, password)
+        {
+            HomeWorks = new List<HomeWork>();
+        }
+
+        public Student(FullName name, PhoneNumber phoneNumber, Email email, BirthDate birthDate, string password)
+            : base(0, name, phoneNumber, email, birthDate, password)
         {
             HomeWorks = new List<HomeWork>();
         }

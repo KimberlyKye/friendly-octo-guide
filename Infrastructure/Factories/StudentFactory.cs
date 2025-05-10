@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Domain.ValueObjects;
+using Domain.ValueObjects.Enums;
 using Entities;
 using Infrastructure.DataModels;
 using Infrastructure.Factories.Abstractions;
@@ -11,15 +12,34 @@ namespace Infrastructure.Factories
 {
     public class StudentFactory : IStudentFactory
     {
-        public Student CreateFrom(User userModel)
+        public Task<Student> CreateFromAsync(User user)
         {
-            return new Student(
-                id: userModel.Id,
-                name: new FullName(userModel.Name, userModel.Surname),
-                email: new Email(userModel.Email),
-                phoneNumber: new PhoneNumber(userModel.PhoneNumber),
-                birthDate: null //new BirthDate(new DateOnly(userModel.DateOfBirth.ToString))
-            );
+            if (user is null
+                           || user.DateOfBirth is null)
+                throw new ArgumentNullException(nameof(user));
+
+            return Task.FromResult(new Student(
+                id: user.Id,
+                name: new FullName(user.Name, user.Surname),
+                phoneNumber: new PhoneNumber(user.PhoneNumber),
+                email: new Email(user.Email),
+                birthDate: new BirthDate((DateTime)user.DateOfBirth)));
         }
+
+        public Task<User> CreateDataModelAsync(Student student)
+        {
+            return Task.FromResult(new User
+            {
+                Id = student.Id,
+                RoleId = (int)RoleEnum.Student,
+                Name = student.Name.FirstName,
+                Surname = student.Name.LastName,
+                Email = student.Email.Value,
+                PhoneNumber = student.PhoneNumber,
+                DateOfBirth = student.DateOfBirth.Date.ToDateTime(TimeOnly.MinValue),
+                Password = student.Password
+            });
+        }
+
     }
 }

@@ -1,6 +1,8 @@
 ﻿using Infrastructure.DataModels;
+using Infrastructure.Migrations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Infrastructure.Configurations
 {
@@ -13,6 +15,8 @@ namespace Infrastructure.Configurations
 
             // Первичный ключ
             builder.HasKey(c => c.Id);
+            builder.Property(c => c.Id)
+              .ValueGeneratedOnAdd(); // Автоинкремент
 
             // Настройка свойств
             builder.Property(c => c.Name)
@@ -27,11 +31,11 @@ namespace Infrastructure.Configurations
                 .IsRequired()
                 .HasColumnType("date"); // Для DateOnly в PostgreSQL
 
-            builder.Property(c => c.PhoneNumber)
-                .IsRequired()
-                .HasMaxLength(12);
+            builder.Property(c => c.PhoneNumber) 
+            .IsRequired()
+            .HasMaxLength(12);
 
-            builder.Property(c => c.Email)
+            builder.Property(c => c.Email) 
                 .IsRequired()
                 .HasMaxLength(100);
 

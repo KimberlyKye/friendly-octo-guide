@@ -11,6 +11,9 @@ using Microsoft.EntityFrameworkCore;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
 using Infrastructure.Repositories.Abstractions;
 using Infrastructure.Repositories;
+using Entities;
+using System.Reflection;
+using Microsoft.OpenApi.Models;
 
 namespace WebApi
 {
@@ -32,14 +35,38 @@ namespace WebApi
             services.AddScoped<ITeacherInfoRepository, TeacherInfoRepository>();
             services.AddScoped<ITeacherLessonRepository, TeacherLessonRepository>();
             services.AddScoped<ICourseInfoRepository, CourseInfoRepository>();
+            services.AddScoped<IUserProfileRepository<Student>, StudentProfileRepository>();
 
             // 2. Swagger
             services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen();
+            services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = "Platform API",
+                    Description = "ASP.NET Core Web API  для приложения Платформа. Платформа (Platform) - это система для дистанционного обучения студентов (Student).",
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Our Git repository",
+                        Url = new Uri("https://github.com/KimberlyKye/friendly-octo-guide")
+                    },
+                    License = new OpenApiLicense
+                    {
+                        Name = "Project description",
+                        Url = new Uri("https://github.com/KimberlyKye/friendly-octo-guide/wiki")
+                    }
+                });
+
+                var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+
+            });
                         
             // 3. Основные сервисы приложения
             services.AddScoped<ITeacherLessonService, TeacherLessonService>();
             services.AddScoped<ITeacherInfoService, TeacherInfoService>();
+            services.AddScoped<IStudentProfileService, StudentProfileService>();
 
             // 4. Фабрики
             services.AddTransient<IStudentFactory, StudentFactory>();

@@ -14,6 +14,9 @@ namespace Infrastructure.Configurations
             // Первичный ключ
             builder.HasKey(c => c.Id);
 
+            builder.Property(s => s.Id)
+                .ValueGeneratedOnAdd(); // Автоинкремент
+
             // Настройка свойств
             builder.Property(c => c.Title)
                 .IsRequired()
