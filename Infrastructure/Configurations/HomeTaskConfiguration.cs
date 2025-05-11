@@ -11,6 +11,8 @@ namespace Infrastructure.Configurations
             builder.ToTable("HomeTasks"); // имя таблицы в БД
 
             builder.HasKey(ht => ht.Id); // первичный ключ
+            builder.Property(ht => ht.Id)
+              .ValueGeneratedOnAdd(); // Автоинкремент
 
             builder.HasOne<Lesson>()              // Указываем тип связанной сущности (Lesson)
                .WithMany()                        // Указываем, что у Lesson много HomeTask (но без навигации)

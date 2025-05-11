@@ -53,6 +53,20 @@ namespace Infrastructure.Contexts
                 .ApplyConfiguration(new StudentFavoriteCoursesConfiguration())
                 .ApplyConfiguration(new LessonsScoresConfiguration());
             #endregion
+
+            // Seed-данные для таблицы ролей
+            modelBuilder.Entity<Role>().HasData(
+            [
+            new Role {Id = 1, Name = "Teacher", Description="Преподаватель"},
+            new Role {Id = 2, Name = "Student", Description = "Студент"}
+            ]);
+
+            // Seed-данные для таблицы состояний курсов
+            modelBuilder.Entity<State>().HasData(
+            [
+            new State {Id = 1, Name = "Archive", Description= "Завершенный курс, который ушел в архив"},
+            new State {Id = 2, Name = "Active", Description= "Активный курс"}
+            ]);
         }
     }
 }

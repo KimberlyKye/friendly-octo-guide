@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Domain.ValueObjects;
+using Domain.ValueObjects.Enums;
 using Entities;
 using Infrastructure.DataModels;
 using Infrastructure.Factories.Abstractions;
@@ -31,7 +32,7 @@ namespace Infrastructure.Factories
             return Task.FromResult(new User
             {
                 Id = teacher.Id,
-                RoleId = 0,
+                RoleId = (int)RoleEnum.Teacher,
                 Name = teacher.Name.FirstName,
                 Surname = teacher.Name.LastName,
                 Email = teacher.Email.Value,

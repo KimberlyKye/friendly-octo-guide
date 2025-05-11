@@ -10,6 +10,14 @@ namespace Infrastructure.Factories.Abstractions
         /// </summary>
         /// <param name="userModel"></param>
         /// <returns></returns>
-        public Student CreateFrom(User userModel);
+        public Task<Student> CreateFromAsync(User userModel);
+
+        /// <summary>
+        /// Создает модель пользователя (DataModel) из студента (Domain)
+        /// </summary>
+        /// <param name="student"></param>
+        /// <returns></returns>
+        public Task<User> CreateDataModelAsync(Student student);
+
     }
 }
