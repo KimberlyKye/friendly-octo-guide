@@ -44,10 +44,11 @@ namespace Tests.Domain.ValueObjects
         [Test]
         public void UpdateLessonInfo_ShouldUpdateLessonInfo()
         {
-            var lesson = new Lesson(1,
-                     new LessonName("lesson name"),
-                      "description",
-                     new DateTime());
+            var lesson = new Lesson( 1,
+                                     1,
+                                     new LessonName("lesson name"),
+                                      "description",
+                                     new DateTime());
             var course = new Course(1, _teacher,
                                     new CourseName("course name"), "description",
                                     new Duration(new DateOnly(2020, 01, 01), new DateOnly(2020, 01, 02)));
@@ -64,10 +65,11 @@ namespace Tests.Domain.ValueObjects
         [Test]
         public void SetLessonScore_ShouldSetLessonScore()
         {
-            var lesson = new Lesson(1,
-                     new LessonName("lesson name"),
-                      "description",
-                     new DateTime());
+            var lesson = new Lesson( 1,
+                                     1,
+                                     new LessonName("lesson name"),
+                                      "description",
+                                     new DateTime());
             Assert.DoesNotThrow(() => _teacher.SetLessonScore(_student, lesson));
 
             // Проверка того, что оценка за урок была установлена
