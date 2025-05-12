@@ -6,6 +6,9 @@ using WebApi.Dto.Course.Responses;
 
 namespace WebApi.Controllers;
 
+/// <summary>
+/// Контроллер курса
+/// </summary>
 [ApiController]
 [Route("api/[controller]")]
 public class CourseController : ControllerBase
@@ -15,6 +18,12 @@ public class CourseController : ControllerBase
         _courseService = courseService;
     }
 
+    /// <summary>
+    /// Метод создание курса
+    /// </summary>
+    /// <param name="courseData"></param>
+    /// <returns></returns>
+    /// <response code="200">Возвращает курс</response>
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -24,8 +33,7 @@ public class CourseController : ControllerBase
         {
             var createdCourse = await _courseService.AddCourseAsync(new CreateCourseModel()
             {
-                Id = courseData.Id,
-                StateId = (int)courseData.StateId,
+                StateId = courseData.StateId,
                 TeacherId = courseData.TeacherId,
                 Title = courseData.Title,
                 Description = courseData.Description,

@@ -16,7 +16,6 @@ public class CourseService : ICourseService
     {
         Course courseModel = new Course()
         {
-            Id = course.Id,
             StateId = (int)course.StateId,
             TeacherId = course.TeacherId,
             Title = course.Title,
