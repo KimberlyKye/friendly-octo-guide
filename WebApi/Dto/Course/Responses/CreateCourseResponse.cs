@@ -1,7 +1,7 @@
-﻿namespace Infrastructure.DataModels
+namespace WebApi.Dto.Course.Responses;
+
+public class CreateCourseResponse
 {
-    public class Course
-    {
         public int Id { get; set; }
         public int StateId {  get; set; }
         public int TeacherId { get; set; }
@@ -10,5 +10,4 @@
         public DateOnly StartDate { get; set; }
         public DateOnly EndDate { get; set;}
         public int PassingScore { get; set; }
-    }
 }
