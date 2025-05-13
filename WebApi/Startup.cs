@@ -11,6 +11,9 @@ using Microsoft.EntityFrameworkCore;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
 using Infrastructure.Repositories.Abstractions;
 using Infrastructure.Repositories;
+using Entities;
+using System.Reflection;
+using Microsoft.OpenApi.Models;
 
 namespace WebApi
 {
@@ -26,29 +29,55 @@ namespace WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // 1. Инфраструктура
+            services.AddCors();
+
+            // 1. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             services.AddDbContext<AppDbContext>(options =>
                  options.UseNpgsql(Configuration.GetConnectionString("PgConnectionString")));
             services.AddScoped<ITeacherInfoRepository, TeacherInfoRepository>();
             services.AddScoped<ITeacherLessonRepository, TeacherLessonRepository>();
             services.AddScoped<ICourseInfoRepository, CourseInfoRepository>();
+            services.AddScoped<IUserProfileRepository<Student>, StudentProfileRepository>();
 
             // 2. Swagger
             services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen();
-                        
-            // 3. Основные сервисы приложения
+            services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = "Platform API",
+                    Description = "ASP.NET Core Web API  пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ (Platform) - пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ (Student).",
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Our Git repository",
+                        Url = new Uri("https://github.com/KimberlyKye/friendly-octo-guide")
+                    },
+                    License = new OpenApiLicense
+                    {
+                        Name = "Project description",
+                        Url = new Uri("https://github.com/KimberlyKye/friendly-octo-guide/wiki")
+                    }
+                });
+
+                var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+
+            });
+
+            // 3. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             services.AddScoped<ITeacherLessonService, TeacherLessonService>();
             services.AddScoped<ITeacherInfoService, TeacherInfoService>();
+            services.AddScoped<IStudentProfileService, StudentProfileService>();
 
-            // 4. Фабрики
+            // 4. пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             services.AddTransient<IStudentFactory, StudentFactory>();
             services.AddTransient<ICourseFactory, CourseFactory>();
             services.AddTransient<ILessonFactory, LessonFactory>();
             services.AddTransient<IHomeTaskFactory, HomeTaskFactory>();
             services.AddTransient<ITeacherFactory, TeacherFactory>();
             services.AddTransient<IFileFactory, FileFactory>();
-            
+
             // 5. MVC
             services.AddControllers();
         }
@@ -57,6 +86,8 @@ namespace WebApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+
             if (env.IsDevelopment())
             {
                 app.UseSwagger();
@@ -71,6 +102,7 @@ namespace WebApi
             {
                 endpoints.MapControllers();
             });
+
         }
     }
 }

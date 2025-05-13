@@ -11,6 +11,8 @@ namespace Infrastructure.Configurations
             builder.ToTable("HomeWorks");
 
             builder.HasKey(hw => hw.Id);
+            builder.Property(hw => hw.Id)
+              .ValueGeneratedOnAdd(); // Автоинкремент
 
             builder.HasOne<StudentCourse>()
                .WithMany()

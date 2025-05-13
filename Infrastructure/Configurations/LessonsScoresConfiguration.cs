@@ -13,6 +13,8 @@ namespace Infrastructure.Configurations
 
             // Первичный ключ
             builder.HasKey(c => c.Id);
+            builder.Property(c => c.Id)
+              .ValueGeneratedOnAdd(); // Автоинкремент
 
             // Настройка свойств
             builder.Property(c => c.Score)

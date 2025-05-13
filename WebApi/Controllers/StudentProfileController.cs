@@ -18,7 +18,7 @@ namespace WebApi.Controllers
         private IStudentProfileService _studentProfileService;
 
         /// <summary>
-        /// Конструктор
+        /// Контроллер
         /// </summary>
         /// <param name="profileService"></param>
         public StudentProfileController(
