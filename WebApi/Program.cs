@@ -13,7 +13,7 @@ namespace WebApi
             using (var scope = host.Services.CreateScope())
             {
                 var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-                db.Database.Migrate();
+                //db.Database.Migrate();
             }
             host.Run();
         }
