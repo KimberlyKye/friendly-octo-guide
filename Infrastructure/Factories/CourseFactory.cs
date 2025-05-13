@@ -28,5 +28,19 @@ namespace Infrastructure.Factories
                 duration: new Duration(courseModel.StartDate, courseModel.EndDate)
             );
         }
+
+        public DataModels.Course MapTo(Course course)
+        {
+            return new DataModels.Course()
+            {
+                StateId = (int)course.State,
+                TeacherId = course.Teacher.Id,
+                Title = course.Name.Value,
+                Description = course.Description,
+                StartDate = course.Duration.StartDate,
+                EndDate = course.Duration.EndDate,
+                PassingScore = 0 // Значение по умолчанию, требуется доработка при добавлении PassingScore в домен
+            };
+        }
     }
 }
