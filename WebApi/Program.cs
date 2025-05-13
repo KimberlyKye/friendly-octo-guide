@@ -1,6 +1,5 @@
 using Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
-using Application.Services;
 
 namespace WebApi
 {
