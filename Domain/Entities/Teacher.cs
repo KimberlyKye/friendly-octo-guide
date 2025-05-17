@@ -19,6 +19,16 @@ namespace Entities
         {
         }
 
+        public Teacher(int id, FullName name, PhoneNumber phoneNumber, Email email, BirthDate birthDate, string password)
+    : base(id, name, phoneNumber, email, birthDate, password)
+        {
+        }
+
+        public Teacher(FullName name, PhoneNumber phoneNumber, Email email, BirthDate birthDate, string password)
+            : base(0, name, phoneNumber, email, birthDate, password)
+        {
+        }
+
         public void UpdateCourseInfo(Course course)
         {
             // Реализация метода
@@ -29,7 +39,7 @@ namespace Entities
             // Реализация метода
         }
 
-        public void SetLessonScore(Student student, Lesson lesson)
+        public void SetLessonScore(Teacher student, Lesson lesson)
         {
             // Реализация метода
         }

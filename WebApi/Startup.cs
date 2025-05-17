@@ -31,13 +31,14 @@ namespace WebApi
         {
             services.AddCors();
 
-            // 1. ��������������
+            // 1. DataBase context + repositories
             services.AddDbContext<AppDbContext>(options =>
                  options.UseNpgsql(Configuration.GetConnectionString("PgConnectionString")));
             services.AddScoped<ITeacherInfoRepository, TeacherInfoRepository>();
             services.AddScoped<ITeacherLessonRepository, TeacherLessonRepository>();
             services.AddScoped<ICourseInfoRepository, CourseInfoRepository>();
             services.AddScoped<IUserProfileRepository<Student>, StudentProfileRepository>();
+            services.AddScoped<IUserProfileRepository<Teacher>, TeacherProfileRepository>();
 
             // 2. Swagger
             services.AddEndpointsApiExplorer();
@@ -47,7 +48,7 @@ namespace WebApi
                 {
                     Version = "v1",
                     Title = "Platform API",
-                    Description = "ASP.NET Core Web API  ��� ���������� ���������. ��������� (Platform) - ��� ������� ��� �������������� �������� ��������� (Student).",
+                    Description = "ASP.NET Core Web API for learning management system named Platform. Created for Otus course C# Professional by Kurkin Kirill, Sharova Anastasia and Dudnikov Alexander. 2025",
                     Contact = new OpenApiContact
                     {
                         Name = "Our Git repository",
@@ -65,12 +66,12 @@ namespace WebApi
 
             });
 
-            // 3. �������� ������� ����������
+            // 3. Services
             services.AddScoped<ITeacherLessonService, TeacherLessonService>();
             services.AddScoped<ITeacherInfoService, TeacherInfoService>();
             services.AddScoped<IStudentProfileService, StudentProfileService>();
 
-            // 4. �������
+            // 4. Factories
             services.AddTransient<IStudentFactory, StudentFactory>();
             services.AddTransient<ICourseFactory, CourseFactory>();
             services.AddTransient<ILessonFactory, LessonFactory>();
