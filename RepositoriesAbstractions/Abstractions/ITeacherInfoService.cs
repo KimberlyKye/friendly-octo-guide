@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Repositories.Abstractions
+namespace Application.Services.Abstractions
 {
-    public interface ITeacherInfoRepository
+    public interface ITeacherInfoService
     {
-        Task<Teacher> GetTeacherById(int teacherId);
+        public Task<Teacher> GetTeacherById(int teacherId);
     }
 }

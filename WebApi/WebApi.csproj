@@ -29,4 +29,8 @@
     <ProjectReference Include="..\Application\Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Dto\Teacher\Responses\" />
+  </ItemGroup>
+
 </Project>

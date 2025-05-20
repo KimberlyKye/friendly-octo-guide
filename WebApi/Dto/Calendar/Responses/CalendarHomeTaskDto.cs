@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Application.Models.Teacher.Responses
+﻿namespace WebApi.Dto.Calendar.Responses
 {
-    public class CalendarResponseModel
+    public class CalendarHomeTaskDto
     {
         public int CourseId { get; set; }
         public string CourseName { get; set; }
@@ -14,6 +8,6 @@ namespace Application.Models.Teacher.Responses
         public string LessonName { get; set; }
         public DateTime DateStart { get; set; }
         public DateTime DateEnd { get; set; }
-        public string Name { get; set; }
+        public string HomeTaskName { get; set; }
     }
 }
