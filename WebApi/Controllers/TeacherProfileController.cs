@@ -15,19 +15,16 @@ namespace WebApi.Controllers
     [Produces("application/json")]
     public class TeacherProfileController : Controller
     {
-        //private readonly ILogger<StudentProfileController> _logger; // TODO: раскомментировать, когда добавим логгер в проект - https://github.com/KimberlyKye/friendly-octo-guide/issues/34
-        private IStudentProfileService _teacherProfileService;
+        private ITeacherProfileService _teacherProfileService;
 
         /// <summary>
-        /// Контроллер
+        ///  Конструктор контроллера
         /// </summary>
         /// <param name="profileService"></param>
         public TeacherProfileController(
-            //ILogger<StudentProfileController> logger, ; // TODO: раскомментировать, когда добавим логгер в проект - https://github.com/KimberlyKye/friendly-octo-guide/issues/34
-            IStudentProfileService profileService
+            ITeacherProfileService profileService
             )
         {
-            //_logger = logger; ; // TODO: раскомментировать, когда добавим логгер в проект - https://github.com/KimberlyKye/friendly-octo-guide/issues/34
             _teacherProfileService = profileService;
         }
 
@@ -57,36 +54,29 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult> CreateTeacherProfileAsync(CreateTeacherRequest request)
         {
-            try
+            var newProfile = new CreateTeacherModel()
             {
-                var newProfile = new CreateStudentModel()
-                {
-                    Email = request.Email,
-                    Password = request.Password,
-                    FirstName = request.FirstName,
-                    LastName = request.LastName,
-                    BirthDate = request.BirthDate,
-                    PhoneNumber = request.PhoneNumber
-                };
+                Email = request.Email,
+                Password = request.Password,
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                BirthDate = request.BirthDate,
+                PhoneNumber = request.PhoneNumber
+            };
 
-                var teacherProfile = await _teacherProfileService.CreateProfileAsync(newProfile);
+            var teacherProfile = await _teacherProfileService.CreateProfileAsync(newProfile);
 
-                var res = new CreateTeacherResponse()
-                {
-                    Id = teacherProfile.Id,
-                    Email = teacherProfile.Email,
-                    FirstName = teacherProfile.FirstName,
-                    LastName = teacherProfile.LastName,
-                    BirthDate = teacherProfile.BirthDate,
-                    PhoneNumber = teacherProfile.PhoneNumber
-                };
-                return StatusCode(201, res);
-            }
-            catch (Exception ex)
+            var res = new CreateTeacherResponse()
             {
-                // Логирование ошибки (можно добавить _logger)
-                return StatusCode(500, $"Internal server error: {ex}");
-            }
+                Id = teacherProfile.Id,
+                Email = teacherProfile.Email,
+                FirstName = teacherProfile.FirstName,
+                LastName = teacherProfile.LastName,
+                BirthDate = teacherProfile.BirthDate,
+                PhoneNumber = teacherProfile.PhoneNumber
+            };
+            return StatusCode(201, res);
+
         }
 
         /// <summary>
@@ -107,26 +97,19 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult> GetTeacherProfileAsync(long id)
         {
-            try
-            {
-                var teacherProfile = await _teacherProfileService.GetProfileInfoAsync(id);
+            var teacherProfile = await _teacherProfileService.GetProfileInfoAsync(id);
 
-                var res = new GetTeacherResponse()
-                {
-                    Id = teacherProfile.Id,
-                    Email = teacherProfile.Email,
-                    FirstName = teacherProfile.FirstName,
-                    LastName = teacherProfile.LastName,
-                    BirthDate = teacherProfile.BirthDate,
-                    PhoneNumber = teacherProfile.PhoneNumber
-                };
-                return StatusCode(200, res);
-            }
-            catch (Exception ex)
+            var res = new GetTeacherResponse()
             {
-                // Логирование ошибки (можно добавить _logger)
-                return StatusCode(500, $"Internal server error: {ex}");
-            }
+                Id = teacherProfile.Id,
+                Email = teacherProfile.Email,
+                FirstName = teacherProfile.FirstName,
+                LastName = teacherProfile.LastName,
+                BirthDate = teacherProfile.BirthDate,
+                PhoneNumber = teacherProfile.PhoneNumber
+            };
+            return StatusCode(200, res);
+
 
         }
 
@@ -156,36 +139,28 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult> UpdateTeacherProfileInfoAsync(UpdateTeacherRequest request)
         {
-            try
+            var updatedProfile = new TeacherProfileModel()
             {
-                var updatedProfile = new StudentProfileModel()
-                {
-                    Id = request.Id,
-                    Email = request.Email,
-                    FirstName = request.FirstName,
-                    LastName = request.LastName,
-                    BirthDate = request.BirthDate,
-                    PhoneNumber = request.PhoneNumber
-                };
+                Id = request.Id,
+                Email = request.Email,
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                BirthDate = request.BirthDate,
+                PhoneNumber = request.PhoneNumber
+            };
 
-                var teacherProfile = await _teacherProfileService.UpdateProfileInfoAsync(updatedProfile);
+            var teacherProfile = await _teacherProfileService.UpdateProfileInfoAsync(updatedProfile);
 
-                var res = new UpdateTeacherResponse()
-                {
-                    Id = teacherProfile.Id,
-                    Email = teacherProfile.Email,
-                    FirstName = teacherProfile.FirstName,
-                    LastName = teacherProfile.LastName,
-                    BirthDate = teacherProfile.BirthDate,
-                    PhoneNumber = teacherProfile.PhoneNumber
-                };
-                return StatusCode(200, res);
-            }
-            catch (Exception ex)
+            var res = new UpdateTeacherResponse()
             {
-                // Логирование ошибки (можно добавить _logger)
-                return StatusCode(500, $"Internal server error: {ex}");
-            }
+                Id = teacherProfile.Id,
+                Email = teacherProfile.Email,
+                FirstName = teacherProfile.FirstName,
+                LastName = teacherProfile.LastName,
+                BirthDate = teacherProfile.BirthDate,
+                PhoneNumber = teacherProfile.PhoneNumber
+            };
+            return StatusCode(200, res);
 
         }
 
