@@ -1,7 +1,7 @@
 using Infrastructure.Contexts;
 using Infrastructure.DataModels;
 using Infrastructure.Factories.Abstractions;
-using Infrastructure.Repositories.Abstractions;
+using RepositoriesAbstractions.Abstractions;
 
 namespace Infrastructure.Repositories;
 
@@ -24,5 +24,10 @@ public class CourseRepository : ICourseRepository
         await _context.Courses.AddAsync(course);
         await _context.SaveChangesAsync();
         return course;
+    }
+
+    public Task<Entities.Course> AddCourseAsync(Entities.Course course)
+    {
+        throw new NotImplementedException();
     }
 }

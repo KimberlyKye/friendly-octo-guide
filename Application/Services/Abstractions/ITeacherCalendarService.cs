@@ -6,6 +6,6 @@ namespace Application.Services.Abstractions
 {
     public interface ITeacherCalendarService
     {
-        public Task<TeacherCalendarResponseModel> GetWeekCalendarData(GetTeacherCalendarDataRequestModel request);        
+        public Task<TeacherCalendarResponseModel> GetPeriodCalendarData(GetTeacherCalendarDataRequestModel request);        
     }
 }

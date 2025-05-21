@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Infrastructure.Contexts;
 using Infrastructure.DataModels;
 using Infrastructure.Factories.Abstractions;
-using Infrastructure.Repositories.Abstractions;
+using RepositoriesAbstractions.Abstractions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories

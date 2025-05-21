@@ -85,6 +85,21 @@ namespace Entities
             if (lesson == null) throw new ArgumentNullException(nameof(lesson));
             _lessons.Add(lesson);
         }
+        /// <summary>
+        /// Добавляет уроки в курс
+        /// </summary>
+        /// <param name="lessons">Уроки для добавления</param>
+        /// <exception cref="ArgumentNullException">Выбрасывается, если lesson равен null</exception>
+        public void AddLessons(IEnumerable<Lesson> lessons)
+        {
+            if (lessons == null)
+                throw new ArgumentNullException(nameof(lessons));
+
+            foreach (var lesson in lessons)
+            {
+                AddLesson(lesson); // Используем существующую логику валидации
+            }
+        }
 
         /// <summary>
         /// Удаляет урок из курса

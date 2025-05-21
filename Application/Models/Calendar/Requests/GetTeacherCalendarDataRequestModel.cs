@@ -10,6 +10,8 @@ namespace Application.Models.Calendar.Requests
     public class GetTeacherCalendarDataRequestModel
     {
         public int TeacherId { get; set; }
-        public DateOnly Date { get; set; }
+        public DateOnly StartDate { get; set; }
+        public DateOnly EndDate { get; set; }
+
     }
 }

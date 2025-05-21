@@ -24,17 +24,18 @@ namespace WebApi.Controllers
             _teacherCalendarService = teacherCalendarService;
         }
     
-        [HttpGet("week-calendar-data")]
-        public async Task<IActionResult> GetWeekCalendarData(GetTeacherCalendarDataRequestDto request)
+        [HttpGet("period-calendar-data")]
+        public async Task<IActionResult> GetPeriodCalendarData(GetTeacherCalendarDataRequestDto request)
         {
             if (request is null
-                || request.Date <= new DateOnly(2000, 1, 1))
+                || request.StartDate <= new DateOnly(2000, 1, 1)
+                || request.EndDate <= new DateOnly(2000, 1, 1))
             {
                 return BadRequest();
             }
-            var requestModel = new GetTeacherCalendarDataRequestModel() { TeacherId = request.TeacherId, Date = request.Date};
-            var result = await _teacherCalendarService.GetWeekCalendarData(requestModel);
+            var requestModel = new GetTeacherCalendarDataRequestModel() { TeacherId = request.TeacherId, StartDate = request.StartDate, EndDate = request.EndDate};
+            var result = await _teacherCalendarService.GetPeriodCalendarData(requestModel);
             return Ok(result);
-        }
+        }        
     }
 }

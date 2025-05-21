@@ -1,7 +1,7 @@
 ﻿using Domain.ValueObjects.Enums;
 using Entities;
 using Infrastructure.Contexts;
-using Infrastructure.Repositories.Abstractions;
+using RepositoriesAbstractions.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Infrastructure.Factories.Abstractions;
 using Infrastructure.Factories;
