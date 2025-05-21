@@ -14,7 +14,6 @@ namespace WebApi.Controllers
     [Produces("application/json")]
     public class StudentProfileController : Controller
     {
-        //private readonly ILogger<StudentProfileController> _logger; // TODO: раскомментировать, когда добавим логгер в проект - https://github.com/KimberlyKye/friendly-octo-guide/issues/34
         private IStudentProfileService _studentProfileService;
 
         /// <summary>
@@ -22,11 +21,9 @@ namespace WebApi.Controllers
         /// </summary>
         /// <param name="profileService"></param>
         public StudentProfileController(
-            //ILogger<StudentProfileController> logger, ; // TODO: раскомментировать, когда добавим логгер в проект - https://github.com/KimberlyKye/friendly-octo-guide/issues/34
             IStudentProfileService profileService
             )
         {
-            //_logger = logger; ; // TODO: раскомментировать, когда добавим логгер в проект - https://github.com/KimberlyKye/friendly-octo-guide/issues/34
             _studentProfileService = profileService;
         }
 
@@ -100,33 +97,24 @@ namespace WebApi.Controllers
         ///
         /// </remarks>
         /// <response code="200">Возвращает профиль студента</response>
-        /// <response code="400">Если есть какие-то ошибки при получении данных</response>
+        /// <response code="500">Если есть какие-то ошибки при получении данных</response>
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult> GetStudentProfileAsync(long id)
         {
-            try
-            {
-                var studentProfile = await _studentProfileService.GetProfileInfoAsync(id);
+            var studentProfile = await _studentProfileService.GetProfileInfoAsync(id);
 
-                var res = new GetStudentResponse()
-                {
-                    Id = studentProfile.Id,
-                    Email = studentProfile.Email,
-                    FirstName = studentProfile.FirstName,
-                    LastName = studentProfile.LastName,
-                    BirthDate = studentProfile.BirthDate,
-                    PhoneNumber = studentProfile.PhoneNumber
-                };
-                return StatusCode(200, res);
-            }
-            catch (Exception ex)
+            var res = new GetStudentResponse()
             {
-                // Логирование ошибки (можно добавить _logger)
-                return StatusCode(500, $"Internal server error: {ex}");
-            }
-
+                Id = studentProfile.Id,
+                Email = studentProfile.Email,
+                FirstName = studentProfile.FirstName,
+                LastName = studentProfile.LastName,
+                BirthDate = studentProfile.BirthDate,
+                PhoneNumber = studentProfile.PhoneNumber
+            };
+            return StatusCode(200, res);
         }
 
         /// <summary>

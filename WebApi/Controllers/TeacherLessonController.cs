@@ -33,28 +33,21 @@ namespace WebApi.Controllers
         //}
         [HttpPost("create-lesson")]
         public async Task<IActionResult> CreateLesson(CreateLessonRequestDto requestDto)
-        {           
-            try
-            {   LessonName lessonName = new LessonName(requestDto.LessonName);
+        {
+            LessonName lessonName = new LessonName(requestDto.LessonName);
 
-                var requestModel = new CreateLessonModel
-                {
-                    TeacherId = (int)requestDto.TeacherId,
-                    CourseId = (int)requestDto.CourseId,
-                    LessonName = lessonName,
-                    LessonDescription = requestDto.LessonDescription,
-                    LessonStartDate = requestDto.LessonStartDate,
-                    Material = requestDto.Material,
-                };
-
-                var result = await _teacherService.CreateLesson(requestModel);
-                return Ok(result);
-            }
-            catch (Exception ex)
+            var requestModel = new CreateLessonModel
             {
-                // Логирование ошибки (можно добавить _logger)
-                return StatusCode(500, $"Internal server error: {ex}");
-            }
+                TeacherId = (int)requestDto.TeacherId,
+                CourseId = (int)requestDto.CourseId,
+                LessonName = lessonName,
+                LessonDescription = requestDto.LessonDescription,
+                LessonStartDate = requestDto.LessonStartDate,
+                Material = requestDto.Material,
+            };
+
+            var result = await _teacherService.CreateLesson(requestModel);
+            return Ok(result);
         }
     }
 }
