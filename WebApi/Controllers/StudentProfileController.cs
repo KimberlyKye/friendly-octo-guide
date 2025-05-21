@@ -53,36 +53,29 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult> CreateStudentProfileAsync(CreateStudentRequest request)
         {
-            try
+            var newProfile = new CreateStudentModel()
             {
-                var newProfile = new CreateStudentModel()
-                {
-                    Email = request.Email,
-                    Password = request.Password,
-                    FirstName = request.FirstName,
-                    LastName = request.LastName,
-                    BirthDate = request.BirthDate,
-                    PhoneNumber = request.PhoneNumber
-                };
+                Email = request.Email,
+                Password = request.Password,
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                BirthDate = request.BirthDate,
+                PhoneNumber = request.PhoneNumber
+            };
 
-                var studentProfile = await _studentProfileService.CreateProfileAsync(newProfile);
+            var studentProfile = await _studentProfileService.CreateProfileAsync(newProfile);
 
-                var res = new CreateStudentResponse()
-                {
-                    Id = studentProfile.Id,
-                    Email = studentProfile.Email,
-                    FirstName = studentProfile.FirstName,
-                    LastName = studentProfile.LastName,
-                    BirthDate = studentProfile.BirthDate,
-                    PhoneNumber = studentProfile.PhoneNumber
-                };
-                return StatusCode(201, res);
-            }
-            catch (Exception ex)
+            var res = new CreateStudentResponse()
             {
-                // Логирование ошибки (можно добавить _logger)
-                return StatusCode(500, $"Internal server error: {ex}");
-            }
+                Id = studentProfile.Id,
+                Email = studentProfile.Email,
+                FirstName = studentProfile.FirstName,
+                LastName = studentProfile.LastName,
+                BirthDate = studentProfile.BirthDate,
+                PhoneNumber = studentProfile.PhoneNumber
+            };
+            return StatusCode(201, res);
+
         }
 
         /// <summary>
@@ -143,37 +136,28 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult> UpdateStudentProfileInfoAsync(UpdateStudentRequest request)
         {
-            try
+            var updatedProfile = new StudentProfileModel()
             {
-                var updatedProfile = new StudentProfileModel()
-                {
-                    Id = request.Id,
-                    Email = request.Email,
-                    FirstName = request.FirstName,
-                    LastName = request.LastName,
-                    BirthDate = request.BirthDate,
-                    PhoneNumber = request.PhoneNumber
-                };
+                Id = request.Id,
+                Email = request.Email,
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                BirthDate = request.BirthDate,
+                PhoneNumber = request.PhoneNumber
+            };
 
-                var studentProfile = await _studentProfileService.UpdateProfileInfoAsync(updatedProfile);
+            var studentProfile = await _studentProfileService.UpdateProfileInfoAsync(updatedProfile);
 
-                var res = new UpdateStudentResponse()
-                {
-                    Id = studentProfile.Id,
-                    Email = studentProfile.Email,
-                    FirstName = studentProfile.FirstName,
-                    LastName = studentProfile.LastName,
-                    BirthDate = studentProfile.BirthDate,
-                    PhoneNumber = studentProfile.PhoneNumber
-                };
-                return StatusCode(200, res);
-            }
-            catch (Exception ex)
+            var res = new UpdateStudentResponse()
             {
-                // Логирование ошибки (можно добавить _logger)
-                return StatusCode(500, $"Internal server error: {ex}");
-            }
-
+                Id = studentProfile.Id,
+                Email = studentProfile.Email,
+                FirstName = studentProfile.FirstName,
+                LastName = studentProfile.LastName,
+                BirthDate = studentProfile.BirthDate,
+                PhoneNumber = studentProfile.PhoneNumber
+            };
+            return StatusCode(200, res);
         }
 
     }

@@ -58,35 +58,27 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> CreateLesson(CreateLessonRequestDto request)
         {
-            try
+            if (request.LessonStartDate <= DateTime.Now)
             {
-                if (request.LessonStartDate <= DateTime.Now)
-                {
-                    ModelState.AddModelError(nameof(request.LessonStartDate),
-                        "Дата занятия должна быть в будущем");
-                    return BadRequest(ModelState);
-                }
-
-                LessonName lessonName = new LessonName(request.LessonName);
-
-                var requestModel = new CreateLessonModel
-                {
-                    TeacherId = (int)request.TeacherId,
-                    CourseId = (int)request.CourseId,
-                    LessonName = lessonName,
-                    LessonDescription = request.LessonDescription,
-                    LessonStartDate = request.LessonStartDate,
-                    Material = request.Material,
-                };
-
-                var result = await _teacherService.CreateLesson(requestModel);
-                return Ok(result);
+                ModelState.AddModelError(nameof(request.LessonStartDate),
+                    "Дата занятия должна быть в будущем");
+                return BadRequest(ModelState);
             }
-            catch (Exception ex)
+
+            LessonName lessonName = new LessonName(request.LessonName);
+
+            var requestModel = new CreateLessonModel
             {
-                // Логирование ошибки (можно добавить _logger)
-                return StatusCode(500, $"Internal server error: {ex}");
-            }            
+                TeacherId = (int)request.TeacherId,
+                CourseId = (int)request.CourseId,
+                LessonName = lessonName,
+                LessonDescription = request.LessonDescription,
+                LessonStartDate = request.LessonStartDate,
+                Material = request.Material,
+            };
+
+            var result = await _teacherService.CreateLesson(requestModel);
+            return Ok(result);
         }
         //[HttpGet("calendar-data")]
         //public async Task<IActionResult> GetCalendarData(GetCalendarDataRequestDto requestDto)
