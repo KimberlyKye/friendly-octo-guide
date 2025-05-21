@@ -2,7 +2,7 @@
 using Application.Services.Abstractions;
 using Domain.ValueObjects;
 using Entities;
-using Domain.;
+using RepositoriesAbstractions.Abstractions;
 using System.ComponentModel;
 
 namespace Application.Services

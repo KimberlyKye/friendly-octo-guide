@@ -30,7 +30,6 @@ namespace Infrastructure.Repositories
         }
         public async Task<IReadOnlyCollection<Entities.Course>> GetPeriodCalendarData(int teacherId, DateOnly startDate, DateOnly endDate)
         {
-            // Валидация входных параметров
             if (startDate > endDate)
             {
                 //_logger.LogError("Дата начала не может быть позже даты окончания.");
@@ -39,34 +38,34 @@ namespace Infrastructure.Repositories
 
             try
             {
-                // Преобразование DateOnly в DateTime для фильтрации в БД
                 var startDateTime = startDate.ToDateTime(TimeOnly.MinValue);
                 var endDateTime = endDate.ToDateTime(TimeOnly.MaxValue);
 
-                // Оптимизированный запрос с JOIN
-                var query =
+                var data = await (
                     from teacher in _context.Users.AsNoTracking()
-                    join course in _context.Courses on teacher.Id equals course.TeacherId
-                    join lesson in _context.Lessons on course.Id equals lesson.CourseId
+                    from course in _context.Courses.Where(c => c.TeacherId == teacher.Id)
+                    from lesson in _context.Lessons.Where(l => l.CourseId == course.Id
+                             && DateOnly.FromDateTime(l.Date) >= startDate
+                             && DateOnly.FromDateTime(l.Date) <= endDate)
                     where teacher.Id == teacherId
-                        && teacher.RoleId == (int)RoleEnum.Teacher
-                        && lesson.Date >= startDateTime
-                        && lesson.Date <= endDateTime
-                    select new { Teacher = teacher, Course = course, Lesson = lesson };
+                             && teacher.RoleId == (int)RoleEnum.Teacher
+                    select new
+                    {
+                        Teacher = teacher,
+                        Course = course,
+                        Lesson = lesson
+                    })
+                    .ToListAsync();
 
-                var data = await query.ToListAsync();
-
-                // Группировка данных по курсам
+                // Группируем данные по курсам
                 var groupedData = data
                     .GroupBy(x => x.Course.Id)
                     .Select(g => new
                     {
                         Course = g.First().Course,
                         Teacher = g.First().Teacher,
-                        Lessons = g.Select(x => x.Lesson).ToList(),
-                        LessonIds = g.Select(x => x.Lesson.Id).Distinct().ToList()
-                    })
-                    .ToList();               
+                        Lessons = g.Select(x => x.Lesson).ToList()
+                    });
 
                 var result = new List<Entities.Course>();
 
@@ -74,12 +73,11 @@ namespace Infrastructure.Repositories
                 {
                     try
                     {
-                        // Создание доменного объекта курса
                         var domainCourse = await _courseFactory.CreateFrom(group.Course, group.Teacher);
 
-                        // Маппинг уроков с HomeTasks
-                        var domainLessons = new List<Entities.Lesson>();
-                        
+                        var domainLessons = group.Lessons
+                            .Select(lesson => _lessonFactory.CreateAsync(lesson, null).Result)
+                            .ToList();
                         domainCourse.AddLessons(domainLessons);
                         result.Add(domainCourse);
                     }
