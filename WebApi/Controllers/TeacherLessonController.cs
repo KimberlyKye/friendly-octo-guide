@@ -55,18 +55,12 @@ namespace WebApi.Controllers
         /// <response code="500">Если есть какие-то ошибки при создании</response>        
         [HttpPost("create-lesson")]
         [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> CreateLesson(CreateLessonRequestDto request)
         {
             try
             {
-                if (request.LessonStartDate <= DateTime.Now)
-                {
-                    ModelState.AddModelError(nameof(request.LessonStartDate),
-                        "Дата занятия должна быть в будущем");
-                    return BadRequest(ModelState);
-                }
-
                 LessonName lessonName = new LessonName(request.LessonName);
 
                 var requestModel = new CreateLessonModel
@@ -80,7 +74,7 @@ namespace WebApi.Controllers
                 };
 
                 var result = await _teacherService.CreateLesson(requestModel);
-                return Ok(result);
+                return StatusCode(201,result);
             }
             catch (Exception ex)
             {

@@ -4,6 +4,6 @@ namespace RepositoriesAbstractions.Abstractions
 {
     public interface ITeacherInfoRepository
     {
-        Task<Teacher> GetTeacherById(int teacherId);
+        Task<Teacher?> GetTeacherById(int teacherId);
     }
 }

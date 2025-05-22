@@ -1,6 +1,6 @@
 ﻿using Application.Services.Abstractions;
 using Entities;
-using Infrastructure.Repositories.Abstractions;
+using RepositoriesAbstractions.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;

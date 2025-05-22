@@ -1,7 +1,8 @@
 using Application.Models.Course;
 using Application.Services.Abstractions;
 using Infrastructure.DataModels;
-using Infrastructure.Repositories.Abstractions;
+using Microsoft.VisualBasic;
+using RepositoriesAbstractions.Abstractions;
 
 namespace Application.Services;
 
@@ -25,7 +26,9 @@ public class CourseService : ICourseService
             PassingScore = course.PassingScore
         };
 
-       return _repository.AddCourseAsync(courseModel);
+        throw new Exception("Нужно выправлять логику");
+
+        //return _repository.AddCourseAsync(courseModel);
     }
 
     private ICourseRepository _repository;

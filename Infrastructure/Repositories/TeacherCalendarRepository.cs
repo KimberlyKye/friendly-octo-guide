@@ -28,73 +28,52 @@ namespace Infrastructure.Repositories
             _courseFactory = courseFactory;
             _lessonFactory = lessonFactory;
         }
-        public async Task<IReadOnlyCollection<Entities.Course>> GetPeriodCalendarData(int teacherId, DateOnly startDate, DateOnly endDate)
+        public async Task<IReadOnlyCollection<Entities.Course>?> GetPeriodCalendarData(int teacherId, DateOnly startDate, DateOnly endDate)
         {
-            if (startDate > endDate)
-            {
-                //_logger.LogError("Дата начала не может быть позже даты окончания.");
-                return Array.Empty<Entities.Course>().AsReadOnly();
-            }
+            
+            var startDateTime = startDate.ToDateTime(TimeOnly.MinValue);
+            var endDateTime = endDate.ToDateTime(TimeOnly.MaxValue);
 
-            try
-            {
-                var startDateTime = startDate.ToDateTime(TimeOnly.MinValue);
-                var endDateTime = endDate.ToDateTime(TimeOnly.MaxValue);
-
-                var data = await (
-                    from teacher in _context.Users.AsNoTracking()
-                    from course in _context.Courses.Where(c => c.TeacherId == teacher.Id)
-                    from lesson in _context.Lessons.Where(l => l.CourseId == course.Id
-                             && DateOnly.FromDateTime(l.Date) >= startDate
-                             && DateOnly.FromDateTime(l.Date) <= endDate)
-                    where teacher.Id == teacherId
-                             && teacher.RoleId == (int)RoleEnum.Teacher
-                    select new
-                    {
-                        Teacher = teacher,
-                        Course = course,
-                        Lesson = lesson
-                    })
-                    .ToListAsync();
-
-                // Группируем данные по курсам
-                var groupedData = data
-                    .GroupBy(x => x.Course.Id)
-                    .Select(g => new
-                    {
-                        Course = g.First().Course,
-                        Teacher = g.First().Teacher,
-                        Lessons = g.Select(x => x.Lesson).ToList()
-                    });
-
-                var result = new List<Entities.Course>();
-
-                foreach (var group in groupedData)
+            var data = await (
+                from teacher in _context.Users.AsNoTracking()
+                from course in _context.Courses.Where(c => c.TeacherId == teacher.Id)
+                from lesson in _context.Lessons.Where(l => l.CourseId == course.Id
+                            && DateOnly.FromDateTime(l.Date) >= startDate
+                            && DateOnly.FromDateTime(l.Date) <= endDate)
+                where teacher.Id == teacherId
+                            && teacher.RoleId == (int)RoleEnum.Teacher
+                select new
                 {
-                    try
-                    {
-                        var domainCourse = await _courseFactory.CreateFrom(group.Course, group.Teacher);
+                    Teacher = teacher,
+                    Course = course,
+                    Lesson = lesson
+                })
+                .ToListAsync();
 
-                        var domainLessons = group.Lessons
-                            .Select(lesson => _lessonFactory.CreateAsync(lesson, null).Result)
-                            .ToList();
-                        domainCourse.AddLessons(domainLessons);
-                        result.Add(domainCourse);
-                    }
-                    catch (Exception ex)
-                    {
-                        //_logger.LogError(ex, "Ошибка маппинга курса {CourseId}", group.Course.Id);
-                        return Array.Empty<Entities.Course>().AsReadOnly();
-                    }
-                }
+            // Группируем данные по курсам
+            var groupedData = data
+                .GroupBy(x => x.Course.Id)
+                .Select(g => new
+                {
+                    Course = g.First().Course,
+                    Teacher = g.First().Teacher,
+                    Lessons = g.Select(x => x.Lesson).ToList()
+                });
 
-                return result.AsReadOnly();
+            var result = new List<Entities.Course>();
+
+            foreach (var group in groupedData)
+            {                
+                var domainCourse = await _courseFactory.CreateFrom(group.Course, group.Teacher);
+
+                var domainLessons = group.Lessons
+                    .Select(lesson => _lessonFactory.CreateAsync(lesson, null).Result)
+                    .ToList();
+                domainCourse.AddLessons(domainLessons);
+                result.Add(domainCourse);                
             }
-            catch (Exception ex)
-            {
-                //_logger.LogError(ex, "Ошибка получения данных для преподавателя {TeacherId}", teacherId);
-                return Array.Empty<Entities.Course>().AsReadOnly();
-            }
+
+            return result.AsReadOnly();            
         }
     }
 }
