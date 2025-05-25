@@ -9,11 +9,11 @@ using Infrastructure.Factories;
 using Infrastructure.Factories.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
-using RepositoriesAbstractions.Abstractions;
 using Infrastructure.Repositories;
 using Entities;
 using System.Reflection;
 using Microsoft.OpenApi.Models;
+using RepositoriesAbstractions.Abstractions;
 
 namespace WebApi
 {
@@ -72,9 +72,8 @@ namespace WebApi
             services.AddScoped<ITeacherLessonService, TeacherLessonService>();
             services.AddScoped<ITeacherInfoService, TeacherInfoService>();
             services.AddScoped<IStudentProfileService, StudentProfileService>();
-            services.AddScoped<ITeacherCalendarService, TeacherCalendarService>();
-            services.AddScoped<IStudentCalendarService, StudentCalendarService>();
             services.AddScoped<ICourseService, CourseService>();
+            services.AddScoped<ITeacherCalendarService, TeacherCalendarService>();
 
             // 4. �������
             services.AddTransient<IStudentFactory, StudentFactory>();

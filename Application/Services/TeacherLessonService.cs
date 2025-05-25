@@ -27,20 +27,11 @@ public class TeacherLessonService : ITeacherLessonService
     //    return await _teacherRepository.GetCalendarData(requestDto);
     //}
     public async Task<int> CreateLesson(CreateLessonModel requestDto)
-    {        
-        if (requestDto.LessonStartDate <= DateTime.Now)
-        {
-            throw new ArgumentException("При создании занятия дата проведения не может быть в прошлом");
-        }
-
-        Teacher? teacher = await _teacherInfoRepository.GetTeacherById(requestDto.TeacherId);
-        if (teacher is null)
-        {
-            throw new ArgumentException($"Преподаватель с ID {requestDto.TeacherId} не существует", nameof(requestDto.TeacherId));
-        }
+    {
+        Teacher teacher = await _teacherInfoRepository.GetTeacherById(requestDto.TeacherId);
 
         if (!await _courseInfoRepository.CheckIsCourseExistAndActiveById(requestDto.CourseId))
-            { throw new ArgumentException($"Курс с ID {requestDto.CourseId} не существует или архтвный", nameof(requestDto.CourseId)); }
+        { return -1; }
 
         Lesson newLesson = await teacher.CreateLesson(  0,
                                                         requestDto.CourseId,
