@@ -29,36 +29,29 @@ public class CourseController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> CreateCourse([FromBody] CreateCourseRequest courseData)
     {
-        try
+        var createdCourse = await _courseService.AddCourseAsync(new CreateCourseModel()
         {
-            var createdCourse = await _courseService.AddCourseAsync(new CreateCourseModel()
-            {
-                StateId = courseData.StateId,
-                TeacherId = courseData.TeacherId,
-                Title = courseData.Title,
-                Description = courseData.Description,
-                StartDate = courseData.StartDate,
-                EndDate = courseData.EndDate,
-                PassingScore = courseData.PassingScore
-            });
+            StateId = courseData.StateId,
+            TeacherId = courseData.TeacherId,
+            Title = courseData.Title,
+            Description = courseData.Description,
+            StartDate = courseData.StartDate,
+            EndDate = courseData.EndDate,
+            PassingScore = courseData.PassingScore
+        });
 
-            var createdCourseResponse = new CreateCourseResponse()
-            {
-                Id = createdCourse.Id,
-                StateId = (int)createdCourse.StateId,
-                TeacherId = createdCourse.TeacherId,
-                Title = createdCourse.Title,
-                Description = createdCourse.Description,
-                StartDate = createdCourse.StartDate,
-                EndDate = createdCourse.EndDate,
-                PassingScore = createdCourse.PassingScore
-            };
-            return Ok(createdCourseResponse);
-        }
-        catch (Exception ex)
+        var createdCourseResponse = new CreateCourseResponse()
         {
-            return StatusCode(500, "Внутренняя ошибка сервера");
-        }
+            Id = createdCourse.Id,
+            StateId = (int)createdCourse.StateId,
+            TeacherId = createdCourse.TeacherId,
+            Title = createdCourse.Title,
+            Description = createdCourse.Description,
+            StartDate = createdCourse.StartDate,
+            EndDate = createdCourse.EndDate,
+            PassingScore = createdCourse.PassingScore
+        };
+        return Ok(createdCourseResponse);
     }
 
     private ICourseService _courseService;

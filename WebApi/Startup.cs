@@ -13,6 +13,9 @@ using Infrastructure.Repositories;
 using Entities;
 using System.Reflection;
 using Microsoft.OpenApi.Models;
+using Serilog;
+using WebApi.Middleware;
+using WebApi.Filters;
 using RepositoriesAbstractions.Abstractions;
 
 namespace WebApi
@@ -30,6 +33,8 @@ namespace WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors();
+            services.AddScoped<CustomExceptionFilter>();
+            services.AddLogging();
 
             // 1. ��������������
             services.AddDbContext<AppDbContext>(options =>
@@ -84,13 +89,22 @@ namespace WebApi
             services.AddTransient<IFileFactory, FileFactory>();
 
             // 5. MVC
-            services.AddControllers();
+
+            services.AddControllers(options =>
+            {
+                options.Filters.Add<CustomExceptionFilter>(); // Фильтр обработки исключений
+            });
         }
 
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseSerilogRequestLogging(); // Логирование HTTP-запросов
+
+
+            app.UseMiddleware<LoggingMiddleware>(); // Использование кастомного мидлвара для логирования запросов в контроллерах. Если будут добавляться новые мидлвары, то можно будет их добавлять здесь, ниже LoggingMiddleware и выше UseCors. Порядок важен! Middleware выполняются сверху вниз.
+
             app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
             if (env.IsDevelopment())
