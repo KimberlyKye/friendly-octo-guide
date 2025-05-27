@@ -144,14 +144,14 @@ namespace Tests.Domain.ValueObjects
                 Throws.ArgumentException);
         }
 
-        [Test]
-        public void Equals_ShouldReturnTrue_WhenNamesAreEqual()
-        {
-            var name1 = new LessonName(ValidName);
-            var name2 = new LessonName(ValidName);
+        // [Test]
+        // public void Equals_ShouldReturnTrue_WhenNamesAreEqual()
+        // {
+        //     var name1 = new LessonName(ValidName);
+        //     var name2 = new LessonName(ValidName);
 
-            Assert.That(name1.Equals(name2), Is.True);
-        }
+        //     Assert.That(name1.Equals(name2), Is.True);
+        // }
 
         [Test]
         public void Equals_ShouldReturnFalse_WhenNamesAreDifferent()

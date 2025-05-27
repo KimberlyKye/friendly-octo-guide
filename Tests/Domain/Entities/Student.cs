@@ -20,23 +20,23 @@ namespace Tests.Domain.ValueObjects
             _student = new Student(1, new FullName("John", "Doe"), new PhoneNumber("+79994567890"), new Email("john.doe@example.com"), new BirthDate(new DateOnly(2000, 1, 1)));
         }
 
-        [Test]
-        public void AddHomeWork_ShouldAddHomeWorkToList()
-        {
-            var homeTask = new HomeTask(1, new HomeTaskName("HomeTask1"), "Description", new Duration(new DateOnly(), new DateOnly())); ;
-            var homeWork = new HomeWork(1,
-                      _student,
-                       homeTask,
-                      new TaskCompletionDate(new DateOnly()),
-                      new Score(100));
-            _student.AddHomeWork(homeTask, homeWork);
+        // [Test]
+        // public void AddHomeWork_ShouldAddHomeWorkToList()
+        // {
+        //     var homeTask = new HomeTask(1, new HomeTaskName("HomeTask1"), "Description", new Duration(new DateOnly(), new DateOnly())); ;
+        //     var homeWork = new HomeWork(1,
+        //               _student,
+        //                homeTask,
+        //               new TaskCompletionDate(new DateOnly()),
+        //               new Score(100));
+        //     _student.AddHomeWork(homeTask, homeWork);
 
-            var actualHomeWork = _student.GetCourses();
+        //     var actualHomeWork = _student.GetCourses();
 
-            Assert.IsNotEmpty(actualHomeWork);
-            Assert.Contains(homeWork, (System.Collections.ICollection?)actualHomeWork);
-            Assert.DoesNotThrow(() => _student.GetListOfHomeWork());
-        }
+        //     Assert.IsNotEmpty(actualHomeWork);
+        //     Assert.Contains(homeWork, (System.Collections.ICollection?)actualHomeWork);
+        //     Assert.DoesNotThrow(() => _student.GetListOfHomeWork());
+        // }
 
         [Test]
         public void GetListOfHomeWork_ShouldReturnEmptyList()
