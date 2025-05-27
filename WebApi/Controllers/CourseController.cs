@@ -13,6 +13,12 @@ namespace WebApi.Controllers;
 [Route("api/[controller]")]
 public class CourseController : ControllerBase
 {
+    private ICourseService _courseService;
+
+    /// <summary>
+    /// Конструктор
+    /// </summary>
+    /// <param name="courseService"></param>
     public CourseController(ICourseService courseService)
     {
         _courseService = courseService;
@@ -21,45 +27,31 @@ public class CourseController : ControllerBase
     /// <summary>
     /// Метод создание курса
     /// </summary>
-    /// <param name="courseData"></param>
+    /// <param name="request"></param>
     /// <returns></returns>
     /// <response code="200">Возвращает курс</response>
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> CreateCourse([FromBody] CreateCourseRequest courseData)
+    public async Task<IActionResult> CreateCourse([FromBody] CreateCourseRequest request)
     {
         try
         {
-            var createdCourse = await _courseService.AddCourseAsync(new CreateCourseModel()
+            var createdCourseId = await _courseService.AddCourseAsync(new CreateCourseModel()
             {
-                StateId = courseData.StateId,
-                TeacherId = courseData.TeacherId,
-                Title = courseData.Title,
-                Description = courseData.Description,
-                StartDate = courseData.StartDate,
-                EndDate = courseData.EndDate,
-                PassingScore = courseData.PassingScore
+                StateId = request.StateId,
+                TeacherId = request.TeacherId,
+                Title = request.Title,
+                Description = request.Description,
+                StartDate = request.StartDate,
+                EndDate = request.EndDate,
+                PassingScore = request.PassingScore
             });
-
-            var createdCourseResponse = new CreateCourseResponse()
-            {
-                Id = createdCourse.Id,
-                StateId = (int)createdCourse.StateId,
-                TeacherId = createdCourse.TeacherId,
-                Title = createdCourse.Title,
-                Description = createdCourse.Description,
-                StartDate = createdCourse.StartDate,
-                EndDate = createdCourse.EndDate,
-                PassingScore = createdCourse.PassingScore
-            };
-            return Ok(createdCourseResponse);
+            return StatusCode(201, createdCourseId);
         }
-        catch (Exception ex)
+        catch
         {
             return StatusCode(500, "Внутренняя ошибка сервера");
         }
     }
-
-    private ICourseService _courseService;
 }

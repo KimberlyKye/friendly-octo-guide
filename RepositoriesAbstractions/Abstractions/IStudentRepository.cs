@@ -31,7 +31,7 @@ namespace RepositoriesAbstractions.Abstractions
         /// <param name="startDate"></param>
         /// <param name="endDate"></param>
         /// <returns></returns>
-        Task<List<HomeTask>> GetHomeTasksByDeadlineRangeAndStudentAsync(int studentId, DateTime startDate, DateTime endDate);
+        Task<List<Entities.HomeTask>> GetHomeTasksByDeadlineRangeAndStudentAsync(int studentId, DateTime startDate, DateTime endDate);
 
         /// <summary>
         /// Получение всего календаря студента на выбранный период.

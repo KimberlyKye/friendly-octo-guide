@@ -19,7 +19,12 @@ namespace Application.Services
         }
         public async Task<Teacher> GetTeacherById(int teacherId)
         {
-            return await _teacherInfoRepository.GetTeacherById(teacherId);
+            Teacher? teacher = await _teacherInfoRepository.GetTeacherById(teacherId);
+            if (teacher is null)
+            {
+                throw new ArgumentException($"Преподаватель с ID {teacherId} не существует", nameof(teacherId));
+            }
+            return teacher;
         }
     }
 }

@@ -7,6 +7,7 @@ using Infrastructure.DataModels;
 using Infrastructure.Factories.Abstractions;
 using RepositoriesAbstractions.Abstractions;
 using Microsoft.EntityFrameworkCore;
+using Infrastructure.Factories;
 
 namespace Infrastructure.Repositories
 {
@@ -62,7 +63,7 @@ namespace Infrastructure.Repositories
             return lessonsDomain;
         }
 
-        public async Task<List<HomeTask>> GetHomeTasksByDeadlineRangeAndStudentAsync(int studentId, DateTime startDate, DateTime endDate)
+        public async Task<List<Entities.HomeTask>> GetHomeTasksByDeadlineRangeAndStudentAsync(int studentId, DateTime startDate, DateTime endDate)
         {
             var courseIds = await GetCourseIdsForStudentAsync(studentId);
             var validLessonIds = await _context.Lessons
@@ -70,12 +71,20 @@ namespace Infrastructure.Repositories
                 .Select(l => l.Id)
                 .ToArrayAsync();
 
-            return await _context.HomeTasks
+            var homeTasks = await _context.HomeTasks
                 .Where(ht => validLessonIds.Contains(ht.LessonId) && ht.EndDate >= startDate && ht.EndDate <= endDate)
                 .ToListAsync();
+
+            var result = new List<Entities.HomeTask>();
+            foreach (var task in homeTasks)
+            {
+                result.Add(await _homeTaskFactory.CreateAsync(task));
+            }
+
+            return result;
         }
 
-        public async Task<(List<Entities.Lesson> Lessons, List<HomeTask> HomeTasks)> GetMonthlyDataForStudentAsync(int studentId, DateTime monthStart, DateTime monthEnd)
+        public async Task<(List<Entities.Lesson> Lessons, List<Entities.HomeTask> HomeTasks)> GetMonthlyDataForStudentAsync(int studentId, DateTime monthStart, DateTime monthEnd)
         {
             var lessons = await GetLessonsByDateRangeAndStudentAsync(studentId, monthStart, monthEnd);
             var homeTasks = await GetHomeTasksByDeadlineRangeAndStudentAsync(studentId, monthStart, monthEnd);

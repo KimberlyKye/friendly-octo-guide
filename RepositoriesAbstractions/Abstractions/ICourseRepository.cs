@@ -12,6 +12,6 @@ namespace RepositoriesAbstractions.Abstractions
         /// </summary>
         /// <param name="course"></param>
         /// <returns></returns>
-        public Task<Course> AddCourseAsync(Course course);
+        public Task<int> AddCourseAsync(Course course);
     }
 }

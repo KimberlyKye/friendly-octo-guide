@@ -1,5 +1,7 @@
+using Entities;
 using Infrastructure.Contexts;
 using Infrastructure.DataModels;
+using Infrastructure.Factories;
 using Infrastructure.Factories.Abstractions;
 using RepositoriesAbstractions.Abstractions;
 
@@ -19,15 +21,12 @@ public class CourseRepository : ICourseRepository
         _courseFactory = courseFactory;
     }
 
-    public async Task<Course> AddCourseAsync(Course course)
+    public async Task<int> AddCourseAsync(Entities.Course course)
     {
-        await _context.Courses.AddAsync(course);
-        await _context.SaveChangesAsync();
-        return course;
-    }
+        var courseDataModel = _courseFactory.MapTo(course);
 
-    public Task<Entities.Course> AddCourseAsync(Entities.Course course)
-    {
-        throw new NotImplementedException();
+        await _context.Courses.AddAsync(courseDataModel);
+        await _context.SaveChangesAsync();
+        return courseDataModel.Id;
     }
 }

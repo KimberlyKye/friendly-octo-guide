@@ -28,6 +28,9 @@ namespace Infrastructure.Factories
 
         public Task<User> CreateDataModelAsync(Student student)
         {
+            if (student is null)
+                throw new ArgumentNullException(nameof(student));
+
             return Task.FromResult(new User
             {
                 Id = student.Id,

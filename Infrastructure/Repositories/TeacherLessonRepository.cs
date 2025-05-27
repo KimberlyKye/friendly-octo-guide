@@ -25,7 +25,7 @@ public class TeacherLessonRepository : ITeacherLessonRepository
         _teacherFactory = teacherFactory;
         _lessonFactory = lessonFactory;
     }    
-    public async Task<int> AddLesson(Entities.Lesson lesson) //<Entities.Lesson>
+    public async Task<int> AddLesson(Entities.Lesson lesson)
     {   
         var lessonDataModel = await _lessonFactory.CreateDataModelAsync(lesson);
 
