@@ -28,9 +28,8 @@ namespace Infrastructure.Repositories
             _courseFactory = courseFactory;
             _lessonFactory = lessonFactory;
         }
-        public async Task<IReadOnlyCollection<Entities.Course>?> GetPeriodCalendarData(int teacherId, DateOnly startDate, DateOnly endDate)
-        {
-            
+        public async Task<IReadOnlyCollection<Entities.Course>> GetPeriodCalendarData(int teacherId, DateOnly startDate, DateOnly endDate)
+        {            
             var startDateTime = startDate.ToDateTime(TimeOnly.MinValue);
             var endDateTime = endDate.ToDateTime(TimeOnly.MaxValue);
 
@@ -72,7 +71,6 @@ namespace Infrastructure.Repositories
                 domainCourse.AddLessons(domainLessons);
                 result.Add(domainCourse);                
             }
-
             return result.AsReadOnly();            
         }
     }

@@ -1,6 +1,7 @@
 using Application.Models.Course;
 using Application.Services.Abstractions;
 using Entities;
+using Microsoft.VisualBasic;
 using RepositoriesAbstractions.Abstractions;
 
 namespace Application.Services;
@@ -24,7 +25,6 @@ public class CourseService : ICourseService
         {
             throw new ArgumentException($"Преподаватель с ID {request.TeacherId} не существует", nameof(request.TeacherId));
         }
-
         Course newCourse = await teacher.CreateCourse(  0,
                                                         teacher,
                                                         new Domain.ValueObjects.CourseName(request.Title),
@@ -33,4 +33,5 @@ public class CourseService : ICourseService
 
         return await _courseRepository.AddCourseAsync(newCourse);
     }    
+    private ICourseRepository _repository;
 }

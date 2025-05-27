@@ -23,8 +23,8 @@ namespace Application.Services
         {
             var minDate = new DateOnly(2000, 1, 1);
 
-            if (request.StartDate <= minDate || request.EndDate <= minDate)
-                throw new ArgumentException("Даты должны быть не раньше 2000-01-01");
+            //if (request.StartDate <= minDate || request.EndDate <= minDate)
+            //    throw new ArgumentException("Даты должны быть не раньше 2000-01-01");
 
             if (request.StartDate > request.EndDate)
             {
@@ -38,8 +38,13 @@ namespace Application.Services
             }
 
             IReadOnlyCollection<Course>? courses =  await _teacherCalendarRepository.GetPeriodCalendarData(request.TeacherId, request.StartDate, request.EndDate);
-            if(courses is null)
-                throw new ArgumentNullException(nameof(courses));
+            if (!courses.Any())
+            {
+                return new TeacherCalendarResponseModel
+                {
+                    CalendarLessonModels = Array.Empty<CalendarLessonModel>()                    
+                };
+            }
 
             var calendarLessons = courses.SelectMany(course =>
                     course.Lessons.Select(lesson => new CalendarLessonModel
