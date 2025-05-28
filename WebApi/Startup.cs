@@ -9,7 +9,6 @@ using Infrastructure.Factories;
 using Infrastructure.Factories.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
-using Infrastructure.Repositories.Abstractions;
 using Infrastructure.Repositories;
 using Entities;
 using System.Reflection;
@@ -17,6 +16,7 @@ using Microsoft.OpenApi.Models;
 using Serilog;
 using WebApi.Middleware;
 using WebApi.Filters;
+using RepositoriesAbstractions.Abstractions;
 
 namespace WebApi
 {
@@ -43,6 +43,9 @@ namespace WebApi
             services.AddScoped<ITeacherLessonRepository, TeacherLessonRepository>();
             services.AddScoped<ICourseInfoRepository, CourseInfoRepository>();
             services.AddScoped<IUserProfileRepository<Student>, StudentProfileRepository>();
+            services.AddScoped<ICourseRepository, CourseRepository>();
+            services.AddScoped<IStudentRepository, StudentRepository>();
+            services.AddScoped<ITeacherCalendarRepository, TeacherCalendarRepository>();
 
             // 2. Swagger
             services.AddEndpointsApiExplorer();
@@ -74,6 +77,8 @@ namespace WebApi
             services.AddScoped<ITeacherLessonService, TeacherLessonService>();
             services.AddScoped<ITeacherInfoService, TeacherInfoService>();
             services.AddScoped<IStudentProfileService, StudentProfileService>();
+            services.AddScoped<ICourseService, CourseService>();
+            services.AddScoped<ITeacherCalendarService, TeacherCalendarService>();
 
             // 4. �������
             services.AddTransient<IStudentFactory, StudentFactory>();

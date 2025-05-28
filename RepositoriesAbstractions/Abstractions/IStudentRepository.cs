@@ -1,10 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Infrastructure.DataModels;
+using Entities;
 
-namespace Infrastructure.Repositories.Abstractions
+namespace RepositoriesAbstractions.Abstractions
 {
     /// <summary>
     /// Репозиторий для студента.
@@ -35,7 +31,7 @@ namespace Infrastructure.Repositories.Abstractions
         /// <param name="startDate"></param>
         /// <param name="endDate"></param>
         /// <returns></returns>
-        Task<List<HomeTask>> GetHomeTasksByDeadlineRangeAndStudentAsync(int studentId, DateTime startDate, DateTime endDate);
+        Task<List<Entities.HomeTask>> GetHomeTasksByDeadlineRangeAndStudentAsync(int studentId, DateTime startDate, DateTime endDate);
 
         /// <summary>
         /// Получение всего календаря студента на выбранный период.

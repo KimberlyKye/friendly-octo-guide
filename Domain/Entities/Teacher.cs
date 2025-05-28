@@ -48,6 +48,18 @@ namespace Entities
         {
             return this;
         }
+        public async Task<Course> CreateCourse(int id,
+                                               Teacher teacher,
+                                               CourseName courseName,
+                                               string description,
+                                               Duration duration)
+        {
+            return await Task.Run(() => new Course( id,
+                                                    teacher,
+                                                    courseName,
+                                                    description,
+                                                    duration));
+        }
         public async Task<Lesson> CreateLesson(int id,
                                                int courseId,
                                                LessonName lessonName,
@@ -62,14 +74,13 @@ namespace Entities
 
             // Доп.проверки???
 
-            return await Task.Run(() => new Lesson(
-                id,
-                courseId,
-                lessonName,
-                description,
-                date,
-                material,
-                homeTasks));
+            return await Task.Run(() => new Lesson( id,
+                                                    courseId,
+                                                    lessonName,
+                                                    description,
+                                                    date,
+                                                    material,
+                                                    homeTasks));
         }
     }
 }

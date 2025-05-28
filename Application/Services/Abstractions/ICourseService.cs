@@ -1,9 +1,9 @@
 using Application.Models.Course;
-using Infrastructure.DataModels;
+using Entities;
 
 namespace Application.Services.Abstractions;
 
 public interface ICourseService
 {
-    public Task<Course> AddCourseAsync(CreateCourseModel course);
+    public Task<int> AddCourseAsync(CreateCourseModel course);
 }

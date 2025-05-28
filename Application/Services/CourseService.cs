@@ -1,32 +1,37 @@
 using Application.Models.Course;
 using Application.Services.Abstractions;
-using Infrastructure.DataModels;
-using Infrastructure.Repositories.Abstractions;
+using Entities;
+using Microsoft.VisualBasic;
+using RepositoriesAbstractions.Abstractions;
 
 namespace Application.Services;
 
 public class CourseService : ICourseService
 {
-    public CourseService(ICourseRepository repository)
+    private ICourseRepository _courseRepository;
+    private ITeacherInfoRepository _teacherInfoRepository;
+    public CourseService(
+        ICourseRepository courseRepository,
+        ITeacherInfoRepository teacherInfoRepository)
     {
-        _repository = repository;
+        _courseRepository = courseRepository;
+        _teacherInfoRepository = teacherInfoRepository;
     }
 
-    public Task<Course> AddCourseAsync(CreateCourseModel course)
+    public async Task<int> AddCourseAsync(CreateCourseModel request)
     {
-        Course courseModel = new Course()
+        Teacher? teacher = await _teacherInfoRepository.GetTeacherById(request.TeacherId);
+        if (teacher is null)
         {
-            StateId = (int)course.StateId,
-            TeacherId = course.TeacherId,
-            Title = course.Title,
-            Description = course.Description,
-            StartDate = course.StartDate,
-            EndDate = course.EndDate,
-            PassingScore = course.PassingScore
-        };
+            throw new ArgumentException($"Преподаватель с ID {request.TeacherId} не существует", nameof(request.TeacherId));
+        }
+        Course newCourse = await teacher.CreateCourse(  0,
+                                                        teacher,
+                                                        new Domain.ValueObjects.CourseName(request.Title),
+                                                        request.Description,
+                                                        new Domain.ValueObjects.Duration(request.StartDate, request.EndDate));       
 
-       return _repository.AddCourseAsync(courseModel);
-    }
-
+        return await _courseRepository.AddCourseAsync(newCourse);
+    }    
     private ICourseRepository _repository;
 }
