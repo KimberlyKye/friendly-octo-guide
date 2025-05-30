@@ -1,4 +1,4 @@
-﻿namespace Infrastructure.Repositories.Abstractions
+﻿namespace RepositoriesAbstractions.Abstractions
 {
     /// <summary>
     /// Репозиторий для действий с профилем человека

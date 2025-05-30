@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Application.Models.Teacher.Responses
 {
-    public class CalendarHomeTaskModel
+    public class CalendarResponseModel
     {
         public CalendarLessonModel[] CalendarLessonDtos { get; set; } = new CalendarLessonModel[0];
-        public CalendarHomeTaskModel[] CalendarHomeTaskDtos { get; set; } = new CalendarHomeTaskModel[0];
+        public CalendarResponseModel[] CalendarHomeTaskDtos { get; set; } = new CalendarResponseModel[0];
     }
 }

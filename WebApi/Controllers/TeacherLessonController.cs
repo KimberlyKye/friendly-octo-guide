@@ -55,6 +55,7 @@ namespace WebApi.Controllers
         /// <response code="500">Если есть какие-то ошибки при создании</response>        
         [HttpPost("create-lesson")]
         [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> CreateLesson(CreateLessonRequestDto request)
         {

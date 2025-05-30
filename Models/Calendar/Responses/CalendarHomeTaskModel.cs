@@ -1,6 +1,12 @@
-﻿namespace WebApi.Dto.Teacher.Responses
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Application.Models.Teacher.Responses
 {
-    public class CalendarHomeTaskDto
+    public class CalendarHomeTaskModel
     {
         public int CourseId { get; set; }
         public string CourseName { get; set; }

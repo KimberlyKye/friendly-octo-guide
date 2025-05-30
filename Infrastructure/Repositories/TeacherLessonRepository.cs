@@ -1,12 +1,12 @@
 ﻿using Entities;
 using Infrastructure.DataModels;
 using Infrastructure.Contexts;
-using Infrastructure.Repositories.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using Infrastructure.Factories.Abstractions;
 using Infrastructure.Factories;
 using Domain.ValueObjects.Enums;
+using RepositoriesAbstractions.Abstractions;
 
 namespace Infrastructure.Repositories;
 
@@ -25,27 +25,15 @@ public class TeacherLessonRepository : ITeacherLessonRepository
         _teacherFactory = teacherFactory;
         _lessonFactory = lessonFactory;
     }    
-    public async Task<int> AddLesson(Entities.Lesson lesson) //<Entities.Lesson>
-    {        
-        try
-        {
-            // Преобразуем доменную модель в DataModel
-            var lessonDataModel = await _lessonFactory.CreateDataModelAsync(lesson);
+    public async Task<int> AddLesson(Entities.Lesson lesson)
+    {   
+        var lessonDataModel = await _lessonFactory.CreateDataModelAsync(lesson);
 
-            // Добавляем в контекст EF Core
-            await _context.Lessons.AddAsync(lessonDataModel);
+        await _context.Lessons.AddAsync(lessonDataModel);
 
-            // Сохраняем изменения
-            await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync();
 
-            // Возвращаем ID созданной записи
-            return lessonDataModel.Id;
-        }
-        catch (Exception ex)
-        {
-            //_logger.LogError(ex, "Error while adding lesson");
-            throw; // Перебрасываем исключение для обработки на уровне выше
-        }
+        return lessonDataModel.Id;        
     }
     //public async Task<CalendarResponseModel> GetCalendarData(GetCalendarDataRequestModel requestDto)
     //{

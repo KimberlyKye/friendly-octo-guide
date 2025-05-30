@@ -10,6 +10,11 @@
     <ProjectReference Include="..\Domain\Entities\Entities.csproj" />
     <ProjectReference Include="..\Domain\ValueObjects\ValueObjects.csproj" />
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
+    <ProjectReference Include="..\RepositoriesAbstractions\RepositoriesAbstractions.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\Teacher\Responses\" />
   </ItemGroup>
 
 </Project>

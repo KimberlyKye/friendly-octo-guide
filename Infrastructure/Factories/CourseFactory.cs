@@ -19,6 +19,9 @@ namespace Infrastructure.Factories
 
         public async Task<Course> CreateFrom(DataModels.Course courseModel, DataModels.User teacher)
         {
+            if (courseModel is null)
+                throw new ArgumentNullException(nameof(courseModel));
+
             var teacherInfo = await _teacherFactory.CreateFrom(teacher);
             return new Course(
                 id: courseModel.Id,
@@ -31,6 +34,9 @@ namespace Infrastructure.Factories
 
         public DataModels.Course MapTo(Course course)
         {
+            if (course is null)
+                throw new ArgumentNullException(nameof(course));
+
             return new DataModels.Course()
             {
                 StateId = (int)course.State,

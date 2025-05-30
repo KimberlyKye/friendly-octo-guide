@@ -4,13 +4,12 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using File = Domain.ValueObjects.File;
 
-namespace Application.Models.Teacher.Requests
+namespace Application.Models.Calendar.Requests
 {
-    public class GetCalendarDataRequestModel
+    public class GetStudentCalendarDataRequestModel
     {
-        public int UserId { get; set; }
+        public int StudentId { get; set; }
         public DateOnly Date { get; set; }
     }
 }

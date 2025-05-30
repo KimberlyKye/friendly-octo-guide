@@ -1,4 +1,5 @@
 ﻿using Domain.ValueObjects;
+using Infrastructure.DataModels;
 using Infrastructure.Factories.Abstractions;
 using System;
 using System.IO;
@@ -10,7 +11,8 @@ namespace Infrastructure.Factories
         public Domain.ValueObjects.File? Create(string? fullPath)
         {
             if (string.IsNullOrWhiteSpace(fullPath))
-                return null;
+                throw new ArgumentNullException(nameof(fullPath));
+
 
             try
             {
@@ -35,6 +37,9 @@ namespace Infrastructure.Factories
 
         public string? GetFullPath(Domain.ValueObjects.File? file)
         {
+            if (file is null)
+                throw new ArgumentNullException(nameof(file));
+
             return file?.GetFullPath();
         }
     }

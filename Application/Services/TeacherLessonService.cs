@@ -1,4 +1,4 @@
-﻿using Infrastructure.Repositories.Abstractions;
+﻿using RepositoriesAbstractions.Abstractions;
 using Application.Services.Abstractions;
 using Entities;
 using Domain.ValueObjects;

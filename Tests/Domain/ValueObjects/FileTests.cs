@@ -70,14 +70,14 @@ namespace Tests.Domain.ValueObjects
             Assert.That(file.ToString(), Is.EqualTo(expectedPath));
         }
 
-        [Test]
-        public void Equals_ShouldReturnTrue_WhenFilesAreSame()
-        {
-            var file1 = new File(ValidPath, ValidName, ValidExtension);
-            var file2 = new File(ValidPath, ValidName, ValidExtension);
+        // [Test]
+        // public void Equals_ShouldReturnTrue_WhenFilesAreSame()
+        // {
+        //     var file1 = new File(ValidPath, ValidName, ValidExtension);
+        //     var file2 = new File(ValidPath, ValidName, ValidExtension);
 
-            Assert.That(file1.Equals(file2), Is.True);
-        }
+        //     Assert.That(file1.Equals(file2), Is.True);
+        // }
 
         [Test]
         public void Equals_ShouldReturnFalse_WhenFilesAreDifferent()

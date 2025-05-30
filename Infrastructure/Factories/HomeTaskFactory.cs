@@ -18,6 +18,8 @@ namespace Infrastructure.Factories
 
         public async Task<Entities.HomeTask> CreateAsync(HomeTask dataModel)
         {
+            if(dataModel is null)
+                throw new ArgumentNullException(nameof(dataModel));
             try
             {
                 var startDate = DateOnly.FromDateTime(dataModel.StartDate);
