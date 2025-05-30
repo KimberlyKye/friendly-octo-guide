@@ -64,7 +64,7 @@ namespace Entities
                                                string description,
                                                Duration duration)
         {
-            return await Task.Run(() => new Course( id,
+            return await Task.Run(() => new Course(id,
                                                     teacher,
                                                     courseName,
                                                     description,
@@ -84,7 +84,7 @@ namespace Entities
 
             // Доп.проверки???
 
-            return await Task.Run(() => new Lesson( id,
+            return await Task.Run(() => new Lesson(id,
                                                     courseId,
                                                     lessonName,
                                                     description,

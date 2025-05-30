@@ -80,6 +80,7 @@ namespace WebApi
             services.AddScoped<IStudentProfileService, StudentProfileService>();
             services.AddScoped<ICourseService, CourseService>();
             services.AddScoped<ITeacherCalendarService, TeacherCalendarService>();
+            services.AddScoped<ITeacherProfileService, TeacherProfileService>();
 
             // 4. Factories
             services.AddTransient<IStudentFactory, StudentFactory>();

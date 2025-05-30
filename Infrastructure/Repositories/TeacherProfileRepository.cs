@@ -1,8 +1,8 @@
 ﻿using Domain.ValueObjects.Enums;
 using Infrastructure.Contexts;
 using Infrastructure.Factories.Abstractions;
-using Infrastructure.Repositories.Abstractions;
 using Microsoft.EntityFrameworkCore;
+using RepositoriesAbstractions.Abstractions;
 
 namespace Infrastructure.Repositories
 {
