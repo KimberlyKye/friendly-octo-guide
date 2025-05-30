@@ -127,7 +127,7 @@ namespace Tests.Domain.ValueObjects
             _person.SetDateOfBirth(expectedDateOfBirth);
             var actualDateOfBirth = _person.GetDateOfBirth();
 
-            Assert.That(actualDateOfBirth, Is.EqualTo(expectedDateOfBirth));
+            Assert.That(actualDateOfBirth.Value, Is.EqualTo(expectedDateOfBirth.Value));
         }
     }
 

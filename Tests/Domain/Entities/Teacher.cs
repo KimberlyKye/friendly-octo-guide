@@ -70,7 +70,7 @@ namespace Tests.Domain.ValueObjects
                                      new LessonName("lesson name"),
                                       "description",
                                      new DateTime());
-            Assert.DoesNotThrow(() => _teacher.SetLessonScore(_student, lesson));
+            Assert.DoesNotThrow(() => _teacher.SetLessonScore(_teacher, lesson));
 
             // Проверка того, что оценка за урок была установлена
         }
