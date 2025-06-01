@@ -17,5 +17,11 @@ namespace Infrastructure.Repositories
             return await _context.Courses
                 .AnyAsync(c => c.Id == courseId && c.StateId == (int)CourseState.Active);
         }
+
+        public async Task<bool> IsCourseOwnedByTeacherAsync(int courseId, int teacherId)
+        {
+            return await _context.Courses
+                .AnyAsync(c => c.Id == courseId && c.TeacherId == teacherId);
+        }
     }
 }

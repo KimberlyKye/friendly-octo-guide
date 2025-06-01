@@ -14,10 +14,6 @@ namespace Infrastructure.Factories
     {
         public Task<Student> CreateFromAsync(User user)
         {
-            if (user is null
-                           || user.DateOfBirth is null)
-                throw new ArgumentNullException(nameof(user));
-
             return Task.FromResult(new Student(
                 id: user.Id,
                 name: new FullName(user.Name, user.Surname),
@@ -28,9 +24,6 @@ namespace Infrastructure.Factories
 
         public Task<User> CreateDataModelAsync(Student student)
         {
-            if (student is null)
-                throw new ArgumentNullException(nameof(student));
-
             return Task.FromResult(new User
             {
                 Id = student.Id,

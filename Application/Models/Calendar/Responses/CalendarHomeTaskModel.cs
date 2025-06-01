@@ -12,8 +12,9 @@ namespace Application.Models.Teacher.Responses
         public string CourseName { get; set; }
         public int LessonId { get; set; }
         public string LessonName { get; set; }
+        public int HomeTaskId { get; set; }
+        public string HomeTaskName { get; set; }
         public DateTime DateStart { get; set; }
         public DateTime DateEnd { get; set; }
-        public string Name { get; set; }
     }
 }

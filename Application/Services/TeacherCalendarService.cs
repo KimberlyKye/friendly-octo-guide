@@ -22,10 +22,7 @@ namespace Application.Services
         public async Task<TeacherCalendarResponseModel> GetPeriodCalendarData(GetTeacherCalendarDataRequestModel request)
         {
             var minDate = new DateOnly(2000, 1, 1);
-
-            //if (request.StartDate <= minDate || request.EndDate <= minDate)
-            //    throw new ArgumentException("Даты должны быть не раньше 2000-01-01");
-
+                        
             if (request.StartDate > request.EndDate)
             {
                 throw new ArgumentException("Начальная дата не может быть позже конечной");
@@ -34,7 +31,7 @@ namespace Application.Services
             Teacher? teacher = await _teacherInfoRepository.GetTeacherById(request.TeacherId);
             if (teacher is null)
             {
-                throw new ArgumentException($"Преподаватель с ID {request.TeacherId} не существует", nameof(request.TeacherId));
+                throw new ArgumentNullException($"Преподаватель с ID {request.TeacherId} не существует", nameof(request.TeacherId));
             }
 
             IReadOnlyCollection<Course>? courses =  await _teacherCalendarRepository.GetPeriodCalendarData(request.TeacherId, request.StartDate, request.EndDate);
