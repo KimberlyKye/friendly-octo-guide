@@ -1,6 +1,7 @@
 ﻿using Application.Services.Abstractions;
 using Application.Models.Teacher.Responses;
 using RepositoriesAbstractions.Abstractions;
+using Domain.ValueObjects.Enums;
 
 namespace Application.Services
 {
@@ -13,11 +14,21 @@ namespace Application.Services
         {
             _studentInfoRepository = studentInfoRepository;
         }
-        public Task<List<StudentAllCoursesModel>> GetAllCourses(int studentId)
+        public async Task<List<StudentAllCoursesModel>> GetAllCourses(int studentId)
         {
-            var courses = _studentInfoRepository.GetAllCourses(studentId);
+            var courses = await _studentInfoRepository.GetAllCourses(studentId);
             
-            return 
+            var result = new List<StudentAllCoursesModel>();
+            foreach (var course in courses)
+            {
+                result.Add(new StudentAllCoursesModel
+                {
+                    Id = course.Id,
+                    Name = course.Name,
+                    IsActive = course.State == CourseState.Active
+                });
+            }
+            return result;
         }
     }
 }

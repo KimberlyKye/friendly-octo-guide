@@ -48,15 +48,24 @@ namespace Infrastructure.Repositories
                     .Where(sc => sc.StudentId == student.Id)
                 from course in _context.Courses
                     .Where(c => c.Id == studentCourse.CourseId)
+                from teacher in _context.Users
+                    .Where(t => t.Id == course.TeacherId && t.RoleId == (int)RoleEnum.Teacher)
                 where student.Id == studentId
                     && student.RoleId == (int)RoleEnum.Student
-                select new { Course = course, Teacher = course.Teacher })
+                select new { Course = course, Teacher = teacher })
                 .ToListAsync();
 
-            var result = _courseFactory.
+            var result = new List<Course>();
+            foreach (var item in coursesData)
+            {                
+                var domainCourse = await _courseFactory.CreateFrom(
+                    courseModel: item.Course,
+                    teacher: item.Teacher);
 
-            return coursesData;
+                result.Add(domainCourse);
+                
+            }
+            return result;
         }
-
     }
 }

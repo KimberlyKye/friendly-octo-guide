@@ -47,7 +47,7 @@ namespace WebApi.Controllers
         {
             if (studentId <= 0) { return BadRequest("studentId не может быть меньше или равен 0 "); }
 
-            var  result = _studentInfoService.GetAllCourses(studentId);
+            var  result = await _studentInfoService.GetAllCourses(studentId);
 
             return Ok(result);
         }
