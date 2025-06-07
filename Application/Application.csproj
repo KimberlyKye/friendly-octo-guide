@@ -13,8 +13,4 @@
     <ProjectReference Include="..\RepositoriesAbstractions\RepositoriesAbstractions.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Models\Teacher\Responses\" />
-  </ItemGroup>
-
 </Project>
