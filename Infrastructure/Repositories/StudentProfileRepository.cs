@@ -41,6 +41,18 @@ namespace Infrastructure.Repositories
             return await _studentFactory.CreateFromAsync(user);
         }
 
+        public async Task<Entities.Student> GetUserProfileByEmailAsync(string email)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(c => c.Email == email);
+
+            if (user == null)
+            {
+                throw new InvalidOperationException("Профиль студента не найден.");
+            }
+
+            return await _studentFactory.CreateFromAsync(user);
+        }
+
         public async Task<Entities.Student> UpdateUserProfileAsync(Entities.Student updatedStudent)
         {
             // Ищем текущего студента по идентификатору

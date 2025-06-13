@@ -23,15 +23,15 @@ public class CourseService : ICourseService
         Teacher? teacher = await _teacherInfoRepository.GetTeacherById(request.TeacherId);
         if (teacher is null)
         {
-            throw new ArgumentException($"Преподаватель с ID {request.TeacherId} не существует", nameof(request.TeacherId));
+            throw new ArgumentException($"пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ ID {request.TeacherId} пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", nameof(request.TeacherId));
         }
         Course newCourse = await teacher.CreateCourse(  0,
                                                         teacher,
                                                         new Domain.ValueObjects.CourseName(request.Title),
                                                         request.Description,
-                                                        new Domain.ValueObjects.Duration(request.StartDate, request.EndDate));       
+                                                        new Domain.ValueObjects.Duration(request.StartDate, request.EndDate));
 
         return await _courseRepository.AddCourseAsync(newCourse);
-    }    
+    }
     private ICourseRepository _repository;
 }

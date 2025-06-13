@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Application.Services.Abstractions;
 using Application.Services;
 using Infrastructure.Contexts;
@@ -9,9 +5,12 @@ using Infrastructure.Factories;
 using Infrastructure.Factories.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
+using Infrastructure.Repositories.Abstractions;
 using Infrastructure.Repositories;
 using Entities;
 using System.Reflection;
+using Application.Auth;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using WebApi.Middleware;
@@ -43,9 +42,7 @@ namespace WebApi
             services.AddScoped<ITeacherLessonRepository, TeacherLessonRepository>();
             services.AddScoped<ICourseInfoRepository, CourseInfoRepository>();
             services.AddScoped<IUserProfileRepository<Student>, StudentProfileRepository>();
-            services.AddScoped<ICourseRepository, CourseRepository>();
-            services.AddScoped<IStudentRepository, StudentRepository>();
-            services.AddScoped<ITeacherCalendarRepository, TeacherCalendarRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
 
             // 2. Swagger
             services.AddEndpointsApiExplorer();
@@ -71,6 +68,30 @@ namespace WebApi
                 var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 
+                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+                {
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer",
+                    BearerFormat = "JWT",
+                    In = ParameterLocation.Header,
+                    Description = "Enter token in format 'bearer<space>token'"
+                });
+                options.AddSecurityRequirement(new OpenApiSecurityRequirement()
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference()
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        new string[] {}
+                    }
+                });
+
             });
 
             // 3. �������� ������� ����������
@@ -89,6 +110,22 @@ namespace WebApi
             services.AddTransient<IFileFactory, FileFactory>();
 
             // 5. MVC
+            services.AddAuthorization();
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+            {
+                options.RequireHttpsMetadata = false;
+                options.TokenValidationParameters = new()
+                {
+                    ValidateIssuer = true,
+                    ValidIssuer = AuthOptions.ISSUER,
+                    ValidateAudience = true,
+                    ValidAudience = AuthOptions.AUDIENCE,
+                    ValidateLifetime = true,
+                    IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
+                    ValidateIssuerSigningKey = true
+                };
+
+            });
 
             services.AddControllers(options =>
             {
@@ -116,7 +153,8 @@ namespace WebApi
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
+            app.UseAuthentication();
+            app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

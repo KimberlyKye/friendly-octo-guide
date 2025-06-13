@@ -1,5 +1,6 @@
 using Application.Models.Course;
 using Application.Services.Abstractions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Dto.Course.Requests;
 using WebApi.Dto.Course.Responses;
@@ -11,6 +12,7 @@ namespace WebApi.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class CourseController : ControllerBase
 {
     private ICourseService _courseService;
