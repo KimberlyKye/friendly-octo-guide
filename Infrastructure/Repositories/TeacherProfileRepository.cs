@@ -29,26 +29,26 @@ namespace Infrastructure.Repositories
             return await _teacherFactory.CreateFrom(createdTeacher);
         }
 
-        public async Task<Entities.Teacher> GetUserProfileAsync(long teacherId)
+        public async Task<Entities.Teacher?> GetUserProfileAsync(long teacherId)
         {
             var user = await _context.Users.FirstOrDefaultAsync(c => c.Id == teacherId && c.RoleId == (int)RoleEnum.Teacher);
 
             if (user == null)
             {
-                throw new InvalidOperationException("Профиль преподавателя не найден.");
+                return null;
             }
 
             return await _teacherFactory.CreateFrom(user);
         }
 
-        public async Task<Entities.Teacher> UpdateUserProfileAsync(Entities.Teacher updatedTeacher)
+        public async Task<Entities.Teacher?> UpdateUserProfileAsync(Entities.Teacher updatedTeacher)
         {
             // Ищем текущего преподавателя по идентификатору
             var currentTeacher = await _context.Users.FirstOrDefaultAsync(c => c.Id == updatedTeacher.Id && c.RoleId == (int)RoleEnum.Teacher);
 
             if (currentTeacher == null)
             {
-                throw new InvalidOperationException("Профиль преподавателя не найден.");
+                return null;
             }
 
             var user = await _teacherFactory.CreateDataModelAsync(updatedTeacher);
