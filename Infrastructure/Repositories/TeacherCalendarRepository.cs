@@ -35,10 +35,11 @@ namespace Infrastructure.Repositories
 
             var data = await (
                 from teacher in _context.Users.AsNoTracking()
-                from course in _context.Courses.Where(c => c.TeacherId == teacher.Id)
+                from course in _context.Courses.Where(c => c.TeacherId == teacher.Id
+                                                        && c.StateId == (int)CourseState.Active)
                 from lesson in _context.Lessons.Where(l => l.CourseId == course.Id
-                            && DateOnly.FromDateTime(l.Date) >= startDate
-                            && DateOnly.FromDateTime(l.Date) <= endDate)
+                                                        && DateOnly.FromDateTime(l.Date) >= startDate
+                                                        && DateOnly.FromDateTime(l.Date) <= endDate)
                 where teacher.Id == teacherId
                             && teacher.RoleId == (int)RoleEnum.Teacher
                 select new

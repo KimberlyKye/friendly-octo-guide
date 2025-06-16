@@ -29,7 +29,7 @@ public class CourseService : ICourseService
                                                         teacher,
                                                         new Domain.ValueObjects.CourseName(request.Title),
                                                         request.Description,
-                                                        new Domain.ValueObjects.Duration(request.StartDate, request.EndDate));       
+                                                        new Domain.ValueObjects.Duration(request.StartDate, request.EndDate));
 
         return await _courseRepository.AddCourseAsync(newCourse);
     }    
