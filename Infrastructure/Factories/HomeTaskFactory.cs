@@ -1,4 +1,3 @@
-// Infrastructure/Factories/HomeTaskFactory.cs
 using System;
 using System.Threading.Tasks;
 using Domain.ValueObjects;
@@ -17,34 +16,22 @@ namespace Infrastructure.Factories
         }
 
         public async Task<Entities.HomeTask> CreateAsync(HomeTask dataModel)
-        {
-            if(dataModel is null)
-                throw new ArgumentNullException(nameof(dataModel));
-            try
-            {
-                var startDate = DateOnly.FromDateTime(dataModel.StartDate);
-                var endDate = DateOnly.FromDateTime(dataModel.EndDate);
-                var homeTaskName = new HomeTaskName(dataModel.Title);
-                var material = _fileFactory.Create(dataModel.Material);
+        {            
+            var startDate = DateOnly.FromDateTime(dataModel.StartDate);
+            var endDate = DateOnly.FromDateTime(dataModel.EndDate);
+            var homeTaskName = new HomeTaskName(dataModel.Title);
+            var material = _fileFactory.Create(dataModel.Material);
 
-                return new Entities.HomeTask(
-                    id: dataModel.Id,
-                    homeTaskName: homeTaskName,
-                    description: dataModel.Description,
-                    duration: new Duration(startDate, endDate),
-                    material: material);
-            }
-            catch (Exception ex)
-            {
-                throw new InvalidOperationException($"Error creating HomeTask (ID: {dataModel.Id})", ex);
-            }
+            return new Entities.HomeTask(
+                id: dataModel.Id,
+                homeTaskName: homeTaskName,
+                description: dataModel.Description,
+                duration: new Duration(startDate, endDate),
+                material: material);            
         }
 
         public Task<HomeTask> CreateDataModelAsync(Entities.HomeTask domainEntity)
         {
-            if (domainEntity == null)
-                throw new ArgumentNullException(nameof(domainEntity));
-
             var materialPath = _fileFactory.GetFullPath(domainEntity.Material);
 
             return Task.FromResult(new HomeTask

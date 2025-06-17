@@ -17,14 +17,14 @@
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        Task<T> UpdateUserProfileAsync(T user);
+        Task<T?> UpdateUserProfileAsync(T user);
 
         /// <summary>
         /// Метод получения человека
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        Task<T> GetUserProfileAsync(long userId);
+        Task<T?> GetUserProfileAsync(long userId);
 
         /// <summary>
         /// Метод проверки наличия пользователя с данным адресом электронной почты

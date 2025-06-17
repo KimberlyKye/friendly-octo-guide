@@ -28,7 +28,7 @@ namespace Infrastructure.Repositories
             _studentFactory = studentFactory;
             _courseFactory = courseFactory;
         }
-        
+
         public async Task<Student?> GetStudentById(int studentId)
         {
 
@@ -42,7 +42,7 @@ namespace Infrastructure.Repositories
         }
         public async Task<List<Course>> GetAllCourses(int studentId)
         {
-            var coursesData = await(
+            var coursesData = await (
                 from student in _context.Users.AsNoTracking()
                 from studentCourse in _context.StudentCourses
                     .Where(sc => sc.StudentId == student.Id)
@@ -57,13 +57,13 @@ namespace Infrastructure.Repositories
 
             var result = new List<Course>();
             foreach (var item in coursesData)
-            {                
+            {
                 var domainCourse = await _courseFactory.CreateFrom(
                     courseModel: item.Course,
                     teacher: item.Teacher);
 
                 result.Add(domainCourse);
-                
+
             }
             return result;
         }

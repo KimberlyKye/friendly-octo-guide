@@ -26,9 +26,6 @@ namespace Infrastructure.Factories
 
         public async Task<Entities.Lesson> CreateAsync(DataModels.Lesson dataModel, IEnumerable<DataModels.HomeTask>? homeTasks = null)
         {
-            if (dataModel is null)
-                throw new ArgumentNullException(nameof(dataModel));
-
             var material = _fileFactory.Create(dataModel.Material);
             var domainHomeTasks = homeTasks != null
                 ? await CreateHomeTasksAsync(homeTasks)
@@ -46,9 +43,6 @@ namespace Infrastructure.Factories
 
         public Task<DataModels.Lesson> CreateDataModelAsync(Entities.Lesson domainEntity)
         {
-            if (domainEntity == null)
-                throw new ArgumentNullException(nameof(domainEntity));
-
             var materialPath = _fileFactory.GetFullPath(domainEntity.Material);
 
             return Task.FromResult(new DataModels.Lesson
