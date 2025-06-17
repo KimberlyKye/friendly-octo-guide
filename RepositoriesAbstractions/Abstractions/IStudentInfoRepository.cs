@@ -10,5 +10,6 @@ namespace RepositoriesAbstractions.Abstractions
     public interface IStudentInfoRepository
     {
         Task<Student?> GetStudentById(int studentId);
+        Task<List<Course>> GetAllCourses(int studentId);
     }
 }
