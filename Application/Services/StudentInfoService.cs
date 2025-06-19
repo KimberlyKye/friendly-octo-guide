@@ -2,6 +2,7 @@
 using Application.Models.Teacher.Responses;
 using RepositoriesAbstractions.Abstractions;
 using Domain.ValueObjects.Enums;
+using Entities;
 
 namespace Application.Services
 {
@@ -29,6 +30,11 @@ namespace Application.Services
                 });
             }
             return result;
+        }
+        public async Task<Course?> GetCourseInfo(int courseId, int studentId)
+        {
+            return await _studentInfoRepository.GetCourseInfo(courseId, studentId);
+                        
         }
     }
 }

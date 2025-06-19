@@ -48,7 +48,7 @@ namespace WebApi.Controllers
         [HttpGet("period-calendar-data")]
         [ProducesResponseType(typeof(TeacherCalendarResponseModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //[ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetPeriodCalendarData(GetTeacherCalendarDataRequestDto request)
         {

@@ -37,10 +37,11 @@ namespace WebApi.Controllers
         ///     }
         ///
         /// </remarks>
-        /// <response code="201">Возвращает id созданного занятия</response>
+        /// <response code="200">Возвращает модель</response>
+        /// <response code="400">Некорректные параметры запроса</response>
         /// <response code="500">Если есть какие-то ошибки при создании</response>        
         [HttpGet("get-all-courses")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllCourses(int studentId)
@@ -48,6 +49,41 @@ namespace WebApi.Controllers
             if (studentId <= 0) { return BadRequest("studentId не может быть меньше или равен 0 "); }
 
             var  result = await _studentInfoService.GetAllCourses(studentId);
+
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Метод получения информации о курсе (без уроков и ДЗ)
+        /// </summary>
+        /// <param name="courseId"></param>
+        /// <param name="studentId"></param>
+        /// <returns>Модель курса</returns>
+        /// <remarks>
+        /// Пример запроса:
+        ///
+        ///     GET /get-course-info
+        ///     {
+        ///        "courseId": 111
+        ///     }
+        ///
+        /// </remarks>
+        /// <response code="200">Возвращает модель</response>
+        /// <response code="400">Некорректные параметры запроса</response>
+        /// <response code="404">Курс не найден</response>
+        /// <response code="500">Если есть какие-то ошибки при создании</response>        
+        [HttpGet("get-course-info")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetCourseInfo(int courseId, int studentId)
+        {
+            if (courseId <= 0) { return BadRequest("courseId не может быть меньше или равен 0 "); }
+
+            var result = await _studentInfoService.GetCourseInfo(courseId, studentId);
+
+            if (result is null) { return NotFound(); };
 
             return Ok(result);
         }

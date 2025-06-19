@@ -81,17 +81,5 @@ namespace WebApi.Controllers
             var result = await _teacherService.CreateLesson(requestModel);
             return Ok(result);
         }
-        //[HttpGet("calendar-data")]
-        //public async Task<IActionResult> GetCalendarData(GetCalendarDataRequestDto requestDto)
-        //{
-        //    if (requestDto is null
-        //        || requestDto.userId <= 0
-        //        || requestDto.date <= new DateOnly(2000, 1, 1))
-        //    {
-        //        return BadRequest();
-        //    }
-        //    var result = await _teacherService.GetCalendarData(requestDto);
-        //    return Ok(result);
-        //}
     }
 }

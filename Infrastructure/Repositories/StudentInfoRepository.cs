@@ -1,6 +1,7 @@
 ﻿using Domain.ValueObjects.Enums;
 using Entities;
 using Infrastructure.Contexts;
+using Infrastructure.DataModels;
 using Infrastructure.Factories.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using RepositoriesAbstractions.Abstractions;
@@ -40,7 +41,7 @@ namespace Infrastructure.Repositories
 
             return await _studentFactory.CreateFromAsync(studentInfo);
         }
-        public async Task<List<Course>> GetAllCourses(int studentId)
+        public async Task<List<Entities.Course>> GetAllCourses(int studentId)
         {
             var coursesData = await (
                 from student in _context.Users.AsNoTracking()
@@ -55,7 +56,7 @@ namespace Infrastructure.Repositories
                 select new { Course = course, Teacher = teacher })
                 .ToListAsync();
 
-            var result = new List<Course>();
+            var result = new List<Entities.Course>();
             foreach (var item in coursesData)
             {
                 var domainCourse = await _courseFactory.CreateFrom(
@@ -66,6 +67,27 @@ namespace Infrastructure.Repositories
 
             }
             return result;
+        }
+        public async Task<Entities.Course?> GetCourseInfo(int courseId, int studentId)
+        {
+            var coursesData = await (
+                from course in _context.Courses.AsNoTracking()
+                from studentCourse in _context.StudentCourses
+                    .Where(sc => sc.CourseId == course.Id
+                              && sc.StudentId == studentId)
+                from teacher in _context.Users
+                    .Where(t => t.Id == course.TeacherId && t.RoleId == (int)RoleEnum.Teacher)
+                where course.Id == courseId
+                select new { Course = course, Teacher = teacher })
+                .FirstOrDefaultAsync();
+
+            if (coursesData is null) { return null; };
+
+            var domainCourse = await _courseFactory.CreateFrom(
+                    courseModel: coursesData.Course,
+                    teacher: coursesData.Teacher);
+
+            return domainCourse;
         }
     }
 }
