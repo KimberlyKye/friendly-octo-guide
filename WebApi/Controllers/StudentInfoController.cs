@@ -87,5 +87,40 @@ namespace WebApi.Controllers
 
             return Ok(result);
         }
+        /// <summary>
+        /// Метод получения информации о курсе (без уроков и ДЗ)
+        /// </summary>
+        /// <param name="courseId"></param>
+        /// <param name="studentId"></param>
+        /// <returns>Модель курса</returns>
+        /// <remarks>
+        /// Пример запроса:
+        ///
+        ///     GET /get-course-info
+        ///     {
+        ///        "courseId": 111
+        ///     }
+        ///
+        /// </remarks>
+        /// <response code="200">Возвращает модель</response>
+        /// <response code="400">Некорректные параметры запроса</response>
+        /// <response code="404">Курс не найден</response>
+        /// <response code="500">Если есть какие-то ошибки при создании</response>        
+        [HttpGet("get-lessons-info-by-course")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetLessonsInfoByCourse(int courseId, int studentId)
+        {
+            if (courseId <= 0) { return BadRequest("courseId не может быть меньше или равен 0 "); }
+
+            var result = await _studentInfoService.GetLessonsInfoByCourse(courseId, studentId);
+
+            if (result is null) { return NotFound(); }
+            ;
+
+            return Ok(result);
+        }
     }
 }

@@ -8,5 +8,6 @@ namespace Application.Services.Abstractions
     {
         Task <List<StudentAllCoursesModel>> GetAllCourses(int studentId);
         Task<Course?> GetCourseInfo(int courseId, int studentId);
+        Task<List<Lesson?>> GetLessonsInfoByCourse(int courseId, int studentId);
     }
 }

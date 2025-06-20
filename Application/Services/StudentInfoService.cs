@@ -34,7 +34,11 @@ namespace Application.Services
         public async Task<Course?> GetCourseInfo(int courseId, int studentId)
         {
             return await _studentInfoRepository.GetCourseInfo(courseId, studentId);
-                        
         }
+        public async Task<List<Lesson?>> GetLessonsInfoByCourse(int courseId, int studentId)
+        {
+            return new List<Lesson?>();
+        }
+
     }
 }
