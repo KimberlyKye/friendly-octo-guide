@@ -5,6 +5,7 @@ using Domain.ValueObjects.Enums;
 using Entities;
 using Application.Models.Course;
 using Domain.ValueObjects;
+using Application.Models.Lesson;
 
 namespace Application.Services
 {
@@ -48,9 +49,20 @@ namespace Application.Services
                 Duration = course.Duration
             };
         }
-        public async Task<List<Lesson?>> GetLessonsInfoByCourse(int courseId, int studentId)
+        public async Task<List<LessonInfoByCourseModel>?> GetLessonsInfoByCourse(int courseId, int studentId)
         {
-            return new List<Lesson?>();
+            var course = await _studentInfoRepository.GetAllCourseInfo(courseId, studentId);
+            if (course is null) { return null!; }
+
+            return course.Lessons.Select(lesson => new LessonInfoByCourseModel
+            {
+                CourseId = course.Id,
+                LessonName = lesson.Name,
+                Description = lesson.Description,
+                Date = lesson.Date,
+                Material = lesson.Material,
+                HomeTasks = lesson.HomeTasks.ToList()
+            }).ToList();
         }
     }
 }

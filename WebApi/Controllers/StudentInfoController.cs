@@ -1,6 +1,7 @@
 ﻿using Application.Services.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Dto.Course.Responses;
+using WebApi.Dto.Lesson.Responses;
 using WebApi.Dto.Teacher.Requests;
 
 namespace WebApi.Controllers
@@ -124,10 +125,19 @@ namespace WebApi.Controllers
             if (courseId <= 0) { return BadRequest("courseId не может быть меньше или равен 0 "); }
 
             var result = await _studentInfoService.GetLessonsInfoByCourse(courseId, studentId);
-
             if (result is null) { return NotFound(); };
 
-            return Ok(result);
+            var response = result.Select(lesson => new LessonInfoByCourseResponse
+            {
+                CourseId = lesson.CourseId,
+                LessonName = lesson.LessonName,
+                Description = lesson.Description,
+                Date = lesson.Date,
+                Material = lesson.Material,
+                HomeTasks = lesson.HomeTasks
+            }).ToList();
+
+            return Ok(response);
         }
     }
 }

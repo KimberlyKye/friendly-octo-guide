@@ -43,19 +43,25 @@ namespace Infrastructure.Repositories
                 from student in _context.Users.AsNoTracking()
                 from studentsCourses in _context.StudentCourses
                     .Where(sCs => sCs.StudentId == student.Id)
-                from courses in _context.Courses.Where(c => c.Id == studentsCourses.CourseId
-                                                   && c.StateId == (int)CourseState.Active)
-                from lessons in _context.Lessons.Where(l => l.CourseId == courses.Id
+                from courses in _context.Courses
+                    .Where(c => c.Id == studentsCourses.CourseId
+                            && c.StateId == (int)CourseState.Active)
+                from teacher in _context.Users
+                    .Where(t => t.Id == courses.TeacherId
+                            && t.RoleId == (int)RoleEnum.Student)
+                from lessons in _context.Lessons
+                    .Where(l => l.CourseId == courses.Id
                             && DateOnly.FromDateTime(l.Date) >= startDate
                             && DateOnly.FromDateTime(l.Date) <= endDate)
-                from homeTasks in _context.HomeTasks.Where(hTs => hTs.LessonId == lessons.Id
+                from homeTasks in _context.HomeTasks
+                    .Where(hTs => hTs.LessonId == lessons.Id
                             && DateOnly.FromDateTime(hTs.StartDate) >= startDate
                             && DateOnly.FromDateTime(hTs.EndDate) <= endDate)
                 where student.Id == studentId
-                            && student.RoleId == (int)RoleEnum.Teacher
+                            && student.RoleId == (int)RoleEnum.Student
                 select new
                 {
-                    Teacher = student,
+                    Teacher = teacher,
                     Course = courses,
                     Lesson = lessons,
                     HomeTasks = homeTasks

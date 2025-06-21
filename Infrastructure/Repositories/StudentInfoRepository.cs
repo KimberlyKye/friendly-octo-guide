@@ -2,6 +2,7 @@
 using Entities;
 using Infrastructure.Contexts;
 using Infrastructure.DataModels;
+using Infrastructure.Factories;
 using Infrastructure.Factories.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using RepositoriesAbstractions.Abstractions;
@@ -18,16 +19,22 @@ namespace Infrastructure.Repositories
         private readonly AppDbContext _context;
         private readonly IStudentFactory _studentFactory;
         private readonly ICourseFactory _courseFactory;
+        private readonly ILessonFactory _lessonFactory;
+        private readonly IHomeTaskFactory _homeTaskFactory;
 
 
         public StudentInfoRepository(
             AppDbContext context,
             IStudentFactory studentFactory,
-            ICourseFactory courseFactory)
+            ICourseFactory courseFactory,
+            ILessonFactory lessonFactory,
+            IHomeTaskFactory homeTaskFactory)
         {
             _context = context;
             _studentFactory = studentFactory;
             _courseFactory = courseFactory;
+            _lessonFactory = lessonFactory;
+            _homeTaskFactory = homeTaskFactory;
         }
 
         public async Task<Student?> GetStudentById(int studentId)
@@ -86,6 +93,56 @@ namespace Infrastructure.Repositories
             var domainCourse = await _courseFactory.CreateFrom(
                     courseModel: coursesData.Course,
                     teacher: coursesData.Teacher);
+
+            return domainCourse;
+        }
+        public async Task<Entities.Course> GetAllCourseInfo(int courseId, int studentId)
+        {
+            var coursesData = await (
+                from course in _context.Courses.AsNoTracking()
+                from studentCourse in _context.StudentCourses
+                    .Where(sc => sc.CourseId == course.Id
+                              && sc.StudentId == studentId)
+                from lessons in _context.Lessons
+                    .Where(l => l.CourseId == course.Id)
+                from homeTasks in _context.HomeTasks
+                    .Where(hTs => hTs.LessonId == lessons.Id)
+                from teacher in _context.Users
+                    .Where(t => t.Id == course.TeacherId && t.RoleId == (int)RoleEnum.Teacher)
+                where course.Id == courseId
+                select new
+                {
+                    Teacher = teacher,
+                    Course = course,
+                    Lesson = lessons,
+                    HomeTasks = homeTasks
+                })
+                .ToListAsync();
+
+            if (!coursesData.Any())
+                return null;
+
+            // Упрощенная обработка результатов
+            var firstRecord = coursesData.First();
+            var domainCourse = await _courseFactory.CreateFrom(firstRecord.Course, firstRecord.Teacher);
+
+            // Группируем уроки с заданиями
+            var lessonsWithTasks = coursesData
+                .GroupBy(x => x.Lesson.Id)
+                .Select(g => new
+                {
+                    Lesson = g.First().Lesson,
+                    HomeTasks = g.Select(x => x.HomeTasks).ToList()
+                });
+
+            foreach (var lessonGroup in lessonsWithTasks)
+            {
+                var domainLesson = await _lessonFactory.CreateAsync(
+                    lessonGroup.Lesson,
+                    lessonGroup.HomeTasks);
+
+                domainCourse.AddLesson(domainLesson);
+            }
 
             return domainCourse;
         }

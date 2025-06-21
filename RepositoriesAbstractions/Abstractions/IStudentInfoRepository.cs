@@ -12,5 +12,6 @@ namespace RepositoriesAbstractions.Abstractions
         Task<Student?> GetStudentById(int studentId);
         Task<List<Course>> GetAllCourses(int studentId);
         Task<Course?> GetCourseInfo(int courseId, int studentId);
+        Task<Entities.Course> GetAllCourseInfo(int courseId, int studentId);
     }
 }
