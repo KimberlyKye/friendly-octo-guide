@@ -5,7 +5,6 @@ using Domain.ValueObjects.Enums;
 using Entities;
 using Application.Models.Course;
 using Domain.ValueObjects;
-using Infrastructure.DataModels;
 
 namespace Application.Services
 {

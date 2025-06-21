@@ -125,8 +125,7 @@ namespace WebApi.Controllers
 
             var result = await _studentInfoService.GetLessonsInfoByCourse(courseId, studentId);
 
-            if (result is null) { return NotFound(); }
-            ;
+            if (result is null) { return NotFound(); };
 
             return Ok(result);
         }
