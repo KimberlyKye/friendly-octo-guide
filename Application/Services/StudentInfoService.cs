@@ -3,6 +3,9 @@ using Application.Models.Teacher.Responses;
 using RepositoriesAbstractions.Abstractions;
 using Domain.ValueObjects.Enums;
 using Entities;
+using Application.Models.Course;
+using Domain.ValueObjects;
+using Infrastructure.DataModels;
 
 namespace Application.Services
 {
@@ -31,14 +34,24 @@ namespace Application.Services
             }
             return result;
         }
-        public async Task<Course?> GetCourseInfo(int courseId, int studentId)
+        public async Task<CourseInfoForStudentModel?> GetCourseInfo(int courseId, int studentId)
         {
-            return await _studentInfoRepository.GetCourseInfo(courseId, studentId);
+
+            var course = await _studentInfoRepository.GetCourseInfo(courseId, studentId);
+            if (course is null) { return null; }
+
+            return new CourseInfoForStudentModel
+            {
+                State = course.State,
+                Teacher = course.Teacher,
+                Name = course.Name,
+                Description = course.Description,
+                Duration = course.Duration
+            };
         }
         public async Task<List<Lesson?>> GetLessonsInfoByCourse(int courseId, int studentId)
         {
             return new List<Lesson?>();
         }
-
     }
 }

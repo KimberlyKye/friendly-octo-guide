@@ -1,5 +1,6 @@
 ﻿using Application.Services.Abstractions;
 using Microsoft.AspNetCore.Mvc;
+using WebApi.Dto.Course.Responses;
 using WebApi.Dto.Teacher.Requests;
 
 namespace WebApi.Controllers
@@ -85,7 +86,14 @@ namespace WebApi.Controllers
 
             if (result is null) { return NotFound(); };
 
-            return Ok(result);
+            return Ok(new CourseInfoForStudentResponse
+            {
+                State = result.State,
+                Teacher = result.Teacher,
+                Name = result.Name,
+                Description = result.Description,
+                Duration = result.Duration
+            });
         }
         /// <summary>
         /// Метод получения информации о курсе (без уроков и ДЗ)
