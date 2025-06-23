@@ -105,7 +105,7 @@ namespace WebApi.Controllers
         /// <remarks>
         /// Пример запроса:
         ///
-        ///     GET /get-course-info
+        ///     GET /get-lessons-info-by-course
         ///     {
         ///        "courseId": 111
         ///     }
