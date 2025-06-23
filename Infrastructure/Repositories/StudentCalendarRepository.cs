@@ -34,11 +34,8 @@ namespace Infrastructure.Repositories
             _lessonFactory = lessonFactory;
             _homeTaskFactory = homeTaskFactory;
         }
-        public async Task<IReadOnlyCollection<Entities.Course>> GetPeriodCalendarData(int studentId, DateOnly startDate, DateOnly endDate)
+        public async Task<IReadOnlyCollection<Entities.Course>> GetPeriodCalendarData(int studentId, DateTime startDate, DateTime endDate)
         {
-            var startDateTime = startDate.ToDateTime(TimeOnly.MinValue);
-            var endDateTime = endDate.ToDateTime(TimeOnly.MaxValue);
-
             var data = await (
                 from student in _context.Users.AsNoTracking()
                 from studentsCourses in _context.StudentCourses
@@ -46,11 +43,11 @@ namespace Infrastructure.Repositories
                 from courses in _context.Courses.Where(c => c.Id == studentsCourses.CourseId
                                                    && c.StateId == (int)CourseState.Active)
                 from lessons in _context.Lessons.Where(l => l.CourseId == courses.Id
-                            && DateOnly.FromDateTime(l.Date) >= startDate
-                            && DateOnly.FromDateTime(l.Date) <= endDate)
+                            && l.Date >= startDate
+                            && l.Date <= endDate)
                 from homeTasks in _context.HomeTasks.Where(hTs => hTs.LessonId == lessons.Id
-                            && DateOnly.FromDateTime(hTs.StartDate) >= startDate
-                            && DateOnly.FromDateTime(hTs.EndDate) <= endDate)
+                            && hTs.StartDate >= startDate
+                            && hTs.EndDate <= endDate)
                 where student.Id == studentId
                             && student.RoleId == (int)RoleEnum.Teacher
                 select new
