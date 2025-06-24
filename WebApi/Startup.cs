@@ -81,6 +81,8 @@ namespace WebApi
             services.AddScoped<ICourseService, CourseService>();
             services.AddScoped<ITeacherCalendarService, TeacherCalendarService>();
             services.AddScoped<ITeacherProfileService, TeacherProfileService>();
+            services.AddScoped<IHomeWorkService, HomeWorkService>();
+            services.AddScoped<IHomeTaskService, HomeTaskService>();
 
             // 4. Factories
             services.AddTransient<IStudentFactory, StudentFactory>();
@@ -89,6 +91,7 @@ namespace WebApi
             services.AddTransient<IHomeTaskFactory, HomeTaskFactory>();
             services.AddTransient<ITeacherFactory, TeacherFactory>();
             services.AddTransient<IFileFactory, FileFactory>();
+            services.AddTransient<IBaseFactory<Entities.HomeWork, Infrastructure.DataModels.HomeWork>, HomeWorkFactory>();
 
             // 5. MVC
 

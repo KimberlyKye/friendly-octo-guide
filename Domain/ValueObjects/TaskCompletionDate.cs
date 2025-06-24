@@ -31,6 +31,23 @@ namespace ValueObjects
         }
 
         /// <summary>
+        /// Инициализирует новый экземпляр даты завершения задачи
+        /// </summary>
+        /// <param name="date">Дата завершения</param>
+        /// <exception cref="ArgumentException">
+        /// Выбрасывается если дата:
+        /// - Равна default (01.01.0001)
+        /// - Раньше текущей даты (если это запрещено бизнес-правилами)
+        /// </exception>
+        public TaskCompletionDate(DateTime date) : base(DateOnly.FromDateTime(date))
+        {
+            var convertetDate = DateOnly.FromDateTime(date);
+            ValidateDate(convertetDate);
+            _date = convertetDate;
+        }
+
+
+        /// <summary>
         /// Текущее значение даты завершения задачи
         /// </summary>
         public DateOnly Value

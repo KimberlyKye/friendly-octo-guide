@@ -51,7 +51,7 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         //[ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetPeriodCalendarData(GetStudentCalendarDataRequestDto request)
+        public async Task<IActionResult> GetPeriodCalendarData([FromBody]GetStudentCalendarDataRequestDto request)
         {
             var requestModel = new GetStudentCalendarDataRequestModel()
             {
