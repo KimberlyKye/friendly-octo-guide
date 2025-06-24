@@ -47,6 +47,8 @@ namespace WebApi
             services.AddScoped<ICourseRepository, CourseRepository>();
             services.AddScoped<IStudentRepository, StudentRepository>();
             services.AddScoped<ITeacherCalendarRepository, TeacherCalendarRepository>();
+            services.AddScoped<IStudentCalendarRepository, StudentCalendarRepository>();
+            services.AddScoped<IStudentInfoRepository, StudentInfoRepository>();
 
             // 2. Swagger
             services.AddEndpointsApiExplorer();
@@ -78,9 +80,10 @@ namespace WebApi
             services.AddScoped<ITeacherLessonService, TeacherLessonService>();
             services.AddScoped<ITeacherInfoService, TeacherInfoService>();
             services.AddScoped<IStudentProfileService, StudentProfileService>();
+            services.AddScoped<ITeacherProfileService, TeacherProfileService>();
             services.AddScoped<ICourseService, CourseService>();
             services.AddScoped<ITeacherCalendarService, TeacherCalendarService>();
-            services.AddScoped<ITeacherProfileService, TeacherProfileService>();
+            services.AddScoped<IStudentCalendarService, StudentCalendarService>();
 
             // 4. Factories
             services.AddTransient<IStudentFactory, StudentFactory>();
