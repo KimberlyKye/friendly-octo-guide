@@ -34,11 +34,8 @@ namespace Infrastructure.Repositories
             _lessonFactory = lessonFactory;
             _homeTaskFactory = homeTaskFactory;
         }
-        public async Task<IReadOnlyCollection<Entities.Course>> GetPeriodCalendarData(int studentId, DateOnly startDate, DateOnly endDate)
+        public async Task<IReadOnlyCollection<Entities.Course>> GetPeriodCalendarData(int studentId, DateTime startDate, DateTime endDate)
         {
-            var startDateTime = startDate.ToDateTime(TimeOnly.MinValue);
-            var endDateTime = endDate.ToDateTime(TimeOnly.MaxValue);
-
             var data = await (
                 from student in _context.Users.AsNoTracking()
                 from studentsCourses in _context.StudentCourses
@@ -48,15 +45,13 @@ namespace Infrastructure.Repositories
                             && c.StateId == (int)CourseState.Active)
                 from teacher in _context.Users
                     .Where(t => t.Id == courses.TeacherId
-                            && t.RoleId == (int)RoleEnum.Student)
-                from lessons in _context.Lessons
-                    .Where(l => l.CourseId == courses.Id
-                            && DateOnly.FromDateTime(l.Date) >= startDate
-                            && DateOnly.FromDateTime(l.Date) <= endDate)
-                from homeTasks in _context.HomeTasks
-                    .Where(hTs => hTs.LessonId == lessons.Id
-                            && DateOnly.FromDateTime(hTs.StartDate) >= startDate
-                            && DateOnly.FromDateTime(hTs.EndDate) <= endDate)
+                            && t.RoleId == (int)RoleEnum.Teacher)
+                from lessons in _context.Lessons.Where(l => l.CourseId == courses.Id
+                            && l.Date >= startDate.ToUniversalTime()
+                            && l.Date <= endDate.ToUniversalTime())
+                from homeTasks in _context.HomeTasks.Where(hTs => hTs.LessonId == lessons.Id
+                            && hTs.StartDate >= startDate.ToUniversalTime()
+                            && hTs.EndDate <= endDate.ToUniversalTime())
                 where student.Id == studentId
                             && student.RoleId == (int)RoleEnum.Student
                 select new

@@ -34,12 +34,7 @@ namespace WebApi.Controllers
         /// <remarks>
         /// Пример запроса:
         ///
-        ///     GET /api/StudentCalendar/period-calendar-data
-        ///     {
-        ///        "teacherId": 12345,
-        ///        "startDate": "2023-09-01",
-        ///        "endDate": "2023-09-30"
-        ///     }
+        ///     GET /api/StudentCalendar/period-calendar-data?teacherId=12345&startDate="2023-09-01"&endDate"2023-09-30"
         ///
         /// </remarks>
         /// <response code="200">Возвращает данные календаря преподавателя</response>
@@ -51,13 +46,13 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         //[ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetPeriodCalendarData(GetStudentCalendarDataRequestDto request)
+        public async Task<IActionResult> GetPeriodCalendarData(int studentId, DateTime startDate, DateTime endDate)
         {
             var requestModel = new GetStudentCalendarDataRequestModel()
             {
-                StudentId = request.StudentId,
-                StartDate = request.StartDate,
-                EndDate = request.EndDate
+                StudentId = studentId,
+                StartDate = startDate,
+                EndDate = endDate
             };
             var result = await _studentCalendarService.GetPeriodCalendarData(requestModel);
             return Ok(result);
