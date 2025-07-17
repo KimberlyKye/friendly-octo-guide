@@ -29,13 +29,13 @@ namespace Infrastructure.Repositories
             return await _studentFactory.CreateFromAsync(createdStudent);
         }
 
-        public async Task<Entities.Student> GetUserProfileAsync(long studentId)
+        public async Task<Entities.Student?> GetUserProfileAsync(long studentId)
         {
             var user = await _context.Users.FirstOrDefaultAsync(c => c.Id == studentId && c.RoleId == (int)RoleEnum.Student);
 
             if (user == null)
             {
-                throw new InvalidOperationException("Профиль студента не найден.");
+                return null;
             }
 
             return await _studentFactory.CreateFromAsync(user);
@@ -48,7 +48,7 @@ namespace Infrastructure.Repositories
 
             if (currentStudent == null)
             {
-                throw new InvalidOperationException("Профиль студента не найден.");
+                return null;
             }
 
             var user = await _studentFactory.CreateDataModelAsync(updatedStudent);

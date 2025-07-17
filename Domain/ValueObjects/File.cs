@@ -48,6 +48,21 @@ namespace Domain.ValueObjects
         }
 
         /// <summary>
+        /// Создает новый экземпляр класса File на основе полного пути к файлу
+        /// </summary>
+        /// <param name="filePath">Полный путь к файлу</param>
+        public File(string filePath)
+        {
+            var arr1 = filePath.Split('/');
+            Path = string.Join("/", arr1.Take(arr1.Length - 1));
+
+            var arr2 = arr1[arr1.Length - 1].Split('.');
+            Name = string.Join(".", arr2.Take(arr2.Length - 1));
+            Extension = arr2[arr2.Length - 1];
+        }
+
+
+        /// <summary>
         /// Возвращает полный путь к файлу
         /// </summary>
         public string GetFullPath() => System.IO.Path.Combine(Path, $"{Name}.{Extension}");

@@ -48,7 +48,7 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetPeriodCalendarData(int studentId, DateTime startDate, DateTime endDate)
         {
-            if(studentId <= 0)
+            if (studentId <= 0)
             {
                 return BadRequest();
             }

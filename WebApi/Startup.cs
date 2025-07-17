@@ -17,6 +17,9 @@ using Serilog;
 using WebApi.Middleware;
 using WebApi.Filters;
 using RepositoriesAbstractions.Abstractions;
+using WebApi.Dto;
+using RepositoriesAbstractions;
+using Application.Models;
 
 namespace WebApi
 {
@@ -35,6 +38,8 @@ namespace WebApi
             services.AddCors();
             services.AddScoped<CustomExceptionFilter>();
             services.AddLogging();
+            services.Configure<FileStorageOptions>(Configuration.GetSection("FileStorage"));
+
 
             // 1. DataBase context + repositories
             services.AddDbContext<AppDbContext>(options =>
@@ -48,6 +53,8 @@ namespace WebApi
             services.AddScoped<ICourseRepository, CourseRepository>();
             services.AddScoped<IStudentRepository, StudentRepository>();
             services.AddScoped<ITeacherCalendarRepository, TeacherCalendarRepository>();
+            services.AddScoped<IHomeWorkRepository, HomeWorkRepository>();
+            services.AddScoped<IHomeTaskRepository, HomeTaskRepository>();
             services.AddScoped<IStudentCalendarRepository, StudentCalendarRepository>();
             services.AddScoped<IStudentInfoRepository, StudentInfoRepository>();
 
@@ -85,6 +92,10 @@ namespace WebApi
             services.AddScoped<ITeacherProfileService, TeacherProfileService>();
             services.AddScoped<ICourseService, CourseService>();
             services.AddScoped<ITeacherCalendarService, TeacherCalendarService>();
+            services.AddScoped<ITeacherProfileService, TeacherProfileService>();
+            services.AddScoped<IHomeWorkService, HomeWorkService>();
+            services.AddScoped<IHomeTaskService, HomeTaskService>();
+            services.AddScoped<IFileStorageService, LocalFileStorageService>();
             services.AddScoped<IStudentCalendarService, StudentCalendarService>();
 
             // 4. Factories
@@ -94,6 +105,8 @@ namespace WebApi
             services.AddTransient<IHomeTaskFactory, HomeTaskFactory>();
             services.AddTransient<ITeacherFactory, TeacherFactory>();
             services.AddTransient<IFileFactory, FileFactory>();
+            services.AddTransient<IBaseFactory<Entities.HomeWork, Infrastructure.DataModels.HomeWork>, HomeWorkFactory>();
+            services.AddTransient<IHomeTaskFactory, HomeTaskFactory>();
 
             // 5. MVC
 
