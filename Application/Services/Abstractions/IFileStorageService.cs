@@ -1,4 +1,4 @@
-namespace Infrastructure;
+namespace Application.Services;
 
 public interface IFileStorageService
 {

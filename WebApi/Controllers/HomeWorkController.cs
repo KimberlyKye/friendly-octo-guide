@@ -7,17 +7,38 @@ using ValueObjects.Enums;
 using Domain.ValueObjects;
 using ValueObjects;
 using Application.Services.Abstractions;
+using Application.Services;
 
 namespace WebApi.Controllers;
 
+/// <summary>
+/// Контроллер для работы с домашними заданиями.
+/// </summary>
 [ApiController]
 [Route("api/[controller]")]
 public class HomeWorkController : ControllerBase
 {
-    private readonly IHomeWorkService _homeWorkService; 
-    private readonly IHomeTaskService _homeTaskService; 
+    /// <summary>
+    /// Сервис для работы с домашними заданиями (попытки сдачи).
+    /// </summary>
+    private readonly IHomeWorkService _homeWorkService;
+
+    /// <summary>
+    /// Сервис для работы с домашними заданиями.
+    /// </summary>
+    private readonly IHomeTaskService _homeTaskService;
+
+    /// <summary>
+    /// Сервис для работы с файлами.
+    /// </summary>
     private readonly IFileStorageService _fileStorageService;
 
+    /// <summary>
+    /// Конструктор контроллера для работы с домашними заданиями.
+    /// </summary>
+    /// <param name="homeWorkService"></param>
+    /// <param name="fileStorageService"></param>
+    /// <param name="homeTaskService"></param>
     public HomeWorkController(
         IHomeWorkService homeWorkService,
         IFileStorageService fileStorageService,
@@ -28,6 +49,19 @@ public class HomeWorkController : ControllerBase
         _fileStorageService = fileStorageService;
     }
 
+    /// <summary>
+    /// Создание новой попытки сдачи домашнего задания.
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
+    /// <example>
+    ///     POST /api/homework/submit
+    /// {
+    ///     "homeTaskId": 1,
+    ///     "studentId": 1,
+    ///     "studentComment": "Думаю, что это не так"
+    ///  }
+    ///  </example>
     [HttpPost("submit")]
     public async Task<IActionResult> SubmitHomework([FromForm] HomeWorkSubmissionRequest request)
     {
@@ -77,6 +111,14 @@ public class HomeWorkController : ControllerBase
         return Ok(MapToResponse(result));
     }
 
+    /// <summary>
+    /// Получение попытки сдачи домашнего задания по идентификатору.
+    /// </summary>
+    /// <param name="submissionId"></param>
+    /// <returns></returns>
+    /// <example>
+    ///     GET /api/homework/1 
+    /// </example>
     [HttpGet("{submissionId}")]
     public async Task<IActionResult> GetSubmission(int submissionId)
     {
@@ -91,6 +133,14 @@ public class HomeWorkController : ControllerBase
         return Ok(MapToResponse(submission));
     }
 
+    /// <summary>
+    /// Скачивание файла сдачи домашнего задания.
+    /// </summary>
+    /// <param name="submissionId"></param>
+    /// <returns></returns>
+    /// <example>
+    ///     GET /api/homework/1/download
+    /// </example>
     [HttpGet("{submissionId}/download")]
     public async Task<IActionResult> DownloadFile(int submissionId)
     {
@@ -107,6 +157,20 @@ public class HomeWorkController : ControllerBase
         return File(stream, "application/octet-stream", Path.GetFileName(submission.Material.GetFullPath()));
     }
 
+
+    /// <summary>
+    /// Оценка домашнего задания.
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
+    /// <example>
+    ///    POST /api/homework/grade
+    /// {  
+    ///    submissionId: 1,
+    ///    score: 100,
+    ///    teacherComment: "Great job!"
+    ///  }
+    /// </example>
     [HttpPost("grade")]
     // [Authorize(Roles = "Teacher")]
     public async Task<IActionResult> GradeHomework([FromBody] GradeHomeWorkRequest request)
@@ -130,6 +194,11 @@ public class HomeWorkController : ControllerBase
         return Ok(MapToResponse(result));
     }
 
+    /// <summary>
+    /// Маппинг сущности HomeWork на HomeWorkSubmissionResponse.
+    /// </summary>
+    /// <param name="submission"></param>
+    /// <returns></returns>
     private HomeWorkSubmissionResponse MapToResponse(HomeWork submission)
     {
         return new HomeWorkSubmissionResponse

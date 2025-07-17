@@ -1,12 +1,16 @@
-namespace Infrastructure;
+using Microsoft.Extensions.Options;
+using Application.Models;
+
+namespace Application.Services;
 
 public class LocalFileStorageService : IFileStorageService
 {
     private readonly string _storagePath;
 
-    public LocalFileStorageService(string storagePath)
+    public LocalFileStorageService(IOptions<FileStorageOptions> options)
     {
-        _storagePath = storagePath;
+        _storagePath = options.Value.RootPath;
+    
         Directory.CreateDirectory(_storagePath);
     }
 
