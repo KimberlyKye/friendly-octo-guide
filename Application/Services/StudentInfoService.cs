@@ -2,6 +2,10 @@
 using Application.Models.Teacher.Responses;
 using RepositoriesAbstractions.Abstractions;
 using Domain.ValueObjects.Enums;
+using Entities;
+using Application.Models.Course;
+using Domain.ValueObjects;
+using Application.Models.Lesson;
 
 namespace Application.Services
 {
@@ -29,6 +33,36 @@ namespace Application.Services
                 });
             }
             return result;
+        }
+        public async Task<CourseInfoForStudentModel?> GetCourseInfo(int courseId, int studentId)
+        {
+
+            var course = await _studentInfoRepository.GetCourseInfo(courseId, studentId);
+            if (course is null) { return null; }
+
+            return new CourseInfoForStudentModel
+            {
+                State = course.State,
+                Teacher = course.Teacher,
+                Name = course.Name,
+                Description = course.Description,
+                Duration = course.Duration
+            };
+        }
+        public async Task<List<LessonInfoByCourseModel>?> GetLessonsInfoByCourse(int courseId, int studentId)
+        {
+            var course = await _studentInfoRepository.GetAllCourseInfo(courseId, studentId);
+            if (course is null) { return null!; }
+
+            return course.Lessons.Select(lesson => new LessonInfoByCourseModel
+            {
+                CourseId = course.Id,
+                LessonName = lesson.Name,
+                Description = lesson.Description,
+                Date = lesson.Date,
+                Material = lesson.Material,
+                HomeTasks = lesson.HomeTasks.ToList()
+            }).ToList();
         }
     }
 }

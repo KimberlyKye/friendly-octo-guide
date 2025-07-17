@@ -45,6 +45,7 @@ namespace WebApi
             services.AddDbContext<AppDbContext>(options =>
                  options.UseNpgsql(Configuration.GetConnectionString("PgConnectionString")));
             services.AddScoped<ITeacherInfoRepository, TeacherInfoRepository>();
+            services.AddScoped<IStudentInfoRepository, StudentInfoRepository>();
             services.AddScoped<ITeacherLessonRepository, TeacherLessonRepository>();
             services.AddScoped<ICourseInfoRepository, CourseInfoRepository>();
             services.AddScoped<IUserProfileRepository<Student>, StudentProfileRepository>();
@@ -54,6 +55,8 @@ namespace WebApi
             services.AddScoped<ITeacherCalendarRepository, TeacherCalendarRepository>();
             services.AddScoped<IHomeWorkRepository, HomeWorkRepository>();
             services.AddScoped<IHomeTaskRepository, HomeTaskRepository>();
+            services.AddScoped<IStudentCalendarRepository, StudentCalendarRepository>();
+            services.AddScoped<IStudentInfoRepository, StudentInfoRepository>();
 
             // 2. Swagger
             services.AddEndpointsApiExplorer();
@@ -84,13 +87,16 @@ namespace WebApi
             // 3. Services
             services.AddScoped<ITeacherLessonService, TeacherLessonService>();
             services.AddScoped<ITeacherInfoService, TeacherInfoService>();
+            services.AddScoped<IStudentInfoService, StudentInfoService>();
             services.AddScoped<IStudentProfileService, StudentProfileService>();
+            services.AddScoped<ITeacherProfileService, TeacherProfileService>();
             services.AddScoped<ICourseService, CourseService>();
             services.AddScoped<ITeacherCalendarService, TeacherCalendarService>();
             services.AddScoped<ITeacherProfileService, TeacherProfileService>();
             services.AddScoped<IHomeWorkService, HomeWorkService>();
             services.AddScoped<IHomeTaskService, HomeTaskService>();
             services.AddScoped<IFileStorageService, LocalFileStorageService>();
+            services.AddScoped<IStudentCalendarService, StudentCalendarService>();
 
             // 4. Factories
             services.AddTransient<IStudentFactory, StudentFactory>();

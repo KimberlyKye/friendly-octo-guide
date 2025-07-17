@@ -28,18 +28,15 @@ namespace Infrastructure.Repositories
             _courseFactory = courseFactory;
             _lessonFactory = lessonFactory;
         }
-        public async Task<IReadOnlyCollection<Entities.Course>> GetPeriodCalendarData(int teacherId, DateOnly startDate, DateOnly endDate)
-        {            
-            var startDateTime = startDate.ToDateTime(TimeOnly.MinValue);
-            var endDateTime = endDate.ToDateTime(TimeOnly.MaxValue);
-
+        public async Task<IReadOnlyCollection<Entities.Course>> GetPeriodCalendarData(int teacherId, DateTime startDate, DateTime endDate)
+        {  
             var data = await (
                 from teacher in _context.Users.AsNoTracking()
                 from course in _context.Courses.Where(c => c.TeacherId == teacher.Id
                                                         && c.StateId == (int)CourseState.Active)
                 from lesson in _context.Lessons.Where(l => l.CourseId == course.Id
-                                                        && DateOnly.FromDateTime(l.Date) >= startDate
-                                                        && DateOnly.FromDateTime(l.Date) <= endDate)
+                                                        && l.Date >= startDate.ToUniversalTime()
+                                                        && l.Date <= endDate.ToUniversalTime())
                 where teacher.Id == teacherId
                             && teacher.RoleId == (int)RoleEnum.Teacher
                 select new
