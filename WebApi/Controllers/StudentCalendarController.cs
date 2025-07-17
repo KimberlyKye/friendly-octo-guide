@@ -27,19 +27,19 @@ namespace WebApi.Controllers
         }
 
         /// <summary>
-        /// Получение данных календаря преподавателя за указанный период
+        /// Получение данных календаря студента за указанный период
         /// </summary>
         /// <param name="request">Параметры запроса</param>
-        /// <returns>Данные календаря преподавателя</returns>
+        /// <returns>Данные календаря студента</returns>
         /// <remarks>
         /// Пример запроса:
         ///
-        ///     GET /api/StudentCalendar/period-calendar-data?teacherId=12345&startDate="2023-09-01"&endDate"2023-09-30"
+        ///     GET /api/StudentCalendar/period-calendar-data?studentId=12345&startDate="2023-09-01"&endDate"2023-09-30"
         ///
         /// </remarks>
-        /// <response code="200">Возвращает данные календаря преподавателя</response>
+        /// <response code="200">Возвращает данные календаря студента</response>
         /// <response code="400">Некорректные параметры запроса</response>
-        /// <response code="404">Преподаватель не найден</response>
+        /// <response code="404">Студент не найден</response>
         /// <response code="500">Ошибка сервера при обработке запроса</response>
         [HttpGet("period-calendar-data")]
         [ProducesResponseType(typeof(StudentCalendarResponseModel), StatusCodes.Status200OK)]
@@ -48,6 +48,10 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetPeriodCalendarData(int studentId, DateTime startDate, DateTime endDate)
         {
+            if(studentId <= 0)
+            {
+                return BadRequest();
+            }
             var requestModel = new GetStudentCalendarDataRequestModel()
             {
                 StudentId = studentId,

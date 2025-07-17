@@ -1,6 +1,7 @@
 ﻿using Application.Models.Calendar.Requests;
 using Application.Models.Teacher.Responses;
 using Application.Services.Abstractions;
+using Entities;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Dto.Calendar.Requests;
 
@@ -33,12 +34,7 @@ namespace WebApi.Controllers
         /// <remarks>
         /// Пример запроса:
         ///
-        ///     GET /api/TeacherCalendar/period-calendar-data
-        ///     {
-        ///        "teacherId": 12345,
-        ///        "startDate": "2023-09-01",
-        ///        "endDate": "2023-09-30"
-        ///     }
+        ///     GET /api/TeacherCalendar/period-calendar-data?teacherId=12345&startDate="2023-09-01"&endDate"2023-09-30"
         ///
         /// </remarks>
         /// <response code="200">Возвращает данные календаря преподавателя</response>
@@ -48,15 +44,19 @@ namespace WebApi.Controllers
         [HttpGet("period-calendar-data")]
         [ProducesResponseType(typeof(TeacherCalendarResponseModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //[ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetPeriodCalendarData(GetTeacherCalendarDataRequestDto request)
+        public async Task<IActionResult> GetPeriodCalendarData(int teacherId, DateTime startDate, DateTime endDate)
         {
+            if (teacherId <= 0)
+            {
+                return BadRequest();
+            }
             var requestModel = new GetTeacherCalendarDataRequestModel()
             {
-                TeacherId = request.TeacherId,
-                StartDate = request.StartDate,
-                EndDate = request.EndDate
+                TeacherId = teacherId,
+                StartDate = startDate,
+                EndDate = endDate
             };
             var result = await _teacherCalendarService.GetPeriodCalendarData(requestModel);
             return Ok(result);

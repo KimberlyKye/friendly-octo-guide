@@ -40,8 +40,12 @@ namespace Infrastructure.Repositories
                 from student in _context.Users.AsNoTracking()
                 from studentsCourses in _context.StudentCourses
                     .Where(sCs => sCs.StudentId == student.Id)
-                from courses in _context.Courses.Where(c => c.Id == studentsCourses.CourseId
-                                                   && c.StateId == (int)CourseState.Active)
+                from courses in _context.Courses
+                    .Where(c => c.Id == studentsCourses.CourseId
+                            && c.StateId == (int)CourseState.Active)
+                from teacher in _context.Users
+                    .Where(t => t.Id == courses.TeacherId
+                            && t.RoleId == (int)RoleEnum.Teacher)
                 from lessons in _context.Lessons.Where(l => l.CourseId == courses.Id
                             && l.Date >= startDate.ToUniversalTime()
                             && l.Date <= endDate.ToUniversalTime())
@@ -49,10 +53,10 @@ namespace Infrastructure.Repositories
                             && hTs.StartDate >= startDate.ToUniversalTime()
                             && hTs.EndDate <= endDate.ToUniversalTime())
                 where student.Id == studentId
-                            && student.RoleId == (int)RoleEnum.Teacher
+                            && student.RoleId == (int)RoleEnum.Student
                 select new
                 {
-                    Teacher = student,
+                    Teacher = teacher,
                     Course = courses,
                     Lesson = lessons,
                     HomeTasks = homeTasks

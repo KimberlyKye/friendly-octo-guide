@@ -10,7 +10,8 @@ namespace Infrastructure.Factories
     {
         public Domain.ValueObjects.File? Create(string fullPath)
         {
-            
+            if (fullPath is null) { return null; };
+
             var dirPath = Path.GetDirectoryName(fullPath);
             var fileName = Path.GetFileNameWithoutExtension(fullPath);
             var extension = Path.GetExtension(fullPath)?.TrimStart('.');
@@ -20,6 +21,8 @@ namespace Infrastructure.Factories
 
         public string? GetFullPath(Domain.ValueObjects.File? file)
         {
+            if (file is null) { return null; };
+
             return file?.GetFullPath();
         }
     }

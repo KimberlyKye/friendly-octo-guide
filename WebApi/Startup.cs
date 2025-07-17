@@ -40,6 +40,7 @@ namespace WebApi
             services.AddDbContext<AppDbContext>(options =>
                  options.UseNpgsql(Configuration.GetConnectionString("PgConnectionString")));
             services.AddScoped<ITeacherInfoRepository, TeacherInfoRepository>();
+            services.AddScoped<IStudentInfoRepository, StudentInfoRepository>();
             services.AddScoped<ITeacherLessonRepository, TeacherLessonRepository>();
             services.AddScoped<ICourseInfoRepository, CourseInfoRepository>();
             services.AddScoped<IUserProfileRepository<Student>, StudentProfileRepository>();
@@ -79,6 +80,7 @@ namespace WebApi
             // 3. Services
             services.AddScoped<ITeacherLessonService, TeacherLessonService>();
             services.AddScoped<ITeacherInfoService, TeacherInfoService>();
+            services.AddScoped<IStudentInfoService, StudentInfoService>();
             services.AddScoped<IStudentProfileService, StudentProfileService>();
             services.AddScoped<ITeacherProfileService, TeacherProfileService>();
             services.AddScoped<ICourseService, CourseService>();
