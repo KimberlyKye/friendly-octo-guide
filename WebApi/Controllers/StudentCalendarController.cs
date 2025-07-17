@@ -46,15 +46,20 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         //[ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetPeriodCalendarData([FromBody] GetStudentCalendarDataRequestDto request)
+        public async Task<IActionResult> GetPeriodCalendarData(int studentId, DateTime startDate, DateTime endDate)
         {
+            if (studentId <= 0)
+            {
+                return BadRequest();
+            }
             var requestModel = new GetStudentCalendarDataRequestModel()
             {
-                StudentId = request.StudentId,
-                StartDate = request.StartDate,
-                EndDate = request.EndDate
+                StudentId = studentId,
+                StartDate = startDate,
+                EndDate = endDate
             };
             var result = await _studentCalendarService.GetPeriodCalendarData(requestModel);
             return Ok(result);
         }
     }
+}
