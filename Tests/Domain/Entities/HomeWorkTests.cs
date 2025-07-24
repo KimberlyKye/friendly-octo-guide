@@ -83,8 +83,8 @@ namespace Tests.Domain.Entities
                 Assert.That(homeWork.TaskCompletionDate, Is.EqualTo(_testCompletionDate));
                 Assert.That(homeWork.Score, Is.EqualTo(_testScore));
                 Assert.That(homeWork.Material, Is.Null);
-                Assert.That(homeWork.StudentComment, Is.EqualTo("Done homework"));
-                Assert.That(homeWork.TeacherComment, Is.EqualTo("Good job"));
+                Assert.That(homeWork.StudentComment, Is.EqualTo("Done homework!"));
+                Assert.That(homeWork.TeacherComment, Is.EqualTo("Good job!"));
             });
         }
 
