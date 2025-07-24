@@ -87,13 +87,13 @@ namespace Entities
             IsOnTime = isOnTime;
         }
 
-        public HomeWork(int homeTaskId, int studentId, string? studentComment, TaskCompletionDate taskCompletionDate, HomeworkStatus submitted, bool isOnTime) : base(0)
+        public HomeWork(int homeTaskId, int studentId, string? studentComment, TaskCompletionDate taskCompletionDate, HomeworkStatus status, bool isOnTime) : base(0)
         {
             HomeTaskId = homeTaskId;
             StudentId = studentId;
             StudentComment = studentComment;
             TaskCompletionDate = taskCompletionDate;
-            // Submitted = submitted;
+            Status = status;
             IsOnTime = isOnTime;
         }
 

@@ -29,11 +29,12 @@ namespace Infrastructure.Factories
                 var isOnTime = DateTime.Now.Date <= dataModel.TaskCompletionDate.Date; // TODO: Change this to check if it's submitted before the deadline
                 var taskCompletionDate = new TaskCompletionDate(dataModel.TaskCompletionDate);
                 return new Entities.HomeWork(
-                    dataModel.Id,
-dataModel.StudentId,
-dataModel.StudentComment,
-taskCompletionDate,
-status, isOnTime
+                    dataModel.HomeTaskId,
+                    dataModel.StudentId,
+                    dataModel.StudentComment,
+                    taskCompletionDate,
+                    status,
+                    isOnTime
                 );
             }
             catch (Exception ex)
@@ -51,13 +52,14 @@ status, isOnTime
 
             return Task.FromResult(new HomeWork
             {
-                // Id = domainEntity.Id,
-                // Title = domainEntity.HomeWorkName.Value,
-                // Description = domainEntity.Description,
-                // StartDate = domainEntity.Duration.StartDate.ToDateTime(TimeOnly.MinValue),
-                // EndDate = domainEntity.Duration.EndDate.ToDateTime(TimeOnly.MinValue),
-                // Material = materialPath
+                Id = domainEntity.Id,
+                StudentId = domainEntity.StudentId,
+                StudentComment = domainEntity.StudentComment,
+                TaskCompletionDate = domainEntity.TaskCompletionDate.Value.ToDateTime(TimeOnly.MinValue),
+                Score = domainEntity.Score,
+                Material = materialPath
             });
         }
+
     }
 }

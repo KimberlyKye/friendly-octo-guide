@@ -41,9 +41,9 @@ namespace ValueObjects
         /// </exception>
         public TaskCompletionDate(DateTime date) : base(DateOnly.FromDateTime(date))
         {
-            var convertetDate = DateOnly.FromDateTime(date);
-            ValidateDate(convertetDate);
-            _date = convertetDate;
+            var convertedDate = DateOnly.FromDateTime(date);
+            ValidateDate(convertedDate);
+            _date = convertedDate;
         }
 
 

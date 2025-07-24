@@ -13,7 +13,7 @@ namespace Infrastructure.Factories.Abstractions
     public interface IBaseFactory<T1, T2>
     {
         /// <summary>
-        /// Сделать из модели БД - доменнуюмодель 
+        /// Сделать из модели БД - доменную модель 
         /// </summary>
         /// <param name="dataModel">Модель БД</param>
         /// <returns>Доменная модель</returns>

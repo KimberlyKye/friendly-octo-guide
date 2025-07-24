@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Infrastru
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi", "WebApi\WebApi.csproj", "{3183B2E4-615A-43FE-A5D6-203C46C6ACC9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{037D4B85-C49E-417A-AAA3-11F0CB69190C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain.Tests", "Domain.Tests\Domain.Tests.csproj", "{037D4B85-C49E-417A-AAA3-11F0CB69190C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{99EC633F-4CBA-4C7F-A289-CD1E5CE7DA48}"
 EndProject
@@ -18,6 +18,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entities", "Domain\Entities\Entities.csproj", "{5C2ED862-5C49-4BE8-BFD2-94DBA6E809C7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RepositoriesAbstractions", "RepositoriesAbstractions\RepositoriesAbstractions.csproj", "{FFF98589-6F1F-4FED-AFBE-C04FBC24DE84}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.Tests", "Infrastructure.Tests\Infrastructure.Tests.csproj", "{B8E4B341-1377-4AD8-973B-119CFE58C90D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,6 +55,10 @@ Global
 		{FFF98589-6F1F-4FED-AFBE-C04FBC24DE84}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FFF98589-6F1F-4FED-AFBE-C04FBC24DE84}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FFF98589-6F1F-4FED-AFBE-C04FBC24DE84}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8E4B341-1377-4AD8-973B-119CFE58C90D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8E4B341-1377-4AD8-973B-119CFE58C90D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8E4B341-1377-4AD8-973B-119CFE58C90D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8E4B341-1377-4AD8-973B-119CFE58C90D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
