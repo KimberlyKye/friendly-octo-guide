@@ -7,6 +7,7 @@ using Entities;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 using ValueObjects;
+using ValueObjects.Enums;
 
 namespace Tests.Domain.ValueObjects
 {
@@ -89,11 +90,9 @@ namespace Tests.Domain.ValueObjects
         public void CheckHomeWork_ShouldCheckHomeWork()
         {
             var homeTask = new HomeTask(1, new HomeTaskName("HomeTask1"), "Description", new Duration(new DateOnly(2020, 01, 01), new DateOnly(2020, 01, 02)));
-            var homeWork = new HomeWork(1,
-                                 _student,
-                                  homeTask,
-                                 new TaskCompletionDate(new DateOnly(2026, 06, 02)),
-                                 new Score(100)); var score = new Score(10);
+            var completionDate = new TaskCompletionDate(DateOnly.FromDateTime(DateTime.Now));
+            var score = new Score(85);
+            var homeWork = new HomeWork(homeTask.Id, 1, score, completionDate, null, "Done homework!", "Good job!", HomeworkStatus.Submitted, true);
             var comment = "Good job!";
             Assert.DoesNotThrow(() => _teacher.CheckHomeWork(homeWork, score, comment));
 
