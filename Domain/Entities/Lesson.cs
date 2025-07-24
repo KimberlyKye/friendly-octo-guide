@@ -20,6 +20,8 @@ namespace Entities
         private DateTime _date;
         private File? _material;
         private readonly List<HomeTask> _homeTasks = new();
+        private Score _passingScore;
+
 
         /// <summary>
         /// Инициализирует новый экземпляр занятия
@@ -38,13 +40,15 @@ namespace Entities
                      LessonName lessonName,
                      string description,
                      DateTime date,
-                     File? material = null,
+                     Score passingScore,
+                     File? material = null,                     
                      IEnumerable<HomeTask>? homeTasks = null) : base(id)
         {
             _courseId = courseId;
             _lessonName = lessonName ?? throw new ArgumentNullException(nameof(lessonName));
             _description = description ?? throw new ArgumentNullException(nameof(description));
             _date = date;
+            _passingScore = passingScore;
             _material = material;
 
             if (homeTasks != null)

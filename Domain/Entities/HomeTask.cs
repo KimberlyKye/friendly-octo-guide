@@ -22,6 +22,7 @@ namespace Entities
         private File? _material;
         private readonly List<HomeWork> _homeWorks = new();
 
+
         /// <summary>
         /// Инициализирует новый экземпляр домашнего задания
         /// </summary>

@@ -50,6 +50,14 @@ namespace Entities
         /// </summary>
         public ReadOnlyCollection<Student> Students { get; private set; }
         private List<Student> _students = new();
+        /// <summary>
+        /// Минимальный проходной балл курса
+        /// </summary>
+        private Score _passingScore;
+        /// <summary>
+        /// Средний балл курса
+        /// </summary>
+        public Score AverageScore { get; set; }
 
         /// <summary>
         /// Инициализирует новый экземпляр курса
@@ -64,7 +72,9 @@ namespace Entities
                      Teacher teacher,
                      CourseName courseName,
                      string description,
-                     Duration duration) : base(id)
+                     Duration duration,                     
+                     Score passingScore,
+                     CourseState courseState = CourseState.Active) : base(id) //По умолчанию Активный
         {
             Teacher = teacher ?? throw new ArgumentNullException(nameof(teacher));
             Name = courseName ?? throw new ArgumentNullException(nameof(courseName));
@@ -72,7 +82,8 @@ namespace Entities
             Duration = duration == default ? throw new ArgumentNullException(nameof(duration)) : duration;
             Lessons = _lessons.AsReadOnly();
             Students = _students.AsReadOnly();
-            State = CourseState.Active; // Новые курсы по умолчанию создаются как актуальные
+            State = courseState;
+            _passingScore = passingScore;
         }
 
         /// <summary>

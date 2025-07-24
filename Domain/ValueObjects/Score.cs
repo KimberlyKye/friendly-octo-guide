@@ -4,7 +4,7 @@ using System;
 namespace Domain.ValueObjects
 {
     /// <summary>
-    /// Значение баллов за домашнее задание.
+    /// Значение баллов.
     /// Гарантирует валидность значения баллов (0-100) и предоставляет методы для работы с ними.
     /// </summary>
     public readonly struct Score : IValueObject,IEquatable<Score>

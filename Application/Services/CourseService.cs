@@ -1,5 +1,6 @@
 using Application.Models.Course;
 using Application.Services.Abstractions;
+using Domain.ValueObjects;
 using Entities;
 using Microsoft.VisualBasic;
 using RepositoriesAbstractions.Abstractions;
@@ -29,7 +30,8 @@ public class CourseService : ICourseService
                                                         teacher,
                                                         new Domain.ValueObjects.CourseName(request.Title),
                                                         request.Description,
-                                                        new Domain.ValueObjects.Duration(request.StartDate, request.EndDate));
+                                                        new Domain.ValueObjects.Duration(request.StartDate, request.EndDate),
+                                                        new Score(request.PassingScore));
 
         return await _courseRepository.AddCourseAsync(newCourse);
     }    

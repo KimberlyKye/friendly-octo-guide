@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Domain.ValueObjects;
+using Domain.ValueObjects.Enums;
 using File = Domain.ValueObjects.File;
 
 namespace Entities
@@ -62,19 +63,22 @@ namespace Entities
                                                Teacher teacher,
                                                CourseName courseName,
                                                string description,
-                                               Duration duration)
+                                               Duration duration,
+                                               Score passingScore)
         {
             return await Task.Run(() => new Course(id,
                                                     teacher,
                                                     courseName,
                                                     description,
-                                                    duration));
+                                                    duration,
+                                                    passingScore));
         }
         public async Task<Lesson> CreateLesson(int id,
                                                int courseId,
                                                LessonName lessonName,
                                                string description,
                                                DateTime date,
+                                               Score passingScore,
                                                File? material = null,
                                                IEnumerable<HomeTask>? homeTasks = null)
         {
@@ -89,6 +93,7 @@ namespace Entities
                                                     lessonName,
                                                     description,
                                                     date,
+                                                    passingScore,
                                                     material,
                                                     homeTasks));
         }
