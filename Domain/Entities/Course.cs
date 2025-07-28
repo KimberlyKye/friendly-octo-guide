@@ -53,7 +53,7 @@ namespace Entities
         /// <summary>
         /// Минимальный проходной балл курса
         /// </summary>
-        private Score _passingScore;
+        public Score _passingScore { get; private set; }
         /// <summary>
         /// Средний балл курса
         /// </summary>

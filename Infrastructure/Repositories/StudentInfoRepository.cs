@@ -1,4 +1,5 @@
-﻿using Domain.ValueObjects.Enums;
+﻿using Domain.ValueObjects;
+using Domain.ValueObjects.Enums;
 using Entities;
 using Infrastructure.Contexts;
 using Infrastructure.DataModels;
@@ -105,6 +106,10 @@ namespace Infrastructure.Repositories
                               && sc.StudentId == studentId)
                 from lessons in _context.Lessons
                     .Where(l => l.CourseId == course.Id)
+                from lessonScore in _context.LessonScores
+                    .Where(lS => lS.LessonId == lessons.Id
+                              && lS.StudentId == studentId)
+                    .DefaultIfEmpty()
                 from homeTasks in _context.HomeTasks
                     .Where(hTs => hTs.LessonId == lessons.Id)
                 from teacher in _context.Users
@@ -114,8 +119,17 @@ namespace Infrastructure.Repositories
                 {
                     Teacher = teacher,
                     Course = course,
-                    Lesson = lessons,
-                    HomeTasks = homeTasks
+                    Lesson = new DataModels.Lesson // Создаем Lesson с Score
+                    {
+                        Id = lessons.Id,
+                        CourseId = lessons.CourseId,
+                        Title = lessons.Title,
+                        Description = lessons.Description,
+                        Date = lessons.Date,
+                        Material = lessons.Material,
+                        Score = lessonScore != null ? lessonScore.Score : 0
+                    },
+                    HomeTask = homeTasks
                 })
                 .ToListAsync();
 
@@ -131,8 +145,8 @@ namespace Infrastructure.Repositories
                 .GroupBy(x => x.Lesson.Id)
                 .Select(g => new
                 {
-                    Lesson = g.First().Lesson,
-                    HomeTasks = g.Select(x => x.HomeTasks).ToList()
+                    Lesson = g.First().Lesson, // Уже содержит Score
+                    HomeTasks = g.Select(x => x.HomeTask).Where(ht => ht != null).ToList()
                 });
 
             foreach (var lessonGroup in lessonsWithTasks)

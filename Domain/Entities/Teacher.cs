@@ -93,9 +93,9 @@ namespace Entities
                                                     lessonName,
                                                     description,
                                                     date,
-                                                    passingScore,
                                                     material,
-                                                    homeTasks));
+                                                    homeTasks,
+                                                    passingScore));
         }
     }
 }

@@ -30,6 +30,9 @@ namespace Infrastructure.Factories
             var domainHomeTasks = homeTasks != null
                 ? await CreateHomeTasksAsync(homeTasks)
                 : null;
+            Score? pScore = dataModel.Score != 0
+                ? new Score(dataModel.Score)
+                : null;
 
             return new Entities.Lesson(
                 id: dataModel.Id,
@@ -38,7 +41,8 @@ namespace Infrastructure.Factories
                 description: dataModel.Description,
                 date: dataModel.Date,
                 material: material,
-                homeTasks: domainHomeTasks);
+                homeTasks: domainHomeTasks,
+                passingScore: pScore);
         }
 
         public Task<DataModels.Lesson> CreateDataModelAsync(Entities.Lesson domainEntity)
@@ -52,7 +56,8 @@ namespace Infrastructure.Factories
                 Title = domainEntity.Name.Value,
                 Description = domainEntity.Description,
                 Date = domainEntity.Date,
-                Material = materialPath
+                Material = materialPath,
+                Score = (int)domainEntity.Score
             });
         }
 

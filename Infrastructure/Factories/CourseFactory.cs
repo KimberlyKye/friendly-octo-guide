@@ -25,7 +25,8 @@ namespace Infrastructure.Factories
                 teacher: teacherInfo,
                 courseName: new CourseName(courseModel.Title),
                 description: courseModel.Description,
-                duration: new Duration(courseModel.StartDate, courseModel.EndDate)
+                duration: new Duration(courseModel.StartDate, courseModel.EndDate),
+                passingScore: new Score(courseModel.PassingScore)
             );
         }
 
@@ -39,7 +40,7 @@ namespace Infrastructure.Factories
                 Description = course.Description,
                 StartDate = course.Duration.StartDate,
                 EndDate = course.Duration.EndDate,
-                PassingScore = 0 // Значение по умолчанию, требуется доработка при добавлении PassingScore в домен
+                PassingScore = course._passingScore
             };
         }
     }
