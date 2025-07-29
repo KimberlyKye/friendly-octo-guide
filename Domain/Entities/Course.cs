@@ -53,11 +53,11 @@ namespace Entities
         /// <summary>
         /// Минимальный проходной балл курса
         /// </summary>
-        public Score _passingScore { get; private set; }
+        public Score PassingScore { get; private set; }
         /// <summary>
         /// Средний балл курса
         /// </summary>
-        public Score AverageScore { get; set; }
+        public Score? AverageScore { get; set; }
 
         /// <summary>
         /// Инициализирует новый экземпляр курса
@@ -67,6 +67,7 @@ namespace Entities
         /// <param name="courseName">Название курса</param>
         /// <param name="description">Описание курса</param>
         /// <param name="duration">Продолжительность курса</param>
+        /// <param name="passingScore">Минимальный проходной балл курса</param>
         /// <exception cref="ArgumentNullException">Выбрасывается, если teacher, courseName, description или duration не заданы</exception>
         public Course(int id,
                      Teacher teacher,
@@ -74,7 +75,8 @@ namespace Entities
                      string description,
                      Duration duration,                     
                      Score passingScore,
-                     CourseState courseState = CourseState.Active) : base(id) //По умолчанию Активный
+                     CourseState courseState = CourseState.Active,
+                     Score? averageScore = null) : base(id) //По умолчанию Активный
         {
             Teacher = teacher ?? throw new ArgumentNullException(nameof(teacher));
             Name = courseName ?? throw new ArgumentNullException(nameof(courseName));
@@ -83,7 +85,8 @@ namespace Entities
             Lessons = _lessons.AsReadOnly();
             Students = _students.AsReadOnly();
             State = courseState;
-            _passingScore = passingScore;
+            PassingScore = passingScore;
+            AverageScore = averageScore;
         }
 
         /// <summary>
@@ -156,6 +159,15 @@ namespace Entities
         public void ChangeState(CourseState newState)
         {
             State = newState;
+        }
+
+        /// <summary>
+        /// Проверяка существования урока
+        /// </summary>
+        /// <param name="lessonId">id урока</param>
+        public bool HasLesson(int lessonId)
+        {
+            return _lessons.Any(l => l.Id == lessonId);
         }
     }
 }

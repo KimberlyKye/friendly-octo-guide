@@ -17,8 +17,11 @@ namespace Infrastructure.Factories
             _teacherFactory = teacherFactory;
         }
 
-        public async Task<Course> CreateFrom(DataModels.Course courseModel, DataModels.User teacher)
-        {            
+        public async Task<Course> CreateFrom(
+            DataModels.Course courseModel,
+            DataModels.User teacher,
+            Score? averageScore = null)
+        {
             var teacherInfo = await _teacherFactory.CreateFrom(teacher);
             return new Course(
                 id: courseModel.Id,
@@ -26,7 +29,8 @@ namespace Infrastructure.Factories
                 courseName: new CourseName(courseModel.Title),
                 description: courseModel.Description,
                 duration: new Duration(courseModel.StartDate, courseModel.EndDate),
-                passingScore: new Score(courseModel.PassingScore)
+                passingScore: new Score(courseModel.PassingScore),
+                averageScore: averageScore
             );
         }
 
@@ -40,7 +44,7 @@ namespace Infrastructure.Factories
                 Description = course.Description,
                 StartDate = course.Duration.StartDate,
                 EndDate = course.Duration.EndDate,
-                PassingScore = course._passingScore
+                PassingScore = course.PassingScore
             };
         }
     }

@@ -10,5 +10,7 @@ namespace WebApi.Dto.Course.Responses
         public CourseName Name { get; set; }
         public string Description { get; set; }
         public Duration Duration { get; set; }
+        public Score PassingScore { get; set; }
+        public Score AverageScore { get; set; }
     }
 }
