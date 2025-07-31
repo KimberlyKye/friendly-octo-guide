@@ -20,6 +20,7 @@ using RepositoriesAbstractions.Abstractions;
 using WebApi.Dto;
 using RepositoriesAbstractions;
 using Application.Models;
+using Npgsql;
 
 namespace WebApi
 {
@@ -42,8 +43,37 @@ namespace WebApi
 
 
             // 1. DataBase context + repositories
+            // Получаем строку подключения из переменных окружения (Render)
+            var connectionUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+
+            // Если строка есть (деплой на Render), парсим её
+            if (!string.IsNullOrEmpty(connectionUrl))
+            {
+                // Формат: postgresql://user:pass@host:5432/db
+                var uri = new Uri(connectionUrl);
+                var userInfo = uri.UserInfo.Split(':');
+
+                var dbConnectionString = new NpgsqlConnectionStringBuilder
+                {
+                    Host = uri.Host,
+                    Port = uri.Port,
+                    Username = userInfo[0],
+                    Password = userInfo[1],
+                    Database = uri.AbsolutePath.TrimStart('/'),
+                    SslMode = SslMode.Require,  // Для Render PostgreSQL
+                    TrustServerCertificate = true
+                }.ToString();
+
+                // Переопределяем строку подключения
+                Configuration["ConnectionStrings:DefaultConnection"] = dbConnectionString;
+            }
+
+            // Добавляем БД (EF Core)
             services.AddDbContext<AppDbContext>(options =>
-                 options.UseNpgsql(Configuration.GetConnectionString("PgConnectionString")));
+                options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+
+            //services.AddDbContext<AppDbContext>(options =>
+            //     options.UseNpgsql(Configuration.GetConnectionString("PgConnectionString")));
             services.AddScoped<ITeacherInfoRepository, TeacherInfoRepository>();
             services.AddScoped<IStudentInfoRepository, StudentInfoRepository>();
             services.AddScoped<ITeacherLessonRepository, TeacherLessonRepository>();
