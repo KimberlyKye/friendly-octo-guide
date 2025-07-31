@@ -21,18 +21,18 @@ namespace Application.Services
 
         public async Task<IEnumerable<int>> AddStudentsToCourse(int courseId, int[] studentIds)
         {
-            var filteredStudentIds = new List<int>();
+            // Получаем список студентов, которых ещё нет в курсе
+            var notEnrolledStudentIds = await _studentInfoRepository.GetStudentIdsNotInCourse(courseId, studentIds);
 
-            foreach (var studentId in studentIds)
-            {
-                if (await _studentInfoRepository.CheckIfUserInCourse(studentId, courseId) != true)
-                {
-                    filteredStudentIds.Add(studentId);
-                }
-            }
-            await _studentInfoRepository.AddStudentsToCourse(courseId, filteredStudentIds.ToArray());
-            return filteredStudentIds;
+            if (!notEnrolledStudentIds.Any())
+                return Array.Empty<int>();
+
+            // Добавляем их в курс
+            await _studentInfoRepository.AddStudentsToCourse(courseId, notEnrolledStudentIds.ToArray());
+
+            return notEnrolledStudentIds;
         }
+
         public async Task<List<StudentAllCoursesModel>> GetAllCourses(int studentId)
         {
             var courses = await _studentInfoRepository.GetAllCourses(studentId);
@@ -95,20 +95,18 @@ namespace Application.Services
 
         public async Task<IEnumerable<int>> RemoveStudentsFromCourse(int courseId, int[] studentIds)
         {
-            // Сначала фильтруем асинхронно
-            var filteredStudentIds = new List<int>();
+            // Получаем ID студентов, которые действительно находятся в курсе
+            var existingStudentIds = await _studentInfoRepository.GetStudentIdsInCourse(courseId, studentIds);
 
-            foreach (var studentId in studentIds)
-            {
-                if (await _studentInfoRepository.CheckIfUserInCourse(studentId, courseId))
-                {
-                    filteredStudentIds.Add(studentId);
-                }
-            }
+            if (!existingStudentIds.Any())
+                return Array.Empty<int>();
 
-            await _studentInfoRepository.RemoveStudentsFromCourse(courseId, filteredStudentIds.ToArray());
-            return filteredStudentIds;
+            // Удаляем их из курса
+            await _studentInfoRepository.RemoveStudentsFromCourse(courseId, existingStudentIds.ToArray());
+
+            return existingStudentIds;
         }
+
 
     }
 }
