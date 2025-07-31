@@ -142,6 +142,15 @@ namespace WebApi.Controllers
             return Ok(response);
         }
 
+        /// <summary>
+        /// Метод получения списка студентов, участвующих в курсе
+        /// </summary>
+        /// <param name="courseId"></param>
+        /// <returns>Список студентов курса</returns>
+        /// <remarks>
+        /// Пример запроса:
+        ///     GET /list/include-in-course/101
+        ///</remarks>
         [HttpGet("list/include-in-course/{courseId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -161,6 +170,17 @@ namespace WebApi.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Метод получения списка студентов, не участвующих в курсе
+        /// </summary>
+        /// <param name="courseId"></param>
+        /// <param name="startRow"></param>
+        /// <param name="endRow"></param>
+        /// <returns>Список студентов, готовых для добавления на курс</returns>
+        /// <remarks>
+        /// Пример запроса:
+        ///     GET /list/not-on-course/101
+        ///</remarks>
         [HttpGet("list/not-on-course/{courseId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -180,6 +200,20 @@ namespace WebApi.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Метод добавления студентов в курс
+        /// </summary>
+        /// <param name="courseId"></param>
+        /// <param name="studentIds"></param>
+        /// <returns>Возвращает сообщение об успешности/неуспешности операции</returns>
+        /// <remarks>
+        /// Пример запроса:
+        /// POST /add-to-course
+        /// {
+        ///    "courseId": 111,
+        ///    "studentIds": [1,2,3]
+        /// }
+        /// </remarks>
         [HttpPost("add-to-course")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -206,6 +240,21 @@ namespace WebApi.Controllers
 
             return Ok("Студенты частично успешно добавлены, однако в процессе возникли проблемы. При необходимости обновите страницу и повторите операцию. Не удалось добавить следующее количество студентов: " + unsuccess.Count() + " с ID: " + string.Join(", ", unsuccess));
         }
+
+        /// <summary>
+        /// Метод удаления студентов из курса
+        /// </summary>
+        /// <param name="courseId"></param>
+        /// <param name="studentIds"></param>
+        /// <returns> Возвращает сообщение об успешности/неуспешности операции</returns>
+        /// <remarks>
+        /// Пример запроса:
+        /// POST /remove-from-course
+        /// {
+        ///    "courseId": 111,
+        ///    "studentIds": [1,2,3]
+        /// }
+        /// </remarks>
         [HttpPost("remove-from-course")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
