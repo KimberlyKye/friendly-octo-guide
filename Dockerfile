@@ -14,6 +14,11 @@ WORKDIR /app
 
 # 5. Копируем собранное из прошлого образа
 COPY --from=build /app/publish .
+ 
+# 6. Команда для миграций:
+RUN dotnet ef database update
+# Или через runtime (если EF Core установлен в основном проекте):
+# ENTRYPOINT ["dotnet", "ef", "database", "update", "--no-build", "&&", "dotnet", "YourProject.dll"]
 
 # 6. Запускаем приложение
 ENTRYPOINT ["dotnet", "WebApi.dll"]
