@@ -21,8 +21,7 @@ namespace Entities
         private DateTime _date;
         private File? _material;
         private readonly List<HomeTask> _homeTasks = new();
-        public Score? Score { get; private set; }
-
+        public Score? Score { get; private set; } 
 
         /// <summary>
         /// Инициализирует новый экземпляр занятия
@@ -43,7 +42,7 @@ namespace Entities
                      DateTime date,
                      File? material = null,                     
                      IEnumerable<HomeTask>? homeTasks = null,
-                     Score? passingScore = null) : base(id)
+                     Score? score = null) : base(id)
         {
             _courseId = courseId;
             _lessonName = lessonName ?? throw new ArgumentNullException(nameof(lessonName));
@@ -54,7 +53,7 @@ namespace Entities
             {
                 _homeTasks.AddRange(homeTasks);
             }
-            Score = passingScore;
+            Score = score;
         }        
 
         public int CourseId => _courseId;

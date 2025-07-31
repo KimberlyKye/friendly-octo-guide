@@ -181,5 +181,22 @@ namespace Infrastructure.Repositories
 
             return domainCourse;
         }
+
+        public async Task<Score> GetCourseAverageScore(int courseId, int studentId)
+        {
+            var averageScore = await (
+                from course in _context.Courses
+                from lessons in _context.Lessons
+                    .Where(l => l.CourseId == course.Id)
+                from lessonScore in _context.LessonScores
+                    .Where(lS => lS.LessonId == lessons.Id &&
+                                lS.StudentId == studentId)
+                where course.Id == courseId
+                select (double?)lessonScore.Score
+                )
+                .AverageAsync();
+
+            return new Score((int)Math.Round(averageScore ?? 0));
+        }        
     }
 }

@@ -78,7 +78,6 @@ namespace Entities
                                                LessonName lessonName,
                                                string description,
                                                DateTime date,
-                                               Score passingScore,
                                                File? material = null,
                                                IEnumerable<HomeTask>? homeTasks = null)
         {
@@ -94,8 +93,7 @@ namespace Entities
                                                     description,
                                                     date,
                                                     material,
-                                                    homeTasks,
-                                                    passingScore));
+                                                    homeTasks));
         }
     }
 }

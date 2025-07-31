@@ -42,7 +42,7 @@ namespace Infrastructure.Factories
                 date: dataModel.Date,
                 material: material,
                 homeTasks: domainHomeTasks,
-                passingScore: pScore);
+                score: pScore);
         }
 
         public Task<DataModels.Lesson> CreateDataModelAsync(Entities.Lesson domainEntity)
