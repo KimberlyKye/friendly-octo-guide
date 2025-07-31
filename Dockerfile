@@ -1,24 +1,17 @@
-# 1. Берём образ SDK для сборки
+# Используем SDK для сборки + миграций
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
-
-# 2. Копируем всё (как при git clone)
 COPY . .
 
-# 3. Собираем проект
-RUN dotnet publish "WebApi/WebApi.csproj" -c Release -o /app/publish
+# Устанавливаем dotnet-ef
+RUN dotnet tool install --global dotnet-ef
 
-# 4. Берём образ только для запуска (он легче)
+# Собираем и применяем миграции
+RUN dotnet publish "WebApi/WebApi.csproj" -c Release -o /app/publish
+RUN dotnet ef database update --project "WebApi/WebApi.csproj" --startup-project "WebApi/WebApi.csproj"
+
+# Итоговый образ для запуска
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
-
-# 5. Копируем собранное из прошлого образа
 COPY --from=build /app/publish .
- 
-# 6. Команда для миграций:
-# RUN dotnet ef database update
-# Или через runtime (если EF Core установлен в основном проекте):
-ENTRYPOINT ["dotnet", "ef", "database", "update", "--no-build", "&&", "dotnet", "WebApi.dll"]
-
-# 6. Запускаем приложение
-# ENTRYPOINT ["dotnet", "WebApi.dll"]
+ENTRYPOINT ["dotnet", "WebApi.dll"]
