@@ -78,45 +78,25 @@ namespace Infrastructure.Repositories
         }
         public async Task<Entities.Course?> GetCourseInfo(int courseId, int studentId)
         {
-            var coursesData = await (
+            var courseData = await (
                 from course in _context.Courses.AsNoTracking()
                 from studentCourse in _context.StudentCourses
                     .Where(sc => sc.CourseId == course.Id && sc.StudentId == studentId)
-                from lessons in _context.Lessons
-                    .Where(l => l.CourseId == courseId)
-                from lessonsScores in _context.LessonScores
-                    .Where(ls => ls.LessonId == lessons.Id && ls.StudentId == studentId)
                 from teacher in _context.Users
                     .Where(t => t.Id == course.TeacherId && t.RoleId == (int)RoleEnum.Teacher)
                 where course.Id == courseId
-                group lessonsScores.Score by new { course, teacher } into g
-                select new
-                {
-                    Course = g.Key.course,
-                    Teacher = g.Key.teacher,
-                    Scores = g.ToList() 
-                })
+                select new { course, teacher })
                 .FirstOrDefaultAsync();
 
-            if (coursesData is null) { return null; }
+            if (courseData is null) { return null; }
 
-            // Обработка оценок и создание Score
-            Score? averageScore = null;
-            if (coursesData.Scores.Any())
-            {
-                var averageValue = (int)Math.Round(coursesData.Scores.Average());
-                if (Score.IsValid(averageValue))
-                {
-                    averageScore = new Score(averageValue);
-                }
-            }
-
-            var domainCourse = await _courseFactory.CreateFrom(
-                courseModel: coursesData.Course,
-                teacher: coursesData.Teacher,
+            Score? averageScore;
+            averageScore = await GetCourseAverageScore(courseId, studentId);
+            
+            return await _courseFactory.CreateFrom(
+                courseModel: courseData.course,
+                teacher: courseData.teacher,
                 averageScore: averageScore);
-
-            return domainCourse;
         }
         public async Task<Entities.Course?> GetAllCourseInfo(int courseId, int studentId)
         {
@@ -197,6 +177,6 @@ namespace Infrastructure.Repositories
                 .AverageAsync();
 
             return new Score((int)Math.Round(averageScore ?? 0));
-        }        
+        }
     }
 }
