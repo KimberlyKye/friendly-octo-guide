@@ -65,15 +65,13 @@ namespace WebApi
                 }.ToString();
 
                 // Переопределяем строку подключения
-                Configuration["ConnectionStrings:DefaultConnection"] = dbConnectionString;
+                Configuration["ConnectionStrings:PgConnectionString"] = dbConnectionString;
             }
 
             // Добавляем БД (EF Core)
             services.AddDbContext<AppDbContext>(options =>
-                options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+                options.UseNpgsql(Configuration.GetConnectionString("PgConnectionString")));
 
-            //services.AddDbContext<AppDbContext>(options =>
-            //     options.UseNpgsql(Configuration.GetConnectionString("PgConnectionString")));
             services.AddScoped<ITeacherInfoRepository, TeacherInfoRepository>();
             services.AddScoped<IStudentInfoRepository, StudentInfoRepository>();
             services.AddScoped<ITeacherLessonRepository, TeacherLessonRepository>();
