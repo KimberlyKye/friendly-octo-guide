@@ -35,13 +35,13 @@ namespace Application.Services.Abstractions
         /// </summary>
         /// <param name="studentIds"></param>
         /// <returns></returns>
-        Task<bool> AddStudentsToCourse(int courseId, int[] studentIds);
+        Task<IEnumerable<int>> AddStudentsToCourse(int courseId, int[] studentIds);
 
         /// <summary>
         /// Удаление студентов с курса
         /// </summary>
         /// <param name="studentIds"></param>
         /// <returns></returns>
-        Task<bool> RemoveStudentsFromCourse(int courseId, int[] studentIds);
+        Task<IEnumerable<int>> RemoveStudentsFromCourse(int courseId, int[] studentIds);
     }
 }

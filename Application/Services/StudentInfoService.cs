@@ -19,10 +19,19 @@ namespace Application.Services
             _studentInfoRepository = studentInfoRepository;
         }
 
-        public async Task<bool> AddStudentsToCourse(int courseId, int[] studentIds)
+        public async Task<IEnumerable<int>> AddStudentsToCourse(int courseId, int[] studentIds)
         {
-            await _studentInfoRepository.AddStudentsToCourse(courseId, studentIds);
-            return true;
+            var filteredStudentIds = new List<int>();
+
+            foreach (var studentId in studentIds)
+            {
+                if (await _studentInfoRepository.CheckIfUserInCourse(studentId, courseId) != true)
+                {
+                    filteredStudentIds.Add(studentId);
+                }
+            }
+            await _studentInfoRepository.AddStudentsToCourse(courseId, filteredStudentIds.ToArray());
+            return filteredStudentIds;
         }
         public async Task<List<StudentAllCoursesModel>> GetAllCourses(int studentId)
         {
@@ -84,10 +93,22 @@ namespace Application.Services
             }).ToList();
         }
 
-        public async Task<bool> RemoveStudentsFromCourse(int courseId, int[] studentIds)
+        public async Task<IEnumerable<int>> RemoveStudentsFromCourse(int courseId, int[] studentIds)
         {
-            await _studentInfoRepository.RemoveStudentsFromCourse(courseId, studentIds);
-            return true;
+            // Сначала фильтруем асинхронно
+            var filteredStudentIds = new List<int>();
+
+            foreach (var studentId in studentIds)
+            {
+                if (await _studentInfoRepository.CheckIfUserInCourse(studentId, courseId))
+                {
+                    filteredStudentIds.Add(studentId);
+                }
+            }
+
+            await _studentInfoRepository.RemoveStudentsFromCourse(courseId, filteredStudentIds.ToArray());
+            return filteredStudentIds;
         }
+
     }
 }

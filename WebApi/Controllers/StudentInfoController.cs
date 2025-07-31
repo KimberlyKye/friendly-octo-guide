@@ -192,11 +192,19 @@ namespace WebApi.Controllers
                 return BadRequest("courseId не может быть меньше или равен 0 ");
             }
             var result = await _studentInfoService.AddStudentsToCourse(courseId, studentIds);
-            if (result == true)
+            if (result.Count() == studentIds.Count())
             {
-                return Ok(result);
+                return Ok("Студенты успешно добавлены");
             }
-            return BadRequest("Неизвестная ошибка");
+
+            var unsuccess = studentIds.Except(result);
+
+            if (unsuccess.Count() == studentIds.Count())
+            {
+                return BadRequest("Не удалось добавить всех студентов!");
+            }
+
+            return Ok("Студенты частично успешно добавлены, однако в процессе возникли проблемы. При необходимости обновите страницу и повторите операцию. Не удалось добавить следующее количество студентов: " + unsuccess.Count() + " с ID: " + string.Join(", ", unsuccess));
         }
         [HttpPost("remove-from-course")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -210,11 +218,18 @@ namespace WebApi.Controllers
                 return BadRequest("courseId не может быть меньше или равен 0 ");
             }
             var result = await _studentInfoService.RemoveStudentsFromCourse(courseId, studentIds);
-            if (result == true)
+            if (result.Count() == studentIds.Count())
             {
-                return Ok(result);
+                return Ok("Студенты успешно удалены");
             }
-            return BadRequest("Неизвестная ошибка");
+            var unsuccess = studentIds.Except(result);
+
+            if (unsuccess.Count() == studentIds.Count())
+            {
+                return BadRequest("Не удалось удалить всех студентов!");
+            }
+
+            return Ok("Студенты частично успешно удалены, однако в процессе возникли проблемы. При необходимости обновите страницу и повторите операцию. Не удалось удалить следующее количество студентов: " + unsuccess.Count() + " с ID: " + string.Join(", ", unsuccess));
         }
 
     }

@@ -211,7 +211,6 @@ namespace Infrastructure.Repositories
         {
             foreach (var studentId in studentIds)
             {
-                //TODO: add validation in service that there is no same user in that course
                 var newRow = new StudentCourse()
                 {
                     CourseId = courseId,
@@ -227,7 +226,6 @@ namespace Infrastructure.Repositories
         {
             foreach (var studentId in studentIds)
             {
-                //TODO: add validation and filter in service that there is that user in that course
                 var removingRow = new StudentCourse()
                 {
                     CourseId = courseId,
@@ -237,6 +235,11 @@ namespace Infrastructure.Repositories
             }
             await _context.SaveChangesAsync();
             return;
+        }
+
+        async Task<bool> IStudentInfoRepository.CheckIfUserInCourse(int userId, int courseId)
+        {
+            return await _context.StudentCourses.AnyAsync(x => x.StudentId == userId && x.CourseId == courseId);
         }
     }
 }

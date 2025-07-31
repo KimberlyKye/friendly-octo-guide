@@ -46,5 +46,13 @@ namespace RepositoriesAbstractions.Abstractions
         /// <param name="studentIds"></param>
         /// <returns></returns>
         Task RemoveStudentsFromCourse(int courseId, int[] studentIds);
+
+        /// <summary>
+        ///  Проверка на наличие студента в курсе
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="courseId"></param>
+        /// <returns></returns>
+        Task<bool> CheckIfUserInCourse(int userId, int courseId);
     }
 }
