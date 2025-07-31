@@ -1,9 +1,14 @@
 #!/bin/bash
 set -e
 
-# Ждём доступности БД (актуально для Docker Compose)
-while ! nc -z $DB_HOST $DB_PORT; do
-  sleep 1
+# Ждем доступности БД (теперь с таймаутом)
+for i in {1..30}; do
+  if </dev/tcp/$DB_HOST/$DB_PORT; then
+    echo "Database is ready!"
+    break
+  fi
+  echo "Waiting for database... ($i/30)"
+  sleep 2
 done
 
 # Применяем миграции
