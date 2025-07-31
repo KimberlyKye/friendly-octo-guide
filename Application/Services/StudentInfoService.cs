@@ -18,10 +18,16 @@ namespace Application.Services
         {
             _studentInfoRepository = studentInfoRepository;
         }
+
+        public async Task<bool> AddStudentsToCourse(int courseId, int[] studentIds)
+        {
+            await _studentInfoRepository.AddStudentsToCourse(courseId, studentIds);
+            return true;
+        }
         public async Task<List<StudentAllCoursesModel>> GetAllCourses(int studentId)
         {
             var courses = await _studentInfoRepository.GetAllCourses(studentId);
-            
+
             var result = new List<StudentAllCoursesModel>();
             foreach (var course in courses)
             {
@@ -34,6 +40,19 @@ namespace Application.Services
             }
             return result;
         }
+
+        public async Task<List<Student>> GetAllStudentsByCourse(int courseId)
+        {
+            var students = await _studentInfoRepository.GetAllStudentsByCourse(courseId);
+            return students;
+        }
+
+        public async Task<List<Student>> GetAllStudentsOutsideCourse(int courseId, int startRow, int endRow)
+        {
+            var students = await _studentInfoRepository.GetAllStudentsOutsideCourse(courseId, startRow, endRow);
+            return students;
+        }
+
         public async Task<CourseInfoForStudentModel?> GetCourseInfo(int courseId, int studentId)
         {
 
@@ -63,6 +82,12 @@ namespace Application.Services
                 Material = lesson.Material,
                 HomeTasks = lesson.HomeTasks.ToList()
             }).ToList();
+        }
+
+        public async Task<bool> RemoveStudentsFromCourse(int courseId, int[] studentIds)
+        {
+            await _studentInfoRepository.RemoveStudentsFromCourse(courseId, studentIds);
+            return true;
         }
     }
 }

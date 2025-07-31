@@ -88,7 +88,8 @@ namespace Infrastructure.Repositories
                 select new { Course = course, Teacher = teacher })
                 .FirstOrDefaultAsync();
 
-            if (coursesData is null) { return null; };
+            if (coursesData is null) { return null; }
+            ;
 
             var domainCourse = await _courseFactory.CreateFrom(
                     courseModel: coursesData.Course,
@@ -145,6 +146,97 @@ namespace Infrastructure.Repositories
             }
 
             return domainCourse;
+        }
+
+        Task<Student?> IStudentInfoRepository.GetStudentById(int studentId)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<List<Entities.Course>> IStudentInfoRepository.GetAllCourses(int studentId)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<Entities.Course?> IStudentInfoRepository.GetCourseInfo(int courseId, int studentId)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<Entities.Course> IStudentInfoRepository.GetAllCourseInfo(int courseId, int studentId)
+        {
+            throw new NotImplementedException();
+        }
+
+        async Task<List<Student>> IStudentInfoRepository.GetAllStudentsByCourse(int courseId)
+        {
+            var filteredStudents = await _context.StudentCourses.Where(student => student.CourseId == courseId).ToListAsync();
+            var studentIds = filteredStudents.Select(student => student.Id).ToList();
+            var students = new List<User>();
+            foreach (var studentId in studentIds)
+            {
+                var student = await _context.Users.Where(user => user.Id == studentId).FirstOrDefaultAsync();
+
+                if (student != null)
+                {
+                    students.Add(student);
+                }
+            }
+            var res = students.Select(_studentFactory.CreateFrom).ToList();
+            return res;
+        }
+
+        async Task<List<Student>> IStudentInfoRepository.GetAllStudentsOutsideCourse(int courseId, int startRow, int endRow)
+        {
+            // TODO: pagination
+            var filteredStudents = _context.StudentCourses.Where(student => student.CourseId == courseId);
+            var studentIds = filteredStudents.Select(student => student.Id).ToList();
+            var students = new List<User>();
+
+            // var res = _context.Users.Where(user => user.RoleId == 2 && !studentIds.Any(id => id == user.Id));
+            foreach (var studentId in studentIds)
+            {
+                var student = await _context.Users.Where(user => user.RoleId == 2 && !studentIds.Any(id => id == user.Id)).FirstOrDefaultAsync();
+
+                if (student != null)
+                {
+                    students.Add(student);
+                }
+            }
+            var res = students.Select(_studentFactory.CreateFrom).ToList();
+            return res;
+        }
+
+        async Task IStudentInfoRepository.AddStudentsToCourse(int courseId, int[] studentIds)
+        {
+            foreach (var studentId in studentIds)
+            {
+                //TODO: add validation in service that there is no same user in that course
+                var newRow = new StudentCourse()
+                {
+                    CourseId = courseId,
+                    StudentId = studentId
+                };
+                _context.StudentCourses.Add(newRow);
+            }
+            await _context.SaveChangesAsync();
+            return;
+        }
+
+        async Task IStudentInfoRepository.RemoveStudentsFromCourse(int courseId, int[] studentIds)
+        {
+            foreach (var studentId in studentIds)
+            {
+                //TODO: add validation and filter in service that there is that user in that course
+                var removingRow = new StudentCourse()
+                {
+                    CourseId = courseId,
+                    StudentId = studentId
+                };
+                _context.StudentCourses.Remove(removingRow);
+            }
+            await _context.SaveChangesAsync();
+            return;
         }
     }
 }

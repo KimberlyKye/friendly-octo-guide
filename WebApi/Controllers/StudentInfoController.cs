@@ -50,7 +50,7 @@ namespace WebApi.Controllers
         {
             if (studentId <= 0) { return BadRequest("studentId не может быть меньше или равен 0 "); }
 
-            var  result = await _studentInfoService.GetAllCourses(studentId);
+            var result = await _studentInfoService.GetAllCourses(studentId);
 
             return Ok(result);
         }
@@ -85,7 +85,8 @@ namespace WebApi.Controllers
 
             var result = await _studentInfoService.GetCourseInfo(courseId, studentId);
 
-            if (result is null) { return NotFound(); };
+            if (result is null) { return NotFound(); }
+            ;
 
             return Ok(new CourseInfoForStudentResponse
             {
@@ -125,7 +126,8 @@ namespace WebApi.Controllers
             if (courseId <= 0) { return BadRequest("courseId не может быть меньше или равен 0 "); }
 
             var result = await _studentInfoService.GetLessonsInfoByCourse(courseId, studentId);
-            if (result is null) { return NotFound(); };
+            if (result is null) { return NotFound(); }
+            ;
 
             var response = result.Select(lesson => new LessonInfoByCourseResponse
             {
@@ -139,5 +141,81 @@ namespace WebApi.Controllers
 
             return Ok(response);
         }
+
+        [HttpGet("list/include-in-course/{courseId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetStudentListByCourse(int courseId)
+        {
+            if (courseId <= 0)
+            {
+                return BadRequest("courseId не может быть меньше или равен 0 ");
+            }
+            var result = await _studentInfoService.GetAllStudentsByCourse(courseId);
+            if (result is null)
+            {
+                return Ok(result);
+            }
+            return Ok(result);
+        }
+
+        [HttpGet("list/not-on-course/{courseId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetStudentListOutsideFromCourse([FromRoute] int courseId, [FromQuery] int startRow, [FromQuery] int endRow)
+        {
+            if (courseId <= 0)
+            {
+                return BadRequest("courseId не может быть меньше или равен 0 ");
+            }
+            var result = await _studentInfoService.GetAllStudentsOutsideCourse(courseId, startRow, endRow);
+            if (result is null)
+            {
+                return Ok(result);
+            }
+            return Ok(result);
+        }
+
+        [HttpPost("add-to-course")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> AddStudentToCourse([FromBody] int courseId, [FromBody] int[] studentIds)
+        {
+            if (courseId <= 0)
+            {
+                return BadRequest("courseId не может быть меньше или равен 0 ");
+            }
+            var result = await _studentInfoService.AddStudentsToCourse(courseId, studentIds);
+            if (result == true)
+            {
+                return Ok(result);
+            }
+            return BadRequest("Неизвестная ошибка");
+        }
+        [HttpPost("remove-from-course")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> RemoveStudentsFromCourse([FromBody] int courseId, [FromBody] int[] studentIds)
+        {
+            if (courseId <= 0)
+            {
+                return BadRequest("courseId не может быть меньше или равен 0 ");
+            }
+            var result = await _studentInfoService.RemoveStudentsFromCourse(courseId, studentIds);
+            if (result == true)
+            {
+                return Ok(result);
+            }
+            return BadRequest("Неизвестная ошибка");
+        }
+
     }
 }
