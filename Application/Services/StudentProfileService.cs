@@ -9,6 +9,7 @@ namespace Application.Services
 {
     public class StudentProfileService : IStudentProfileService
     {
+        private static readonly SemaphoreSlim _semaphore = new(1, 1);
         private readonly IUserProfileRepository<Student> _studentProfileRepository;
 
         public StudentProfileService(IUserProfileRepository<Student> studentProfileRepository)
@@ -18,33 +19,48 @@ namespace Application.Services
 
         public async Task<StudentProfileModel> CreateProfileAsync(CreateStudentModel profileInfo)
         {
-            var fullName = new FullName(profileInfo.FirstName, profileInfo.LastName);
-            var phoneNumber = new PhoneNumber(profileInfo.PhoneNumber);
-            var birthDate = new BirthDate(profileInfo.BirthDate);
-            var email = new Email(profileInfo.Email);
+            // Добавляем semaphore чтобы избежать одновременного создания нескольких профилей с одинаковыми email
+            await _semaphore.WaitAsync().ConfigureAwait(false);
 
-            var student = new Student(fullName, phoneNumber, email, birthDate, profileInfo.Password);
-
-            var existingUser = await _studentProfileRepository.CheckUserByEmail(profileInfo.Email);
-
-            if (existingUser)
+            try
             {
-                throw new ArgumentException("Профиль с таким email уже зарегестрирован!");
+                // 1. Создание value-объектов
+                var fullName = new FullName(profileInfo.FirstName, profileInfo.LastName);
+                var phoneNumber = new PhoneNumber(profileInfo.PhoneNumber);
+                var birthDate = new BirthDate(profileInfo.BirthDate);
+                var email = new Email(profileInfo.Email);
+
+                // 2. Проверка существующего пользователя
+                var existingUser = await _studentProfileRepository
+                    .CheckUserByEmail(profileInfo.Email)
+                    .ConfigureAwait(false);
+
+                if (existingUser)
+                {
+                    throw new ArgumentException("Профиль с таким email уже зарегистрирован!");
+                }
+
+                // 3. Создание студента
+                var student = new Student(fullName, phoneNumber, email, birthDate, profileInfo.Password);
+                var createdUser = await _studentProfileRepository
+                    .CreateUserProfileAsync(student)
+                    .ConfigureAwait(false);
+
+                // 4. Маппинг результата
+                return new StudentProfileModel
+                {
+                    Id = createdUser.Id,
+                    FirstName = createdUser.GetName().FirstName,
+                    LastName = createdUser.GetName().LastName,
+                    Email = createdUser.Email.Value,
+                    BirthDate = createdUser.DateOfBirth.Date.ToDateTime(TimeOnly.MinValue),
+                    PhoneNumber = createdUser.GetPhoneNumber()
+                };
             }
-
-            var createdUser = await _studentProfileRepository.CreateUserProfileAsync(student);
-
-            var res = new StudentProfileModel()
+            finally
             {
-                Id = createdUser.Id,
-                FirstName = createdUser.GetName().FirstName,
-                LastName = createdUser.GetName().LastName,
-                Email = createdUser.Email.Value,
-                BirthDate = createdUser.DateOfBirth.Date.ToDateTime(TimeOnly.MinValue),
-                PhoneNumber = createdUser.GetPhoneNumber()
-            };
-
-            return res;
+                _semaphore.Release();
+            }
         }
 
         public async Task<StudentProfileModel> GetProfileInfoAsync(long profileId)
