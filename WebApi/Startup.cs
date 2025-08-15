@@ -94,6 +94,7 @@ namespace WebApi
             services.AddTransient<IHomeTaskFactory, HomeTaskFactory>();
             services.AddTransient<ITeacherFactory, TeacherFactory>();
             services.AddTransient<IFileFactory, FileFactory>();
+            services.AddTransient<IHomeWorkFactory, HomeWorkFactory>();
 
             // 5. MVC
 

@@ -20,7 +20,7 @@ namespace Entities
         private string _description;
         private DateTime _date;
         private File? _material;
-        private readonly List<HomeTask> _homeTasks = new();
+        private readonly List<HomeTask> _homeTasks = new(); Залей мЕйн Сделать только один и править Тесты и Фабрику
         public Score? Score { get; private set; } 
 
         /// <summary>

@@ -1,11 +1,12 @@
-﻿using Application.Services.Abstractions;
+﻿using Application.Models.Course;
+using Application.Models.Lesson;
 using Application.Models.Teacher.Responses;
-using RepositoriesAbstractions.Abstractions;
+using Application.Services.Abstractions;
+using Domain.ValueObjects;
 using Domain.ValueObjects.Enums;
 using Entities;
-using Application.Models.Course;
-using Domain.ValueObjects;
-using Application.Models.Lesson;
+using Infrastructure.DataModels;
+using RepositoriesAbstractions.Abstractions;
 
 namespace Application.Services
 {
@@ -49,10 +50,11 @@ namespace Application.Services
                 Duration = course.Duration
             };
         }
+
         public async Task<List<LessonInfoByCourseModel>?> GetLessonsInfoByCourse(int courseId, int studentId)
         {
             var course = await _studentInfoRepository.GetAllCourseInfo(courseId, studentId);
-            if (course is null) { return null!; }
+            if (course is null) { return null; }
 
             return course.Lessons.Select(lesson => new LessonInfoByCourseModel
             {
@@ -63,6 +65,16 @@ namespace Application.Services
                 Material = lesson.Material,
                 HomeTasks = lesson.HomeTasks.ToList()
             }).ToList();
+        }
+
+        public async Task<List<LessonInfoByCourseModel>?> GetLessonAndHomeworkInfo(int lessonId, int studentId)
+        {
+            var lesson = await _studentInfoRepository.GetLessonAndHomeworkInfo(lessonId, studentId);
+            if (lesson is null) { return null!; }
+
+
+
+            return null;
         }
     }
 }

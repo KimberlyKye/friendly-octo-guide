@@ -178,5 +178,60 @@ namespace Infrastructure.Repositories
 
             return new Score((int)Math.Round(averageScore ?? 0));
         }
+
+        public async Task<Entities.Lesson?> GetLessonAndHomeworkInfo(int lessonId, int studentId)
+        {
+            var lessonData = await (
+                from lesson in _context.Lessons.AsNoTracking()                
+                from homeTasks in _context.HomeTasks
+                    .Where(hTs => hTs.LessonId == lessonId)
+                                .ToList()
+
+                from homeWorks in _context.HomeWorks
+                    .Where(hWr => hWr.HomeTaskId == homeTasks.Id &&
+                                  hWr.StudentId == studentId)
+                                .ToList()
+
+                from lessonScore in _context.LessonScores
+                   .Where(lS => lS.LessonId == lessonId
+                             && lS.StudentId == studentId)
+                   .DefaultIfEmpty()
+                where lesson.Id == lessonId
+                select new
+                {
+                    Lesson = new DataModels.Lesson // Создаем Lesson с Score
+                    {
+                        Id = lesson.Id,
+                        CourseId = lesson.CourseId,
+                        Title = lesson.Title,
+                        Description = lesson.Description,
+                        Date = lesson.Date,
+                        Material = lesson.Material,
+                        Score = lessonScore != null ? lessonScore.Score : 0
+                    },
+                    HomeTasks = homeTasks,
+                    HomeWorks = homeWorks
+                })
+                .FirstOrDefaultAsync();
+
+
+            if (lessonData is null) { return null; }
+
+            var homeTasksList = lessonData.HomeTasks != null
+                ? new List<DataModels.HomeTask> { lessonData.HomeTasks }
+                : new List<DataModels.HomeTask>();
+
+            var domainLesson = await _lessonFactory.CreateAsync(
+                    lessonData.Lesson,
+                    homeTasksList);
+
+
+            
+
+
+
+
+            return null;
+        }
     }
 }

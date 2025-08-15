@@ -41,7 +41,7 @@ namespace WebApi.Controllers
         /// </remarks>
         /// <response code="200">Возвращает модель</response>
         /// <response code="400">Некорректные параметры запроса</response>
-        /// <response code="500">Если есть какие-то ошибки при создании</response>        
+        /// <response code="500">Если есть какие-то ошибки при запросе</response>
         [HttpGet("get-all-courses")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -66,14 +66,15 @@ namespace WebApi.Controllers
         ///
         ///     GET /get-course-info
         ///     {
-        ///        "courseId": 111
+        ///        "courseId": 111,
+        ///        "studentId": 111
         ///     }
         ///
         /// </remarks>
         /// <response code="200">Возвращает модель</response>
         /// <response code="400">Некорректные параметры запроса</response>
-        /// <response code="404">Курс не найден</response>
-        /// <response code="500">Если есть какие-то ошибки при создании</response>        
+        /// <response code="404">Данные не найдены</response>
+        /// <response code="500">Если есть какие-то ошибки при запросе</response>
         [HttpGet("get-course-info")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -81,7 +82,7 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetCourseInfo(int courseId, int studentId)
         {
-            if (courseId <= 0) { return BadRequest("courseId не может быть меньше или равен 0 "); }
+            if (courseId <= 0 || studentId <= 0) { return BadRequest("courseId или studentId не может быть меньше или равен 0 "); }
 
             var result = await _studentInfoService.GetCourseInfo(courseId, studentId);
 
@@ -97,24 +98,25 @@ namespace WebApi.Controllers
             });
         }
         /// <summary>
-        /// Метод получения информации о курсе (без уроков и ДЗ)
+        /// Метод получения информации о уроках в курсе
         /// </summary>
         /// <param name="courseId"></param>
         /// <param name="studentId"></param>
-        /// <returns>Модель курса</returns>
+        /// <returns>Модель данных</returns>
         /// <remarks>
         /// Пример запроса:
         ///
         ///     GET /get-lessons-info-by-course
         ///     {
-        ///        "courseId": 111
+        ///        "courseId": 111,
+        ///        "studentId": 111
         ///     }
         ///
         /// </remarks>
         /// <response code="200">Возвращает модель</response>
         /// <response code="400">Некорректные параметры запроса</response>
-        /// <response code="404">Курс не найден</response>
-        /// <response code="500">Если есть какие-то ошибки при создании</response>        
+        /// <response code="404">Данные не найдены</response>
+        /// <response code="500">Если есть какие-то ошибки при запросе</response>
         [HttpGet("get-lessons-info-by-course")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -122,7 +124,7 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetLessonsInfoByCourse(int courseId, int studentId)
         {
-            if (courseId <= 0) { return BadRequest("courseId не может быть меньше или равен 0 "); }
+            if (courseId <= 0 || studentId <= 0) { return BadRequest("courseId или studentId не может быть меньше или равен 0 "); }
 
             var result = await _studentInfoService.GetLessonsInfoByCourse(courseId, studentId);
             if (result is null) { return NotFound(); };
@@ -139,5 +141,44 @@ namespace WebApi.Controllers
 
             return Ok(response);
         }
+        /// <summary>
+        /// Метод получения полной информации о уроке и сданных домашних работах
+        /// </summary>
+        /// <param name="lessonId"></param>
+        /// <param name="studentId"></param>
+        /// <returns>Модель данных</returns>
+        /// <remarks>
+        /// Пример запроса:
+        ///
+        ///     GET /get-lesson-and-homework-info
+        ///     {
+        ///        "lessonId": 111,
+        ///        "studentId": 111,
+        ///     }
+        ///
+        /// </remarks>
+        /// <response code="200">Возвращает модель</response>
+        /// <response code="400">Некорректные параметры запроса</response>
+        /// <response code="404">Данные не найдены</response>
+        /// <response code="500">Если есть какие-то ошибки при запросе</response>
+        [HttpGet("get-lesson-and-homework-info")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetLessonAndHomeworkInfo(int lessonId, int studentId)
+        {
+            if (lessonId <= 0 || studentId <= 0) { return BadRequest("lessonId или studentId не может быть меньше или равен 0 "); }
+
+            var result = await _studentInfoService.GetLessonAndHomeworkInfo(lessonId, studentId);
+            if (result is null) { return NotFound(); };
+
+
+
+
+
+            return NotFound();
+        }
+
     }
 }
