@@ -1,51 +1,63 @@
-﻿using Domain.ValueObjects.Enums;
-using Entities;
+﻿// Infrastructure/Factories/HomeWorkFactory.cs
+using System;
+using System.Threading.Tasks;
+using Domain.ValueObjects;
 using Infrastructure.DataModels;
 using Infrastructure.Factories.Abstractions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ValueObjects;
+using ValueObjects.Enums;
 
 namespace Infrastructure.Factories
 {
-    public class HomeWorkFactory : IHomeWorkFactory
+    public class HomeWorkFactory : IBaseFactory<Entities.HomeWork, HomeWork>
     {
+        private readonly IFileFactory _fileFactory;
 
-        public Task<Entities.HomeWork> CreateFromAsync(DataModels.HomeWork homeWorkModel)
+        public HomeWorkFactory(IFileFactory fileFactory) : base()
         {
-            return Task.FromResult(new Entities.HomeWork
-            {
-                Id = homeWorkModel.Id,
-                RoleId = (int)RoleEnum.Student,
-                Name = homeWorkModel.Name.FirstName,
-                Surname = homeWorkModel.Name.LastName,
-                Email = homeWorkModel.Email.Value,
-                PhoneNumber = homeWorkModel.PhoneNumber,
-                DateOfBirth = homeWorkModel.DateOfBirth.Date.ToDateTime(TimeOnly.MinValue),
-                Password = homeWorkModel.Password
-            });
+            _fileFactory = fileFactory ?? throw new ArgumentNullException(nameof(fileFactory));
         }
 
-        public Task<DataModels.HomeWork> CreateDataModelAsync(Entities.HomeWork homeWork)
+        public async Task<Entities.HomeWork> CreateAsync(HomeWork dataModel)
         {
-            throw new NotImplementedException();
-            
-        }        
+            if (dataModel is null)
+                throw new ArgumentNullException(nameof(dataModel));
+            try
+            {
+                var material = _fileFactory.Create(dataModel.Material);
+                var status = dataModel.Score < 40 ? HomeworkStatus.Rejected : HomeworkStatus.Submitted;
+                var isOnTime = DateTime.Now.Date <= dataModel.TaskCompletionDate.Date; // TODO: Change this to check if it's submitted before the deadline
+                var taskCompletionDate = new TaskCompletionDate(dataModel.TaskCompletionDate);
+                return new Entities.HomeWork(
+                    dataModel.Id,
+dataModel.StudentId,
+dataModel.StudentComment,
+taskCompletionDate,
+status, isOnTime
+                );
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException($"Error creating HomeWork (ID: {dataModel.Id})", ex);
+            }
+        }
+
+        public Task<HomeWork> CreateDataModelAsync(Entities.HomeWork domainEntity)
+        {
+            if (domainEntity == null)
+                throw new ArgumentNullException(nameof(domainEntity));
+
+            var materialPath = _fileFactory.GetFullPath(domainEntity.Material);
+
+            return Task.FromResult(new HomeWork
+            {
+                // Id = domainEntity.Id,
+                // Title = domainEntity.HomeWorkName.Value,
+                // Description = domainEntity.Description,
+                // StartDate = domainEntity.Duration.StartDate.ToDateTime(TimeOnly.MinValue),
+                // EndDate = domainEntity.Duration.EndDate.ToDateTime(TimeOnly.MinValue),
+                // Material = materialPath
+            });
+        }
     }
 }
-
-
-
-//return Task.FromResult(new User
-//{
-//    Id = student.Id,
-//    RoleId = (int)RoleEnum.Student,
-//    Name = student.Name.FirstName,
-//    Surname = student.Name.LastName,
-//    Email = student.Email.Value,
-//    PhoneNumber = student.PhoneNumber,
-//    DateOfBirth = student.DateOfBirth.Date.ToDateTime(TimeOnly.MinValue),
-//    Password = student.Password
-//});

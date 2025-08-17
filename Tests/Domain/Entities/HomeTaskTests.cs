@@ -6,6 +6,7 @@ using System;
 using System.Linq;
 using File = Domain.ValueObjects.File;
 using ValueObjects;
+using ValueObjects.Enums;
 
 namespace Tests.Domain.Entities
 {
@@ -19,6 +20,9 @@ namespace Tests.Domain.Entities
         private File _testFile;
         private Student _testStudent;
         private TaskCompletionDate _testCompletionDate;
+        private Score _testScore;
+        private HomeTask _testHomeTask;
+        private HomeWork _mockHomeWork;
 
         [SetUp]
         public void Setup()
@@ -39,6 +43,16 @@ namespace Tests.Domain.Entities
             _testStudent = new Student(1, fullName, phoneNumber, email, birthDate);
 
             _testCompletionDate = new TaskCompletionDate(DateOnly.FromDateTime(DateTime.Now));
+
+            var homeTaskName = new HomeTaskName("Домашнее задание 1");
+            var duration = new Duration(
+                DateOnly.FromDateTime(DateTime.Now),
+                DateOnly.FromDateTime(DateTime.Now.AddDays(7)));
+            _testScore = new Score(85);
+
+            _testHomeTask = new HomeTask(TestId, homeTaskName, "Описание задания", duration);
+            _mockHomeWork = new HomeWork(_testHomeTask.Id, _testStudent.Id, _testScore, _testCompletionDate, null, "Done homework!", "Good job!", HomeworkStatus.Submitted, true);
+
         }
 
         [Test]
@@ -100,12 +114,11 @@ namespace Tests.Domain.Entities
         {
             var homeTask = new HomeTask(TestId, _validName, _validDescription, _validDuration);
             var score = new Score(90);
-            var homeWork = new HomeWork(1, _testStudent, homeTask, _testCompletionDate, score);
 
-            homeTask.AddHomeWork(homeWork);
+            homeTask.AddHomeWork(_mockHomeWork);
 
             Assert.That(homeTask.HomeWorks.Count, Is.EqualTo(1));
-            Assert.That(homeTask.HomeWorks.First(), Is.EqualTo(homeWork));
+            Assert.That(homeTask.HomeWorks.First(), Is.EqualTo(_mockHomeWork));
         }
 
         [Test]
@@ -123,7 +136,6 @@ namespace Tests.Domain.Entities
         {
             var homeTask = new HomeTask(TestId, _validName, _validDescription, _validDuration);
             var score = new Score(90);
-            var homeWork1 = new HomeWork(1, _testStudent, homeTask, _testCompletionDate, score);
             var birthDate = new DateOnly(2000, 1, 10);
 
             // Создаем нового студента для второй работы
@@ -133,12 +145,10 @@ namespace Tests.Domain.Entities
                 new Email("petr@example.com"),
                 new BirthDate(birthDate));
 
-            var homeWork2 = new HomeWork(1, anotherStudent, homeTask, _testCompletionDate, score);
-
-            homeTask.AddHomeWork(homeWork1);
+            homeTask.AddHomeWork(_mockHomeWork);
 
             Assert.That(
-                () => homeTask.AddHomeWork(homeWork2),
+                () => homeTask.AddHomeWork(_mockHomeWork),
                 Throws.InvalidOperationException.With.Message.Contain("уже существует"));
         }
 
@@ -146,11 +156,9 @@ namespace Tests.Domain.Entities
         public void RemoveHomeWork_ShouldRemoveWork_WhenExists()
         {
             var homeTask = new HomeTask(TestId, _validName, _validDescription, _validDuration);
-            var score = new Score(90);
-            var homeWork = new HomeWork(1, _testStudent, homeTask, _testCompletionDate, score);
 
-            homeTask.AddHomeWork(homeWork);
-            homeTask.RemoveHomeWork(homeWork);
+            homeTask.AddHomeWork(_mockHomeWork);
+            homeTask.RemoveHomeWork(_mockHomeWork);
 
             Assert.That(homeTask.HomeWorks, Is.Empty);
         }
@@ -160,9 +168,8 @@ namespace Tests.Domain.Entities
         {
             var homeTask = new HomeTask(TestId, _validName, _validDescription, _validDuration);
             var score = new Score(90);
-            var homeWork = new HomeWork(1, _testStudent, homeTask, _testCompletionDate, score);
 
-            Assert.That(() => homeTask.RemoveHomeWork(homeWork), Throws.Nothing);
+            Assert.That(() => homeTask.RemoveHomeWork(_mockHomeWork), Throws.Nothing);
         }
 
         [Test]

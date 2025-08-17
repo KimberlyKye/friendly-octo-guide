@@ -17,6 +17,10 @@ using Serilog;
 using WebApi.Middleware;
 using WebApi.Filters;
 using RepositoriesAbstractions.Abstractions;
+using WebApi.Dto;
+using RepositoriesAbstractions;
+using Application.Models;
+using Npgsql;
 
 namespace WebApi
 {
@@ -35,10 +39,39 @@ namespace WebApi
             services.AddCors();
             services.AddScoped<CustomExceptionFilter>();
             services.AddLogging();
+            services.Configure<FileStorageOptions>(Configuration.GetSection("FileStorage"));
+
 
             // 1. DataBase context + repositories
+            // Получаем строку подключения из переменных окружения (Render)
+            var connectionUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+
+            // Если строка есть (деплой на Render), парсим её
+            if (!string.IsNullOrEmpty(connectionUrl))
+            {
+                // Формат: postgresql://user:pass@host:5432/db
+                var uri = new Uri(connectionUrl);
+                var userInfo = uri.UserInfo.Split(':');
+
+                var dbConnectionString = new NpgsqlConnectionStringBuilder
+                {
+                    Host = uri.Host,
+                    Port = uri.Port,
+                    Username = userInfo[0],
+                    Password = userInfo[1],
+                    Database = uri.AbsolutePath.TrimStart('/'),
+                    SslMode = SslMode.Require,  // Для Render PostgreSQL
+                    TrustServerCertificate = true
+                }.ToString();
+
+                // Переопределяем строку подключения
+                Configuration["ConnectionStrings:PgConnectionString"] = dbConnectionString;
+            }
+
+            // Добавляем БД (EF Core)
             services.AddDbContext<AppDbContext>(options =>
-                 options.UseNpgsql(Configuration.GetConnectionString("PgConnectionString")));
+                options.UseNpgsql(Configuration.GetConnectionString("PgConnectionString")));
+
             services.AddScoped<ITeacherInfoRepository, TeacherInfoRepository>();
             services.AddScoped<IStudentInfoRepository, StudentInfoRepository>();
             services.AddScoped<ITeacherLessonRepository, TeacherLessonRepository>();
@@ -48,6 +81,8 @@ namespace WebApi
             services.AddScoped<ICourseRepository, CourseRepository>();
             services.AddScoped<IStudentRepository, StudentRepository>();
             services.AddScoped<ITeacherCalendarRepository, TeacherCalendarRepository>();
+            services.AddScoped<IHomeWorkRepository, HomeWorkRepository>();
+            services.AddScoped<IHomeTaskRepository, HomeTaskRepository>();
             services.AddScoped<IStudentCalendarRepository, StudentCalendarRepository>();
             services.AddScoped<IStudentInfoRepository, StudentInfoRepository>();
 
@@ -85,6 +120,10 @@ namespace WebApi
             services.AddScoped<ITeacherProfileService, TeacherProfileService>();
             services.AddScoped<ICourseService, CourseService>();
             services.AddScoped<ITeacherCalendarService, TeacherCalendarService>();
+            services.AddScoped<ITeacherProfileService, TeacherProfileService>();
+            services.AddScoped<IHomeWorkService, HomeWorkService>();
+            services.AddScoped<IHomeTaskService, HomeTaskService>();
+            services.AddScoped<IFileStorageService, LocalFileStorageService>();
             services.AddScoped<IStudentCalendarService, StudentCalendarService>();
 
             // 4. Factories
@@ -94,7 +133,8 @@ namespace WebApi
             services.AddTransient<IHomeTaskFactory, HomeTaskFactory>();
             services.AddTransient<ITeacherFactory, TeacherFactory>();
             services.AddTransient<IFileFactory, FileFactory>();
-            services.AddTransient<IHomeWorkFactory, HomeWorkFactory>();
+            services.AddTransient<IBaseFactory<Entities.HomeWork, Infrastructure.DataModels.HomeWork>, HomeWorkFactory>();
+            services.AddTransient<IHomeTaskFactory, HomeTaskFactory>();
 
             // 5. MVC
 
@@ -115,11 +155,11 @@ namespace WebApi
 
             app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
-            if (env.IsDevelopment())
-            {
+            // if (env.IsDevelopment())
+            // {
                 app.UseSwagger();
                 app.UseSwaggerUI();
-            }
+            // }
 
             app.UseHttpsRedirection();
 
