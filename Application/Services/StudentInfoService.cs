@@ -67,9 +67,9 @@ namespace Application.Services
             }).ToList();
         }
 
-        public async Task<List<LessonInfoByCourseModel>?> GetLessonAndHomeworkInfo(int lessonId, int studentId)
+        public async Task<List<LessonInfoByCourseModel>?> GetHomeworksInfo(int lessonId, int studentId)
         {
-            var lesson = await _studentInfoRepository.GetLessonAndHomeworkInfo(lessonId, studentId);
+            var lesson = await _studentInfoRepository.GetHomeworksInfo(lessonId, studentId);
             if (lesson is null) { return null!; }
 
 

@@ -11,7 +11,7 @@ namespace Application.Services.Abstractions
         Task <List<StudentAllCoursesModel>> GetAllCourses(int studentId);
         Task<CourseInfoForStudentModel?> GetCourseInfo(int courseId, int studentId);
         Task<List<LessonInfoByCourseModel>?> GetLessonsInfoByCourse(int courseId, int studentId);
-        Task<List<LessonInfoByCourseModel>?> GetLessonAndHomeworkInfo(int lessonId, int studentId);
+        Task<List<LessonInfoByCourseModel>?> GetHomeworksInfo(int lessonId, int studentId);
         
     }
 }

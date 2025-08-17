@@ -150,7 +150,7 @@ namespace WebApi.Controllers
         /// <remarks>
         /// Пример запроса:
         ///
-        ///     GET /get-lesson-and-homework-info
+        ///     GET /get-homeworks-info
         ///     {
         ///        "lessonId": 111,
         ///        "studentId": 111,
@@ -161,16 +161,16 @@ namespace WebApi.Controllers
         /// <response code="400">Некорректные параметры запроса</response>
         /// <response code="404">Данные не найдены</response>
         /// <response code="500">Если есть какие-то ошибки при запросе</response>
-        [HttpGet("get-lesson-and-homework-info")]
+        [HttpGet("get-homeworks-info")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetLessonAndHomeworkInfo(int lessonId, int studentId)
+        public async Task<IActionResult> GetHomeworksInfo(int lessonId, int studentId)
         {
             if (lessonId <= 0 || studentId <= 0) { return BadRequest("lessonId или studentId не может быть меньше или равен 0 "); }
 
-            var result = await _studentInfoService.GetLessonAndHomeworkInfo(lessonId, studentId);
+            var result = await _studentInfoService.GetHomeworksInfo(lessonId, studentId);
             if (result is null) { return NotFound(); };
 
 
