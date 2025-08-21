@@ -79,7 +79,7 @@ namespace Entities
                                                string description,
                                                DateTime date,
                                                File? material = null,
-                                               IEnumerable<HomeTask>? homeTasks = null)
+                                               HomeTask? homeTask = null)
         {
             // Проверки параметров
             if (lessonName == null)
@@ -93,7 +93,7 @@ namespace Entities
                                                     description,
                                                     date,
                                                     material,
-                                                    homeTasks));
+                                                    homeTask));
         }
     }
 }

@@ -73,22 +73,19 @@ namespace Application.Services
                     });
 
                     // Обработка домашних заданий урока
-                    if (lesson.HomeTasks != null)
-                    {
-                        foreach (var homeTask in lesson.HomeTasks)
+                    if (lesson.HomeTask != null)
+                    {   
+                        homeTasksList.Add(new CalendarHomeTaskModel
                         {
-                            homeTasksList.Add(new CalendarHomeTaskModel
-                            {
-                                CourseId = course.Id,
-                                CourseName = course.Name.Value,
-                                LessonId = lesson.Id,
-                                LessonName = lesson.Name,
-                                HomeTaskId = homeTask.Id,
-                                HomeTaskName = homeTask.HomeTaskName.Value,
-                                DateStart = homeTask.Duration.StartDate.ToDateTime(TimeOnly.MinValue),
-                                DateEnd = homeTask.Duration.EndDate.ToDateTime(TimeOnly.MinValue)
-                            });
-                        }
+                            CourseId = course.Id,
+                            CourseName = course.Name.Value,
+                            LessonId = lesson.Id,
+                            LessonName = lesson.Name,
+                            HomeTaskId = lesson.HomeTask.Id,
+                            HomeTaskName = lesson.HomeTask.HomeTaskName.Value,
+                            DateStart = lesson.HomeTask.Duration.StartDate.ToDateTime(TimeOnly.MinValue),
+                            DateEnd = lesson.HomeTask.Duration.EndDate.ToDateTime(TimeOnly.MinValue)
+                        });
                     }
                 }
             }

@@ -51,7 +51,7 @@ namespace Infrastructure.Repositories
                             && l.Date <= endDate.ToUniversalTime())
                 from homeTasks in _context.HomeTasks.Where(hTs => hTs.LessonId == lessons.Id
                             && hTs.StartDate >= startDate.ToUniversalTime()
-                            && hTs.EndDate <= endDate.ToUniversalTime())
+                            && hTs.StartDate <= endDate.ToUniversalTime()) //<=================================
                 where student.Id == studentId
                             && student.RoleId == (int)RoleEnum.Student
                 select new
@@ -74,7 +74,7 @@ namespace Infrastructure.Repositories
                             .Select(lg => new
                             {
                                 Lesson = lg.First().Lesson,
-                                HomeTasks = lg.Select(x => x.HomeTasks).ToList()
+                                HomeTasks = lg.Select(x => x.HomeTasks)
                             })
                             .ToList()
                     });

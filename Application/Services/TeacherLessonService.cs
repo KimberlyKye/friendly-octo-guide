@@ -45,7 +45,7 @@ public class TeacherLessonService : ITeacherLessonService
                                                         request.LessonDescription,
                                                         request.LessonStartDate,
                                                         request.Material,
-                                                        request.HomeTasks);
+                                                        request.HomeTask);
 
         return await _teacherLessonRepository.AddLesson(newLesson);
     }    

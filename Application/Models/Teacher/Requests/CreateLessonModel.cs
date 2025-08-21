@@ -18,6 +18,6 @@ namespace Application.Models.Teacher.Requests
         public required DateTime LessonStartDate { get; init; }
         public Score PassingScore { get; init; }
         public required Domain.ValueObjects.File? Material { get; init; }
-        public List<HomeTask>? HomeTasks { get; init; }
+        public HomeTask? HomeTask { get; init; }
     }
 }

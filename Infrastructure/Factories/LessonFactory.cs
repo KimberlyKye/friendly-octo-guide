@@ -24,11 +24,11 @@ namespace Infrastructure.Factories
             _fileFactory = fileFactory ?? throw new ArgumentNullException(nameof(fileFactory));
         }
 
-        public async Task<Entities.Lesson> CreateAsync(DataModels.Lesson dataModel, IEnumerable<DataModels.HomeTask>? homeTasks = null)
+        public async Task<Entities.Lesson> CreateAsync(DataModels.Lesson dataModel, DataModels.HomeTask? homeTask = null)
         {
             var material = _fileFactory.Create(dataModel.Material);
-            var domainHomeTasks = homeTasks != null
-                ? await CreateHomeTasksAsync(homeTasks)
+            var domainHomeTask = homeTask != null
+                ? await _homeTaskFactory.CreateAsync(homeTask)
                 : null;
             Score? pScore = dataModel.Score != 0
                 ? new Score(dataModel.Score)
@@ -41,10 +41,9 @@ namespace Infrastructure.Factories
                 description: dataModel.Description,
                 date: dataModel.Date,
                 material: material,
-                homeTasks: domainHomeTasks,
+                homeTask: domainHomeTask,
                 score: pScore);
         }
-
         public Task<DataModels.Lesson> CreateDataModelAsync(Entities.Lesson domainEntity)
         {
             var materialPath = _fileFactory.GetFullPath(domainEntity.Material);
@@ -59,15 +58,6 @@ namespace Infrastructure.Factories
                 Material = materialPath,
                 Score = (int)domainEntity.Score
             });
-        }
-
-        private async Task<List<Entities.HomeTask>> CreateHomeTasksAsync(IEnumerable<DataModels.HomeTask> homeTasks)
-        {
-            var tasks = homeTasks
-                .Where(h => h != null)
-                .Select(ht => _homeTaskFactory.CreateAsync(ht));
-
-            return (await Task.WhenAll(tasks)).ToList();
         }
     }
 }

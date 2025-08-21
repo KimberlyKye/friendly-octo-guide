@@ -10,6 +10,6 @@ namespace Application.Models.Lesson
         public string Description { get; set; }
         public DateTime Date {  get; set; }
         public Domain.ValueObjects.File? Material { get; set; }
-        public List<HomeTask> HomeTasks { get; set; }
+        public HomeTask? HomeTask { get; set; }
     }
 }

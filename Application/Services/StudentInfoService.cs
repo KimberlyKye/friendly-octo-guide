@@ -63,7 +63,7 @@ namespace Application.Services
                 Description = lesson.Description,
                 Date = lesson.Date,
                 Material = lesson.Material,
-                HomeTasks = lesson.HomeTasks.ToList()
+                HomeTask = lesson.HomeTask
             }).ToList();
         }
 

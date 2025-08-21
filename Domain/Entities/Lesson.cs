@@ -20,7 +20,7 @@ namespace Entities
         private string _description;
         private DateTime _date;
         private File? _material;
-        private readonly List<HomeTask> _homeTasks = new(); Залей мЕйн Сделать только один и править Тесты и Фабрику
+        public HomeTask? HomeTask { get; set; }
         public Score? Score { get; private set; } 
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace Entities
         /// <param name="description">Описание занятия</param>
         /// <param name="date">Дата и время проведения</param>
         /// <param name="material">Учебный материал (опционально)</param>
-        /// <param name="homeTasks">Список домашних заданий</param>
+        /// <param name="homeTask">Список домашних заданий</param>
         /// <exception cref="ArgumentNullException">
         /// Возникает при передаче null для обязательных параметров
         /// </exception>
@@ -41,7 +41,7 @@ namespace Entities
                      string description,
                      DateTime date,
                      File? material = null,                     
-                     IEnumerable<HomeTask>? homeTasks = null,
+                     HomeTask? homeTask = null,
                      Score? score = null) : base(id)
         {
             _courseId = courseId;
@@ -49,10 +49,8 @@ namespace Entities
             _description = description ?? throw new ArgumentNullException(nameof(description));
             _date = date;
             _material = material;
-            if (homeTasks != null)
-            {
-                _homeTasks.AddRange(homeTasks);
-            }
+            HomeTask = homeTask;
+
             Score = score;
         }        
 
@@ -90,45 +88,6 @@ namespace Entities
         {
             get => _material;
             set => _material = value;
-        }
-
-        /// <summary>
-        /// Список домашних заданий (только для чтения)
-        /// </summary>
-        public ReadOnlyCollection<HomeTask> HomeTasks => _homeTasks.AsReadOnly();
-
-        /// <summary>
-        /// Добавляет домашнее задание к занятию
-        /// </summary>
-        /// <param name="homeTask">Домашнее задание для добавления</param>
-        /// <exception cref="ArgumentNullException">
-        /// Возникает при попытке добавить null
-        /// </exception>
-        public void AddHomeTask(HomeTask homeTask)
-        {
-            if (homeTask == null) throw new ArgumentNullException(nameof(homeTask));
-            _homeTasks.Add(homeTask);
-        }
-
-        /// <summary>
-        /// Удаляет домашнее задание из занятия
-        /// </summary>
-        /// <param name="homeTask">Домашнее задание для удаления</param>
-        /// <returns>
-        /// true - если задание было успешно удалено,
-        /// false - если задание не найдено в списке
-        /// </returns>
-        public bool RemoveHomeTask(HomeTask homeTask)
-        {
-            return _homeTasks.Remove(homeTask);
-        }
-
-        /// <summary>
-        /// Проверяет, содержит ли занятие указанное домашнее задание
-        /// </summary>
-        public bool ContainsHomeTask(HomeTask homeTask)
-        {
-            return _homeTasks.Contains(homeTask);
-        }
+        }        
     }
 }
