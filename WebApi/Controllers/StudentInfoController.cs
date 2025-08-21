@@ -142,7 +142,7 @@ namespace WebApi.Controllers
             return Ok(response);
         }
         /// <summary>
-        /// Метод получения полной информации о уроке и сданных домашних работах
+        /// Метод получения информации о сданных домашних работах
         /// </summary>
         /// <param name="lessonId"></param>
         /// <param name="studentId"></param>
