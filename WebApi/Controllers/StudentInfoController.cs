@@ -136,7 +136,7 @@ namespace WebApi.Controllers
                 Description = lesson.Description,
                 Date = lesson.Date,
                 Material = lesson.Material,
-                HomeTasks = lesson.HomeTask
+                HomeTask = lesson.HomeTask
             }).ToList();
 
             return Ok(response);

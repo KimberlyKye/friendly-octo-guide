@@ -50,7 +50,7 @@ namespace Infrastructure.Repositories
                             && l.Date >= startDate.ToUniversalTime()
                             && l.Date <= endDate.ToUniversalTime())
                 from homeTasks in _context.HomeTasks.Where(hTs => hTs.LessonId == lessons.Id
-                            && hTs.StartDate >= startDate.ToUniversalTime()
+                            && hTs.EndDate >= startDate.ToUniversalTime()
                             && hTs.StartDate <= endDate.ToUniversalTime()) //<=================================
                 where student.Id == studentId
                             && student.RoleId == (int)RoleEnum.Student

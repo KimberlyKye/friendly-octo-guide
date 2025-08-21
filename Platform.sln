@@ -17,7 +17,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ValueObjects", "Domain\Valu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entities", "Domain\Entities\Entities.csproj", "{5C2ED862-5C49-4BE8-BFD2-94DBA6E809C7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RepositoriesAbstractions", "RepositoriesAbstractions\RepositoriesAbstractions.csproj", "{FFF98589-6F1F-4FED-AFBE-C04FBC24DE84}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RepositoriesAbstractions", "RepositoriesAbstractions\RepositoriesAbstractions.csproj", "{FFF98589-6F1F-4FED-AFBE-C04FBC24DE84}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Models", "Models", "{C9C92589-56BA-43AE-9AFA-DE3C3869B256}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -61,6 +63,7 @@ Global
 		{4B77C7D8-EA00-4996-AD9B-C27BF1214B68} = {99EC633F-4CBA-4C7F-A289-CD1E5CE7DA48}
 		{5C2ED862-5C49-4BE8-BFD2-94DBA6E809C7} = {99EC633F-4CBA-4C7F-A289-CD1E5CE7DA48}
 		{FFF98589-6F1F-4FED-AFBE-C04FBC24DE84} = {99EC633F-4CBA-4C7F-A289-CD1E5CE7DA48}
+		{C9C92589-56BA-43AE-9AFA-DE3C3869B256} = {99EC633F-4CBA-4C7F-A289-CD1E5CE7DA48}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2328DB31-442C-49C6-A46B-4ADAACE6716C}

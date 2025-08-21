@@ -24,22 +24,22 @@ namespace Infrastructure.Factories
             _fileFactory = fileFactory ?? throw new ArgumentNullException(nameof(fileFactory));
         }
 
-        public async Task<Entities.Lesson> CreateAsync(DataModels.Lesson dataModel, DataModels.HomeTask? homeTask = null)
+        public async Task<Entities.Lesson> CreateAsync(DataModels.Lesson lesson, DataModels.HomeTask? homeTask = null)
         {
-            var material = _fileFactory.Create(dataModel.Material);
+            var material = _fileFactory.Create(lesson.Material);
             var domainHomeTask = homeTask != null
                 ? await _homeTaskFactory.CreateAsync(homeTask)
                 : null;
-            Score? pScore = dataModel.Score != 0
-                ? new Score(dataModel.Score)
+            Score? pScore = lesson.Score != 0
+                ? new Score(lesson.Score)
                 : null;
 
             return new Entities.Lesson(
-                id: dataModel.Id,
-                courseId : dataModel.CourseId,
-                lessonName: new LessonName(dataModel.Title),
-                description: dataModel.Description,
-                date: dataModel.Date,
+                id: lesson.Id,
+                courseId : lesson.CourseId,
+                lessonName: new LessonName(lesson.Title),
+                description: lesson.Description,
+                date: lesson.Date,
                 material: material,
                 homeTask: domainHomeTask,
                 score: pScore);
