@@ -204,14 +204,24 @@ namespace Infrastructure.Repositories
 
         async Task IStudentInfoRepository.AddStudentsToCourse(int courseId, int[] studentIds)
         {
-            var entries = studentIds.Select(id => new StudentCourse
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
             {
-                CourseId = courseId,
-                StudentId = id
-            });
+                var entries = studentIds.Select(id => new StudentCourse
+                {
+                    CourseId = courseId,
+                    StudentId = id
+                });
 
-            _context.StudentCourses.AddRange(entries);
-            await _context.SaveChangesAsync();
+                _context.StudentCourses.AddRange(entries);
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
         }
 
 
