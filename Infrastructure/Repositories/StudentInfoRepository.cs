@@ -227,12 +227,22 @@ namespace Infrastructure.Repositories
 
         async Task IStudentInfoRepository.RemoveStudentsFromCourse(int courseId, int[] studentIds)
         {
-            var entriesToRemove = await _context.StudentCourses
-                .Where(sc => sc.CourseId == courseId && studentIds.Contains(sc.StudentId))
-                .ToListAsync();
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                var entriesToRemove = await _context.StudentCourses
+                    .Where(sc => sc.CourseId == courseId && studentIds.Contains(sc.StudentId))
+                    .ToListAsync();
 
-            _context.StudentCourses.RemoveRange(entriesToRemove);
-            await _context.SaveChangesAsync();
+                _context.StudentCourses.RemoveRange(entriesToRemove);
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
         }
 
         async Task<bool> IStudentInfoRepository.CheckIfUserInCourse(int userId, int courseId)
