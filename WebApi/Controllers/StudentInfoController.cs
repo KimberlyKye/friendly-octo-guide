@@ -50,7 +50,7 @@ namespace WebApi.Controllers
         {
             if (studentId <= 0) { return BadRequest("studentId не может быть меньше или равен 0 "); }
 
-            var  result = await _studentInfoService.GetAllCourses(studentId);
+            var result = await _studentInfoService.GetAllCourses(studentId);
 
             return Ok(result);
         }
@@ -85,7 +85,8 @@ namespace WebApi.Controllers
 
             var result = await _studentInfoService.GetCourseInfo(courseId, studentId);
 
-            if (result is null) { return NotFound(); };
+            if (result is null) { return NotFound(); }
+            ;
 
             return Ok(new CourseInfoForStudentResponse
             {
@@ -125,7 +126,8 @@ namespace WebApi.Controllers
             if (courseId <= 0) { return BadRequest("courseId не может быть меньше или равен 0 "); }
 
             var result = await _studentInfoService.GetLessonsInfoByCourse(courseId, studentId);
-            if (result is null) { return NotFound(); };
+            if (result is null) { return NotFound(); }
+            ;
 
             var response = result.Select(lesson => new LessonInfoByCourseResponse
             {
@@ -139,5 +141,145 @@ namespace WebApi.Controllers
 
             return Ok(response);
         }
+
+        /// <summary>
+        /// Метод получения списка студентов, участвующих в курсе
+        /// </summary>
+        /// <param name="courseId"></param>
+        /// <returns>Список студентов курса</returns>
+        /// <remarks>
+        /// Пример запроса:
+        ///     GET /list/include-in-course/101
+        ///</remarks>
+        [HttpGet("list/include-in-course/{courseId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetStudentListByCourse(int courseId)
+        {
+            if (courseId <= 0)
+            {
+                return BadRequest("courseId не может быть меньше или равен 0 ");
+            }
+            var result = await _studentInfoService.GetAllStudentsByCourse(courseId);
+            if (result is null)
+            {
+                return Ok(result);
+            }
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Метод получения списка студентов, не участвующих в курсе
+        /// </summary>
+        /// <param name="courseId"></param>
+        /// <param name="startRow"></param>
+        /// <param name="endRow"></param>
+        /// <returns>Список студентов, готовых для добавления на курс</returns>
+        /// <remarks>
+        /// Пример запроса:
+        ///     GET /list/not-on-course/101
+        ///</remarks>
+        [HttpGet("list/not-on-course/{courseId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetStudentListOutsideFromCourse([FromRoute] int courseId, [FromQuery] int startRow, [FromQuery] int endRow)
+        {
+            if (courseId <= 0)
+            {
+                return BadRequest("courseId не может быть меньше или равен 0 ");
+            }
+            var result = await _studentInfoService.GetAllStudentsOutsideCourse(courseId, startRow, endRow);
+            if (result is null)
+            {
+                return Ok(result);
+            }
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Метод добавления студентов в курс
+        /// </summary>
+        /// <param name="courseId"></param>
+        /// <param name="studentIds"></param>
+        /// <returns>Возвращает сообщение об успешности/неуспешности операции</returns>
+        /// <remarks>
+        /// Пример запроса:
+        /// POST /add-to-course
+        /// {
+        ///    "courseId": 111,
+        ///    "studentIds": [1,2,3]
+        /// }
+        /// </remarks>
+        [HttpPost("add-to-course")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> AddStudentToCourse([FromBody] int courseId, [FromBody] int[] studentIds)
+        {
+            if (courseId <= 0)
+            {
+                return BadRequest("courseId не может быть меньше или равен 0 ");
+            }
+            var result = await _studentInfoService.AddStudentsToCourse(courseId, studentIds);
+            if (result.Count() == studentIds.Count())
+            {
+                return Ok("Студенты успешно добавлены");
+            }
+
+            var unsuccess = studentIds.Except(result);
+
+            if (unsuccess.Count() == studentIds.Count())
+            {
+                return BadRequest("Не удалось добавить всех студентов!");
+            }
+
+            return Ok("Студенты частично успешно добавлены, однако в процессе возникли проблемы. При необходимости обновите страницу и повторите операцию. Не удалось добавить следующее количество студентов: " + unsuccess.Count() + " с ID: " + string.Join(", ", unsuccess));
+        }
+
+        /// <summary>
+        /// Метод удаления студентов из курса
+        /// </summary>
+        /// <param name="courseId"></param>
+        /// <param name="studentIds"></param>
+        /// <returns> Возвращает сообщение об успешности/неуспешности операции</returns>
+        /// <remarks>
+        /// Пример запроса:
+        /// POST /remove-from-course
+        /// {
+        ///    "courseId": 111,
+        ///    "studentIds": [1,2,3]
+        /// }
+        /// </remarks>
+        [HttpPost("remove-from-course")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> RemoveStudentsFromCourse([FromBody] int courseId, [FromBody] int[] studentIds)
+        {
+            if (courseId <= 0)
+            {
+                return BadRequest("courseId не может быть меньше или равен 0 ");
+            }
+            var result = await _studentInfoService.RemoveStudentsFromCourse(courseId, studentIds);
+            if (result.Count() == studentIds.Count())
+            {
+                return Ok("Студенты успешно удалены");
+            }
+            var unsuccess = studentIds.Except(result);
+
+            if (unsuccess.Count() == studentIds.Count())
+            {
+                return BadRequest("Не удалось удалить всех студентов!");
+            }
+
+            return Ok("Студенты частично успешно удалены, однако в процессе возникли проблемы. При необходимости обновите страницу и повторите операцию. Не удалось удалить следующее количество студентов: " + unsuccess.Count() + " с ID: " + string.Join(", ", unsuccess));
+        }
+
     }
 }

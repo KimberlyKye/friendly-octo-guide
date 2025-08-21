@@ -88,7 +88,8 @@ namespace Infrastructure.Repositories
                 select new { Course = course, Teacher = teacher })
                 .FirstOrDefaultAsync();
 
-            if (coursesData is null) { return null; };
+            if (coursesData is null) { return null; }
+            ;
 
             var domainCourse = await _courseFactory.CreateFrom(
                     courseModel: coursesData.Course,
@@ -145,6 +146,127 @@ namespace Infrastructure.Repositories
             }
 
             return domainCourse;
+        }
+
+        Task<Student?> IStudentInfoRepository.GetStudentById(int studentId)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<List<Entities.Course>> IStudentInfoRepository.GetAllCourses(int studentId)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<Entities.Course?> IStudentInfoRepository.GetCourseInfo(int courseId, int studentId)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<Entities.Course> IStudentInfoRepository.GetAllCourseInfo(int courseId, int studentId)
+        {
+            throw new NotImplementedException();
+        }
+
+        async Task<List<Student>> IStudentInfoRepository.GetAllStudentsByCourse(int courseId)
+        {
+            var students = await (
+                from sc in _context.StudentCourses
+                where sc.CourseId == courseId
+                join user in _context.Users on sc.StudentId equals user.Id
+                select _studentFactory.CreateFrom(user)
+            ).ToListAsync();
+
+            return students;
+        }
+
+        async Task<List<Student>> IStudentInfoRepository.GetAllStudentsOutsideCourse(int courseId, int startRow, int endRow)
+        {
+            // Получаем Id студентов, которые уже находятся в курсе
+            var enrolledStudentIds = await _context.StudentCourses
+                .Where(sc => sc.CourseId == courseId)
+                .Select(sc => sc.StudentId)
+                .ToListAsync();
+
+            // Получаем всех студентов (Role = 2), исключая тех, кто уже в курсе
+            var students = await _context.Users
+                .Where(user => user.RoleId == 2 && !enrolledStudentIds.Contains(user.Id))
+                .OrderBy(user => user.Id)  // Сортировка важна для корректной пагинации
+                .Skip(startRow)
+                .Take(endRow - startRow + 1)  // Пагинация
+                .ToListAsync();
+
+            // Преобразуем в Student модели
+            var result = students.Select(_studentFactory.CreateFrom).ToList();
+            return result;
+        }
+
+
+        async Task IStudentInfoRepository.AddStudentsToCourse(int courseId, int[] studentIds)
+        {
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                var entries = studentIds.Select(id => new StudentCourse
+                {
+                    CourseId = courseId,
+                    StudentId = id
+                });
+
+                _context.StudentCourses.AddRange(entries);
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
+        }
+
+
+        async Task IStudentInfoRepository.RemoveStudentsFromCourse(int courseId, int[] studentIds)
+        {
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                var entriesToRemove = await _context.StudentCourses
+                    .Where(sc => sc.CourseId == courseId && studentIds.Contains(sc.StudentId))
+                    .ToListAsync();
+
+                _context.StudentCourses.RemoveRange(entriesToRemove);
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
+        }
+
+        async Task<bool> IStudentInfoRepository.CheckIfUserInCourse(int userId, int courseId)
+        {
+            return await _context.StudentCourses
+                .AnyAsync(sc => sc.StudentId == userId && sc.CourseId == courseId);
+        }
+
+        async Task<List<int>> IStudentInfoRepository.GetStudentIdsInCourse(int courseId, int[] studentIds)
+        {
+            return await _context.StudentCourses
+                .Where(sc => sc.CourseId == courseId && studentIds.Contains(sc.StudentId))
+                .Select(sc => sc.StudentId)
+                .ToListAsync();
+        }
+
+        async Task<List<int>> IStudentInfoRepository.GetStudentIdsNotInCourse(int courseId, int[] studentIds)
+        {
+            var enrolledStudentIds = await _context.StudentCourses
+    .Where(sc => sc.CourseId == courseId && studentIds.Contains(sc.StudentId))
+    .Select(sc => sc.StudentId)
+    .ToListAsync();
+
+            return studentIds.Except(enrolledStudentIds).ToList();
         }
     }
 }
