@@ -1,6 +1,4 @@
-﻿using Domain.ValueObjects;
-
-namespace Tests.Domain.ValueObjects
+﻿namespace Tests.Domain.ValueObjects
 {
     class FullNameTests
     {

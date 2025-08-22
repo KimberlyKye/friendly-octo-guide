@@ -1,13 +1,10 @@
+using Application.Services.Abstractions;
+using Common.Domain.Entities;
+using Common.Domain.ValueObjects;
+using Common.Domain.ValueObjects.Enums;
 using Microsoft.AspNetCore.Mvc;
-using Infrastructure;
 using WebApi.Dto.HomeWork.Requests;
 using WebApi.Dto.HomeWork.Responses;
-using Entities;
-using ValueObjects.Enums;
-using Domain.ValueObjects;
-using ValueObjects;
-using Application.Services.Abstractions;
-using Application.Services;
 
 namespace WebApi.Controllers;
 
@@ -104,7 +101,7 @@ public class HomeWorkController : ControllerBase
         {
             var material = await _fileStorageService.SaveFileAsync(
                 request.File.OpenReadStream(), request.File.FileName);
-            submission.Material = new Domain.ValueObjects.File(material);
+            submission.Material = new Common.Domain.ValueObjects.File(material);
         }
 
         var result = await _homeWorkService.SubmitHomeworkAsync(submission);

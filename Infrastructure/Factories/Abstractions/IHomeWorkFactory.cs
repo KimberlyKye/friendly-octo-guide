@@ -1,12 +1,4 @@
-﻿using Entities;
-using Infrastructure.DataModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Infrastructure.Factories.Abstractions
+﻿namespace Infrastructure.Factories.Abstractions
 {
     public interface IHomeWorkFactory
     {

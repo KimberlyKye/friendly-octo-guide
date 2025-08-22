@@ -1,9 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Domain.ValueObjects;
-using Entities;
+using Common.Domain.Entities;
+using Common.Domain.ValueObjects;
 using Infrastructure.Factories.Abstractions;
 
 namespace Infrastructure.Factories

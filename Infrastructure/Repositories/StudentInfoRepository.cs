@@ -1,17 +1,10 @@
-﻿using Domain.ValueObjects;
-using Domain.ValueObjects.Enums;
-using Entities;
+﻿using Common.Domain.Entities;
+using Common.Domain.ValueObjects;
+using Common.Domain.ValueObjects.Enums;
 using Infrastructure.Contexts;
-using Infrastructure.DataModels;
-using Infrastructure.Factories;
 using Infrastructure.Factories.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using RepositoriesAbstractions.Abstractions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Repositories
 {
@@ -49,7 +42,7 @@ namespace Infrastructure.Repositories
 
             return await _studentFactory.CreateFromAsync(studentInfo);
         }
-        public async Task<List<Entities.Course>> GetAllCourses(int studentId)
+        public async Task<List<Common.Domain.Entities.Course>> GetAllCourses(int studentId)
         {
             var coursesData = await (
                 from student in _context.Users.AsNoTracking()
@@ -64,7 +57,7 @@ namespace Infrastructure.Repositories
                 select new { Course = course, Teacher = teacher })
                 .ToListAsync();
 
-            var result = new List<Entities.Course>();
+            var result = new List<Common.Domain.Entities.Course>();
             foreach (var item in coursesData)
             {
                 var domainCourse = await _courseFactory.CreateFrom(
@@ -76,7 +69,7 @@ namespace Infrastructure.Repositories
             }
             return result;
         }
-        public async Task<Entities.Course?> GetCourseInfo(int courseId, int studentId)
+        public async Task<Common.Domain.Entities.Course?> GetCourseInfo(int courseId, int studentId)
         {
             var courseData = await (
                 from course in _context.Courses.AsNoTracking()
@@ -92,13 +85,13 @@ namespace Infrastructure.Repositories
 
             Score? averageScore;
             averageScore = await GetCourseAverageScore(courseId, studentId);
-            
+
             return await _courseFactory.CreateFrom(
                 courseModel: courseData.course,
                 teacher: courseData.teacher,
                 averageScore: averageScore);
         }
-        public async Task<Entities.Course?> GetAllCourseInfo(int courseId, int studentId)
+        public async Task<Common.Domain.Entities.Course?> GetAllCourseInfo(int courseId, int studentId)
         {
             var coursesData = await (
                 from course in _context.Courses.AsNoTracking()
@@ -153,8 +146,9 @@ namespace Infrastructure.Repositories
             foreach (var lessonGroup in lessonsWithTasks)
             {
                 var domainLesson = await _lessonFactory.CreateAsync(
-                    lessonGroup.Lesson,
-                    lessonGroup.HomeTasks);
+                    lessonGroup.Lesson);
+                    //,
+                    //lessonGroup.HomeTasks);
 
                 domainCourse.AddLesson(domainLesson);
             }
@@ -179,10 +173,10 @@ namespace Infrastructure.Repositories
             return new Score((int)Math.Round(averageScore ?? 0));
         }
 
-        public async Task<Entities.Lesson?> GetHomeworksInfo(int lessonId, int studentId)
+        public async Task<Common.Domain.Entities.Lesson?> GetHomeworksInfo(int lessonId, int studentId)
         {
             var lessonData = await (
-                from lesson in _context.Lessons.AsNoTracking()                
+                from lesson in _context.Lessons.AsNoTracking()
                 from homeTasks in _context.HomeTasks
                     .Where(hTs => hTs.LessonId == lessonId)
                                 .ToList()
@@ -190,11 +184,11 @@ namespace Infrastructure.Repositories
                 from homeWorks in _context.HomeWorks
                     .Where(hWr => hWr.HomeTaskId == homeTasks.Id &&
                                   hWr.StudentId == studentId)
-                                .ToList()                
+                                .ToList()
                     .DefaultIfEmpty()
                 where lesson.Id == lessonId
                 select new
-                {                   
+                {
                     homeTasks,
                     homeWorks
                 })
@@ -203,7 +197,7 @@ namespace Infrastructure.Repositories
 
             if (lessonData is null) { return null; }
 
-           
+
 
 
 

@@ -1,4 +1,3 @@
-using Entities;
 using Infrastructure.DataModels;
 
 namespace Infrastructure.Factories.Abstractions

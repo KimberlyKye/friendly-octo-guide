@@ -2,10 +2,7 @@
 using Application.Models.Lesson;
 using Application.Models.Teacher.Responses;
 using Application.Services.Abstractions;
-using Domain.ValueObjects;
-using Domain.ValueObjects.Enums;
-using Entities;
-using Infrastructure.DataModels;
+using Common.Domain.ValueObjects.Enums;
 using RepositoriesAbstractions.Abstractions;
 
 namespace Application.Services
@@ -22,7 +19,7 @@ namespace Application.Services
         public async Task<List<StudentAllCoursesModel>> GetAllCourses(int studentId)
         {
             var courses = await _studentInfoRepository.GetAllCourses(studentId);
-            
+
             var result = new List<StudentAllCoursesModel>();
             foreach (var course in courses)
             {

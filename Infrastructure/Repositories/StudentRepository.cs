@@ -1,13 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Infrastructure.Contexts;
-using Infrastructure.DataModels;
 using Infrastructure.Factories.Abstractions;
-using RepositoriesAbstractions.Abstractions;
 using Microsoft.EntityFrameworkCore;
-using Infrastructure.Factories;
+using RepositoriesAbstractions.Abstractions;
 
 namespace Infrastructure.Repositories
 {

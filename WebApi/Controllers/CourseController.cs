@@ -2,7 +2,6 @@ using Application.Models.Course;
 using Application.Services.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Dto.Course.Requests;
-using WebApi.Dto.Course.Responses;
 
 namespace WebApi.Controllers;
 

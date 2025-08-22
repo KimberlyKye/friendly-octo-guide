@@ -11,6 +11,6 @@ namespace WebApi.Dto.Student.Requests
         /// ID студента
         /// </summary>
         [Required(ErrorMessage = "ID студента обязателен")]
-        public int Id { get; set; } 
+        public int Id { get; set; }
     }
 }

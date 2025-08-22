@@ -18,12 +18,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Using Include="NUnit.Framework" />
+    <ProjectReference Include="..\Common\Common.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Domain\ValueObjects\ValueObjects.csproj" />
-    <ProjectReference Include="..\Domain\Entities\Entities.csproj" />
+    <Using Include="NUnit.Framework" />
   </ItemGroup>
 
 </Project>

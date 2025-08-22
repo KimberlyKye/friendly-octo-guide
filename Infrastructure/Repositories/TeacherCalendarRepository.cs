@@ -1,9 +1,4 @@
-﻿using Domain.ValueObjects;
-using Domain.ValueObjects.Enums;
-using Entities;
-using Infrastructure.Contexts;
-using Infrastructure.DataModels;
-using Infrastructure.Factories;
+﻿using Infrastructure.Contexts;
 using Infrastructure.Factories.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using RepositoriesAbstractions.Abstractions;
@@ -29,7 +24,7 @@ namespace Infrastructure.Repositories
             _lessonFactory = lessonFactory;
         }
         public async Task<IReadOnlyCollection<Entities.Course>> GetPeriodCalendarData(int teacherId, DateTime startDate, DateTime endDate)
-        {  
+        {
             var data = await (
                 from teacher in _context.Users.AsNoTracking()
                 from course in _context.Courses.Where(c => c.TeacherId == teacher.Id
@@ -60,16 +55,16 @@ namespace Infrastructure.Repositories
             var result = new List<Entities.Course>();
 
             foreach (var group in groupedData)
-            {                
+            {
                 var domainCourse = await _courseFactory.CreateFrom(group.Course, group.Teacher);
 
                 var domainLessons = group.Lessons
                     .Select(lesson => _lessonFactory.CreateAsync(lesson, null).Result)
                     .ToList();
                 domainCourse.AddLessons(domainLessons);
-                result.Add(domainCourse);                
+                result.Add(domainCourse);
             }
-            return result.AsReadOnly();            
+            return result.AsReadOnly();
         }
     }
 }

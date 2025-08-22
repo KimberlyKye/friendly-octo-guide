@@ -1,8 +1,4 @@
-﻿using Domain.ValueObjects;
-using Infrastructure.DataModels;
-using Infrastructure.Factories.Abstractions;
-using System;
-using System.IO;
+﻿using Infrastructure.Factories.Abstractions;
 
 namespace Infrastructure.Factories
 {

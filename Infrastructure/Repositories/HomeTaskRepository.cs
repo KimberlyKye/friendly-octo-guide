@@ -1,10 +1,7 @@
 namespace Infrastructure.Repositories;
-
-using Entities;
-using RepositoriesAbstractions;
-using Microsoft.EntityFrameworkCore;
 using Infrastructure.Contexts;
 using Infrastructure.Factories.Abstractions;
+using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
 public class HomeTaskRepository : IHomeTaskRepository

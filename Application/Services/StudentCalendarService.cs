@@ -1,14 +1,8 @@
-﻿using Application.Models.Calendar.Requests;
-using Application.Models.Teacher.Responses;
-using Application.Services.Abstractions;
-using Entities;
-using Infrastructure.Repositories;
+﻿using Application.Services.Abstractions;
+using Common.Domain.Entities;
+using Common.Models.Calendar.Requests;
+using Common.Models.Calendar.Responses;
 using RepositoriesAbstractions.Abstractions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Services
 {
@@ -74,7 +68,7 @@ namespace Application.Services
 
                     // Обработка домашних заданий урока
                     if (lesson.HomeTask != null)
-                    {   
+                    {
                         homeTasksList.Add(new CalendarHomeTaskModel
                         {
                             CourseId = course.Id,

@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Dto.Course.Responses;
 using WebApi.Dto.Lesson.Responses;
-using WebApi.Dto.Teacher.Requests;
 
 namespace WebApi.Controllers
 {
@@ -50,7 +49,7 @@ namespace WebApi.Controllers
         {
             if (studentId <= 0) { return BadRequest("studentId не может быть меньше или равен 0 "); }
 
-            var  result = await _studentInfoService.GetAllCourses(studentId);
+            var result = await _studentInfoService.GetAllCourses(studentId);
 
             return Ok(result);
         }
@@ -86,7 +85,8 @@ namespace WebApi.Controllers
 
             var result = await _studentInfoService.GetCourseInfo(courseId, studentId);
 
-            if (result is null) { return NotFound(); };
+            if (result is null) { return NotFound(); }
+            ;
 
             return Ok(new CourseInfoForStudentResponse
             {
@@ -127,7 +127,8 @@ namespace WebApi.Controllers
             if (courseId <= 0 || studentId <= 0) { return BadRequest("courseId или studentId не может быть меньше или равен 0 "); }
 
             var result = await _studentInfoService.GetLessonsInfoByCourse(courseId, studentId);
-            if (result is null) { return NotFound(); };
+            if (result is null) { return NotFound(); }
+            ;
 
             var response = result.Select(lesson => new LessonInfoByCourseResponse
             {
@@ -171,7 +172,8 @@ namespace WebApi.Controllers
             if (lessonId <= 0 || studentId <= 0) { return BadRequest("lessonId или studentId не может быть меньше или равен 0 "); }
 
             var result = await _studentInfoService.GetHomeworksInfo(lessonId, studentId);
-            if (result is null) { return NotFound(); };
+            if (result is null) { return NotFound(); }
+            ;
 
 
 

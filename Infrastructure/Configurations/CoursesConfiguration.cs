@@ -24,7 +24,7 @@ namespace Infrastructure.Configurations
 
             builder.Property(c => c.Description)
                 .IsRequired();
-                //.HasMaxLength(2000);  <========= Нужно ли ограничение????
+            //.HasMaxLength(2000);  <========= Нужно ли ограничение????
 
             builder.Property(c => c.StartDate)
                 .IsRequired()

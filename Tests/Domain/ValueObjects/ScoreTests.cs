@@ -1,8 +1,4 @@
-﻿using Domain.ValueObjects;
-using NUnit.Framework;
-using System;
-
-namespace Tests.Domain.ValueObjects
+﻿namespace Tests.Domain.ValueObjects
 {
     [TestFixture]
     public class ScoreTests

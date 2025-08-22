@@ -1,26 +1,20 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Application.Services.Abstractions;
 using Application.Services;
+using Application.Services.Abstractions;
+using Common.Domain.Entities;
+using Common.RepositoriesAbstractions;
+using Common.RepositoriesAbstractions.Abstractions;
 using Infrastructure.Contexts;
 using Infrastructure.Factories;
 using Infrastructure.Factories.Abstractions;
-using Microsoft.EntityFrameworkCore;
-using Npgsql.EntityFrameworkCore.PostgreSQL;
 using Infrastructure.Repositories;
-using Entities;
-using System.Reflection;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using Serilog;
-using WebApi.Middleware;
-using WebApi.Filters;
-using RepositoriesAbstractions.Abstractions;
-using WebApi.Dto;
-using RepositoriesAbstractions;
-using Application.Models;
 using Npgsql;
+using RepositoriesAbstractions.Abstractions;
+using Serilog;
+using System.Reflection;
+using WebApi.Filters;
+using WebApi.Middleware;
 
 namespace WebApi
 {
@@ -133,7 +127,7 @@ namespace WebApi
             services.AddTransient<IHomeTaskFactory, HomeTaskFactory>();
             services.AddTransient<ITeacherFactory, TeacherFactory>();
             services.AddTransient<IFileFactory, FileFactory>();
-            services.AddTransient<IBaseFactory<Entities.HomeWork, Infrastructure.DataModels.HomeWork>, HomeWorkFactory>();
+            services.AddTransient<IBaseFactory<Common.Domain.Entities.HomeWork, Infrastructure.DataModels.HomeWork>, HomeWorkFactory>();
             services.AddTransient<IHomeTaskFactory, HomeTaskFactory>();
 
             // 5. MVC
@@ -157,8 +151,8 @@ namespace WebApi
 
             // if (env.IsDevelopment())
             // {
-                app.UseSwagger();
-                app.UseSwaggerUI();
+            app.UseSwagger();
+            app.UseSwaggerUI();
             // }
 
             app.UseHttpsRedirection();

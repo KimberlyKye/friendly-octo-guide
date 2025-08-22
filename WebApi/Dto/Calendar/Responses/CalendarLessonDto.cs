@@ -14,7 +14,7 @@
         /// Название курса
         /// </summary>
         public string CourseName { get; set; }
-                
+
         /// <summary>
         /// Идентификатор занятия
         /// </summary>

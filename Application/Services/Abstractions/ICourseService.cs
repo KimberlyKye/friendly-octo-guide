@@ -1,5 +1,4 @@
 using Application.Models.Course;
-using Entities;
 
 namespace Application.Services.Abstractions;
 

@@ -29,7 +29,7 @@ namespace Infrastructure.Configurations
 
             builder.Property(l => l.Material)
                 .IsRequired(false); // допускаем NULL для Material
-            
+
             builder.HasOne<Course>()              // Указываем тип связанной сущности (Course)
                .WithMany()                        // Указываем, что у Course много Lesson (но без навигации)
                .HasForeignKey(l => l.CourseId)    // Внешний ключ в Lesson

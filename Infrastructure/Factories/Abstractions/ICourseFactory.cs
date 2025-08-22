@@ -1,5 +1,5 @@
-using Domain.ValueObjects;
-using Entities;
+using Common.Domain.Entities;
+using Common.Domain.ValueObjects;
 
 namespace Infrastructure.Factories.Abstractions
 {

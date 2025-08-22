@@ -43,6 +43,6 @@
         /// <summary>
         /// Дата дедлайна сдачи дз
         /// </summary>
-        public DateTime DateEnd { get; set; }               
+        public DateTime DateEnd { get; set; }
     }
 }

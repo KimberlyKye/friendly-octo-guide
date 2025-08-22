@@ -1,13 +1,4 @@
-﻿using Domain.Entities;
-using Domain.ValueObjects;
-using Entities;
-using NUnit.Framework;
-using System;
-using ValueObjects;
-using ValueObjects.Enums;
-using File = Domain.ValueObjects.File;
-
-namespace Tests.Domain.Entities
+﻿namespace Tests.Domain.Entities
 {
     [TestFixture]
     public class HomeWorkTests

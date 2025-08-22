@@ -1,13 +1,5 @@
-// Infrastructure/Factories/LessonFactory.cs
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Domain.ValueObjects;
-using Entities;
-using Infrastructure.DataModels;
+using Common.Domain.ValueObjects;
 using Infrastructure.Factories.Abstractions;
-using File = Domain.ValueObjects.File;
 
 namespace Infrastructure.Factories
 {
@@ -24,7 +16,7 @@ namespace Infrastructure.Factories
             _fileFactory = fileFactory ?? throw new ArgumentNullException(nameof(fileFactory));
         }
 
-        public async Task<Entities.Lesson> CreateAsync(DataModels.Lesson lesson, DataModels.HomeTask? homeTask = null)
+        public async Task<Common.Domain.Entities.Lesson> CreateAsync(DataModels.Lesson lesson, DataModels.HomeTask? homeTask = null)
         {
             var material = _fileFactory.Create(lesson.Material);
             var domainHomeTask = homeTask != null
@@ -34,9 +26,9 @@ namespace Infrastructure.Factories
                 ? new Score(lesson.Score)
                 : null;
 
-            return new Entities.Lesson(
+            return new Common.Domain.Entities.Lesson(
                 id: lesson.Id,
-                courseId : lesson.CourseId,
+                courseId: lesson.CourseId,
                 lessonName: new LessonName(lesson.Title),
                 description: lesson.Description,
                 date: lesson.Date,
@@ -44,7 +36,7 @@ namespace Infrastructure.Factories
                 homeTask: domainHomeTask,
                 score: pScore);
         }
-        public Task<DataModels.Lesson> CreateDataModelAsync(Entities.Lesson domainEntity)
+        public Task<DataModels.Lesson> CreateDataModelAsync(Common.Domain.Entities.Lesson domainEntity)
         {
             var materialPath = _fileFactory.GetFullPath(domainEntity.Material);
 

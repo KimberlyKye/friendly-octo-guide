@@ -1,15 +1,8 @@
-﻿using Domain.ValueObjects.Enums;
-using Entities;
+﻿using Common.Domain.ValueObjects.Enums;
 using Infrastructure.Contexts;
-using Infrastructure.Factories;
 using Infrastructure.Factories.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using RepositoriesAbstractions.Abstractions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Repositories
 {
@@ -34,7 +27,7 @@ namespace Infrastructure.Repositories
             _lessonFactory = lessonFactory;
             _homeTaskFactory = homeTaskFactory;
         }
-        public async Task<IReadOnlyCollection<Entities.Course>> GetPeriodCalendarData(int studentId, DateTime startDate, DateTime endDate)
+        public async Task<IReadOnlyCollection<Common.Domain.Entities.Course>> GetPeriodCalendarData(int studentId, DateTime startDate, DateTime endDate)
         {
             var data = await (
                 from student in _context.Users.AsNoTracking()
@@ -79,23 +72,21 @@ namespace Infrastructure.Repositories
                             .ToList()
                     });
 
-            var result = new List<Entities.Course>();
+            var result = new List<Common.Domain.Entities.Course>();
 
             foreach (var group in groupedData)
             {
                 // Создаем доменный курс
                 var domainCourse = await _courseFactory.CreateFrom(group.Course, group.Teacher);
-                var domainLessons = new List<Entities.Lesson>();
+                var domainLessons = new List<Common.Domain.Entities.Lesson>();
 
                 foreach (var lessonGroup in group.Lessons)
                 {
-                    // Получаем DataModels.HomeTask для текущего урока
-                    var dataModelHomeTasks = lessonGroup.HomeTasks;
-
                     // Создаем урок, передавая DataModels.HomeTask
                     var domainLesson = await _lessonFactory.CreateAsync(
-                        lessonGroup.Lesson,
-                        dataModelHomeTasks);
+                        lessonGroup.Lesson);
+                        //,
+                        //lessonGroup.HomeTasks);
 
                     domainLessons.Add(domainLesson);
                 }

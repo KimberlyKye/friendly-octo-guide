@@ -1,11 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using WebApi.Dto.Teacher.Requests;
+﻿using Application.Models.Teacher.Requests;
 using Application.Services.Abstractions;
-using Application.Models.Teacher.Requests;
-using Application.Models.Teacher.Responses;
-using Humanizer;
-using Domain.ValueObjects;
-using File = Domain.ValueObjects.File;
+using Common.Domain.ValueObjects;
+using Microsoft.AspNetCore.Mvc;
+using WebApi.Dto.Teacher.Requests;
 
 namespace WebApi.Controllers
 {

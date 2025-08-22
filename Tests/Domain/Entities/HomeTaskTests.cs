@@ -1,12 +1,4 @@
-﻿using Domain.Entities;
-using Domain.ValueObjects;
-using Entities;
-using NUnit.Framework;
-using System;
-using System.Linq;
-using File = Domain.ValueObjects.File;
-using ValueObjects;
-using ValueObjects.Enums;
+﻿using File = Domain.ValueObjects.File;
 
 namespace Tests.Domain.Entities
 {

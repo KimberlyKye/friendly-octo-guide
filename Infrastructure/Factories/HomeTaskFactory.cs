@@ -1,6 +1,3 @@
-using System;
-using System.Threading.Tasks;
-using Domain.ValueObjects;
 using Infrastructure.DataModels;
 using Infrastructure.Factories.Abstractions;
 
@@ -16,7 +13,7 @@ namespace Infrastructure.Factories
         }
 
         public async Task<Entities.HomeTask> CreateAsync(HomeTask dataModel)
-        {            
+        {
             var startDate = DateOnly.FromDateTime(dataModel.StartDate);
             var endDate = DateOnly.FromDateTime(dataModel.EndDate);
             var homeTaskName = new HomeTaskName(dataModel.Title);
@@ -27,7 +24,7 @@ namespace Infrastructure.Factories
                 homeTaskName: homeTaskName,
                 description: dataModel.Description,
                 duration: new Duration(startDate, endDate),
-                material: material);            
+                material: material);
         }
 
         public Task<HomeTask> CreateDataModelAsync(Entities.HomeTask domainEntity)

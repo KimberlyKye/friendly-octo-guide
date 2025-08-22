@@ -1,7 +1,5 @@
-﻿using Entities;
-using Domain.ValueObjects;
-using System.ComponentModel.DataAnnotations;
-using File = Domain.ValueObjects.File;
+﻿using System.ComponentModel.DataAnnotations;
+using File = Common.Domain.ValueObjects.File;
 
 namespace WebApi.Dto.Teacher.Requests
 {

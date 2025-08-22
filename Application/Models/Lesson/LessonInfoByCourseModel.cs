@@ -1,5 +1,5 @@
-﻿using Domain.ValueObjects;
-using Entities;
+﻿using Common.Domain.Entities;
+using Common.Domain.ValueObjects;
 
 namespace Application.Models.Lesson
 {
@@ -8,8 +8,8 @@ namespace Application.Models.Lesson
         public int CourseId { get; set; }
         public LessonName LessonName { get; set; }
         public string Description { get; set; }
-        public DateTime Date {  get; set; }
-        public Domain.ValueObjects.File? Material { get; set; }
+        public DateTime Date { get; set; }
+        public Common.Domain.ValueObjects.File? Material { get; set; }
         public HomeTask? HomeTask { get; set; }
     }
 }

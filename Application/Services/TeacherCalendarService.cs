@@ -1,9 +1,8 @@
-﻿using Application.Models.Calendar.Requests;
-using Application.Models.Teacher.Responses;
-using Application.Services.Abstractions;
+﻿using Application.Services.Abstractions;
+using Common.Domain.Entities;
+using Common.Models.Calendar.Requests;
+using Common.Models.Calendar.Responses;
 using RepositoriesAbstractions.Abstractions;
-using Entities;
-using Infrastructure.Repositories;
 
 namespace Application.Services
 {
@@ -22,7 +21,7 @@ namespace Application.Services
         public async Task<TeacherCalendarResponseModel> GetPeriodCalendarData(GetTeacherCalendarDataRequestModel request)
         {
             var minDate = new DateOnly(2000, 1, 1);
-                        
+
             if (request.StartDate > request.EndDate)
             {
                 throw new ArgumentException("Начальная дата не может быть позже конечной");
@@ -34,12 +33,12 @@ namespace Application.Services
                 throw new ArgumentNullException($"Преподаватель с ID {request.TeacherId} не существует", nameof(request.TeacherId));
             }
 
-            IReadOnlyCollection<Course>? courses =  await _teacherCalendarRepository.GetPeriodCalendarData(request.TeacherId, request.StartDate, request.EndDate);
+            IReadOnlyCollection<Course>? courses = await _teacherCalendarRepository.GetPeriodCalendarData(request.TeacherId, request.StartDate, request.EndDate);
             if (!courses.Any())
             {
                 return new TeacherCalendarResponseModel
                 {
-                    CalendarLessonModels = Array.Empty<CalendarLessonModel>()                    
+                    CalendarLessonModels = Array.Empty<CalendarLessonModel>()
                 };
             }
 
