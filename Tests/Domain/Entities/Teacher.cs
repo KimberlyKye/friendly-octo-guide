@@ -1,3 +1,7 @@
+using Common.Domain.Entities;
+using Common.Domain.ValueObjects;
+using Common.Domain.ValueObjects.Enums;
+
 namespace Tests.Domain.ValueObjects
 {
     [TestFixture]

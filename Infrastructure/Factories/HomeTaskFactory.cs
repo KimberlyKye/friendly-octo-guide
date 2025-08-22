@@ -1,3 +1,4 @@
+using Common.Domain.ValueObjects;
 using Infrastructure.DataModels;
 using Infrastructure.Factories.Abstractions;
 
@@ -12,14 +13,14 @@ namespace Infrastructure.Factories
             _fileFactory = fileFactory ?? throw new ArgumentNullException(nameof(fileFactory));
         }
 
-        public async Task<Entities.HomeTask> CreateAsync(HomeTask dataModel)
+        public async Task<Common.Domain.Entities.HomeTask> CreateAsync(HomeTask dataModel)
         {
             var startDate = DateOnly.FromDateTime(dataModel.StartDate);
             var endDate = DateOnly.FromDateTime(dataModel.EndDate);
             var homeTaskName = new HomeTaskName(dataModel.Title);
             var material = _fileFactory.Create(dataModel.Material);
 
-            return new Entities.HomeTask(
+            return new Common.Domain.Entities.HomeTask(
                 id: dataModel.Id,
                 homeTaskName: homeTaskName,
                 description: dataModel.Description,
@@ -27,7 +28,7 @@ namespace Infrastructure.Factories
                 material: material);
         }
 
-        public Task<HomeTask> CreateDataModelAsync(Entities.HomeTask domainEntity)
+        public Task<HomeTask> CreateDataModelAsync(Common.Domain.Entities.HomeTask domainEntity)
         {
             var materialPath = _fileFactory.GetFullPath(domainEntity.Material);
 

@@ -1,11 +1,12 @@
-﻿using Infrastructure.Contexts;
+﻿using Common.Domain.ValueObjects.Enums;
+using Infrastructure.Contexts;
 using Infrastructure.Factories.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using RepositoriesAbstractions.Abstractions;
 
 namespace Infrastructure.Repositories
 {
-    public class TeacherProfileRepository : IUserProfileRepository<Entities.Teacher>
+    public class TeacherProfileRepository : IUserProfileRepository<Common.Domain.Entities.Teacher>
     {
         private readonly AppDbContext _context;
         private readonly ITeacherFactory _teacherFactory;
@@ -16,7 +17,7 @@ namespace Infrastructure.Repositories
             _teacherFactory = teacherFactory;
         }
 
-        public async Task<Entities.Teacher> CreateUserProfileAsync(Entities.Teacher teacher)
+        public async Task<Common.Domain.Entities.Teacher> CreateUserProfileAsync(Common.Domain.Entities.Teacher teacher)
         {
             // Преобразуем Teacher в User через фабрику
             var createdTeacher = await _teacherFactory.CreateDataModelAsync(teacher);
@@ -28,7 +29,7 @@ namespace Infrastructure.Repositories
             return await _teacherFactory.CreateFrom(createdTeacher);
         }
 
-        public async Task<Entities.Teacher?> GetUserProfileAsync(long teacherId)
+        public async Task<Common.Domain.Entities.Teacher?> GetUserProfileAsync(long teacherId)
         {
             var user = await _context.Users.FirstOrDefaultAsync(c => c.Id == teacherId && c.RoleId == (int)RoleEnum.Teacher);
 
@@ -40,7 +41,7 @@ namespace Infrastructure.Repositories
             return await _teacherFactory.CreateFrom(user);
         }
 
-        public async Task<Entities.Teacher?> UpdateUserProfileAsync(Entities.Teacher updatedTeacher)
+        public async Task<Common.Domain.Entities.Teacher?> UpdateUserProfileAsync(Common.Domain.Entities.Teacher updatedTeacher)
         {
             // Ищем текущего преподавателя по идентификатору
             var currentTeacher = await _context.Users.FirstOrDefaultAsync(c => c.Id == updatedTeacher.Id && c.RoleId == (int)RoleEnum.Teacher);

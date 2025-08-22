@@ -1,4 +1,6 @@
-﻿using Infrastructure.Contexts;
+﻿using Common.Domain.Entities;
+using Common.Domain.ValueObjects.Enums;
+using Infrastructure.Contexts;
 using Infrastructure.Factories.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using RepositoriesAbstractions.Abstractions;

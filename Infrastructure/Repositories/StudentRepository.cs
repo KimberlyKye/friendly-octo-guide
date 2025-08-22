@@ -39,7 +39,7 @@ namespace Infrastructure.Repositories
             return courseIds;
         }
 
-        public async Task<List<Entities.Lesson>> GetLessonsByDateRangeAndStudentAsync(int studentId, DateTime startDate, DateTime endDate)
+        public async Task<List<Common.Domain.Entities.Lesson>> GetLessonsByDateRangeAndStudentAsync(int studentId, DateTime startDate, DateTime endDate)
         {
             var courseIds = await GetCourseIdsForStudentAsync(studentId);
 
@@ -47,7 +47,7 @@ namespace Infrastructure.Repositories
                 .Where(l => courseIds.Contains(l.CourseId) && l.Date >= startDate && l.Date <= endDate)
                 .ToListAsync();
 
-            var lessonsDomain = new List<Entities.Lesson>();
+            var lessonsDomain = new List<Common.Domain.Entities.Lesson>();
             // foreach (var lesson in lessons)
             // {
             //     var lessonDomain = _lessonFactory.CreateFrom(lesson);
@@ -57,7 +57,7 @@ namespace Infrastructure.Repositories
             return lessonsDomain;
         }
 
-        public async Task<List<Entities.HomeTask>> GetHomeTasksByDeadlineRangeAndStudentAsync(int studentId, DateTime startDate, DateTime endDate)
+        public async Task<List<Common.Domain.Entities.HomeTask>> GetHomeTasksByDeadlineRangeAndStudentAsync(int studentId, DateTime startDate, DateTime endDate)
         {
             var courseIds = await GetCourseIdsForStudentAsync(studentId);
             var validLessonIds = await _context.Lessons
@@ -69,7 +69,7 @@ namespace Infrastructure.Repositories
                 .Where(ht => validLessonIds.Contains(ht.LessonId) && ht.EndDate >= startDate && ht.EndDate <= endDate)
                 .ToListAsync();
 
-            var result = new List<Entities.HomeTask>();
+            var result = new List<Common.Domain.Entities.HomeTask>();
             foreach (var task in homeTasks)
             {
                 result.Add(await _homeTaskFactory.CreateAsync(task));
@@ -78,7 +78,7 @@ namespace Infrastructure.Repositories
             return result;
         }
 
-        public async Task<(List<Entities.Lesson> Lessons, List<Entities.HomeTask> HomeTasks)> GetMonthlyDataForStudentAsync(int studentId, DateTime monthStart, DateTime monthEnd)
+        public async Task<(List<Common.Domain.Entities.Lesson> Lessons, List<Common.Domain.Entities.HomeTask> HomeTasks)> GetMonthlyDataForStudentAsync(int studentId, DateTime monthStart, DateTime monthEnd)
         {
             var lessons = await GetLessonsByDateRangeAndStudentAsync(studentId, monthStart, monthEnd);
             var homeTasks = await GetHomeTasksByDeadlineRangeAndStudentAsync(studentId, monthStart, monthEnd);

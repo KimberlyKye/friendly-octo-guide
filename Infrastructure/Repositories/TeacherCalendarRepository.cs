@@ -1,4 +1,5 @@
-﻿using Infrastructure.Contexts;
+﻿using Common.Domain.ValueObjects.Enums;
+using Infrastructure.Contexts;
 using Infrastructure.Factories.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using RepositoriesAbstractions.Abstractions;
@@ -23,7 +24,7 @@ namespace Infrastructure.Repositories
             _courseFactory = courseFactory;
             _lessonFactory = lessonFactory;
         }
-        public async Task<IReadOnlyCollection<Entities.Course>> GetPeriodCalendarData(int teacherId, DateTime startDate, DateTime endDate)
+        public async Task<IReadOnlyCollection<Common.Domain.Entities.Course>> GetPeriodCalendarData(int teacherId, DateTime startDate, DateTime endDate)
         {
             var data = await (
                 from teacher in _context.Users.AsNoTracking()
@@ -52,7 +53,7 @@ namespace Infrastructure.Repositories
                     Lessons = g.Select(x => x.Lesson).ToList()
                 });
 
-            var result = new List<Entities.Course>();
+            var result = new List<Common.Domain.Entities.Course>();
 
             foreach (var group in groupedData)
             {

@@ -1,3 +1,5 @@
+using Common.Domain.ValueObjects;
+
 namespace Tests.Domain.ValueObjects
 {
     [TestFixture]

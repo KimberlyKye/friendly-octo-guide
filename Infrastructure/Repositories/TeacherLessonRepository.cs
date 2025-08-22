@@ -19,7 +19,7 @@ public class TeacherLessonRepository : ITeacherLessonRepository
         _teacherFactory = teacherFactory;
         _lessonFactory = lessonFactory;
     }
-    public async Task<int> AddLesson(Entities.Lesson lesson)
+    public async Task<int> AddLesson(Common.Domain.Entities.Lesson lesson)
     {
         var lessonDataModel = await _lessonFactory.CreateDataModelAsync(lesson);
 

@@ -1,3 +1,4 @@
+using Common.RepositoriesAbstractions.Abstractions;
 using Infrastructure.Contexts;
 using Infrastructure.Factories.Abstractions;
 
@@ -17,7 +18,7 @@ public class CourseRepository : ICourseRepository
         _courseFactory = courseFactory;
     }
 
-    public async Task<int> AddCourseAsync(Entities.Course course)
+    public async Task<int> AddCourseAsync(Common.Domain.Entities.Course course)
     {
         var courseDataModel = _courseFactory.MapTo(course);
 

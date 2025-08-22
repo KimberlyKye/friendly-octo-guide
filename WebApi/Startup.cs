@@ -7,6 +7,7 @@ using Infrastructure.Contexts;
 using Infrastructure.Factories;
 using Infrastructure.Factories.Abstractions;
 using Infrastructure.Repositories;
+using Infrastructure.DataModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Npgsql;

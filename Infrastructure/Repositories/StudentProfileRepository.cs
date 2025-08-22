@@ -1,11 +1,12 @@
-﻿using Infrastructure.Contexts;
+﻿using Common.Domain.ValueObjects.Enums;
+using Infrastructure.Contexts;
 using Infrastructure.Factories.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using RepositoriesAbstractions.Abstractions;
 
 namespace Infrastructure.Repositories
 {
-    public class StudentProfileRepository : IUserProfileRepository<Entities.Student>
+    public class StudentProfileRepository : IUserProfileRepository<Common.Domain.Entities.Student>
     {
         private readonly AppDbContext _context;
         private readonly IStudentFactory _studentFactory;
@@ -16,7 +17,7 @@ namespace Infrastructure.Repositories
             _studentFactory = studentFactory;
         }
 
-        public async Task<Entities.Student> CreateUserProfileAsync(Entities.Student student)
+        public async Task<Common.Domain.Entities.Student> CreateUserProfileAsync(Common.Domain.Entities.Student student)
         {
             // Преобразуем Student в User через фабрику
             var createdStudent = await _studentFactory.CreateDataModelAsync(student);
@@ -28,7 +29,7 @@ namespace Infrastructure.Repositories
             return await _studentFactory.CreateFromAsync(createdStudent);
         }
 
-        public async Task<Entities.Student?> GetUserProfileAsync(long studentId)
+        public async Task<Common.Domain.Entities.Student?> GetUserProfileAsync(long studentId)
         {
             var user = await _context.Users.FirstOrDefaultAsync(c => c.Id == studentId && c.RoleId == (int)RoleEnum.Student);
 
@@ -40,7 +41,7 @@ namespace Infrastructure.Repositories
             return await _studentFactory.CreateFromAsync(user);
         }
 
-        public async Task<Entities.Student> UpdateUserProfileAsync(Entities.Student updatedStudent)
+        public async Task<Common.Domain.Entities.Student> UpdateUserProfileAsync(Common.Domain.Entities.Student updatedStudent)
         {
             // Ищем текущего студента по идентификатору
             var currentStudent = await _context.Users.FirstOrDefaultAsync(c => c.Id == updatedStudent.Id && c.RoleId == (int)RoleEnum.Student);

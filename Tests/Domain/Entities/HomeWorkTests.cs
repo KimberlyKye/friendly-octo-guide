@@ -1,4 +1,8 @@
-﻿namespace Tests.Domain.Entities
+﻿using Common.Domain.Entities;
+using Common.Domain.ValueObjects;
+using Common.Domain.ValueObjects.Enums;
+
+namespace Tests.Domain.Entities
 {
     [TestFixture]
     public class HomeWorkTests

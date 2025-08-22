@@ -1,4 +1,7 @@
-﻿using File = Domain.ValueObjects.File;
+﻿using Common.Domain.Entities;
+using Common.Domain.ValueObjects;
+using Common.Domain.ValueObjects.Enums;
+using File = Common.Domain.ValueObjects.File;
 
 namespace Tests.Domain.Entities
 {

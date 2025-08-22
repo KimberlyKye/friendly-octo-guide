@@ -1,4 +1,7 @@
 namespace Infrastructure.Repositories;
+
+using Common.Domain.Entities;
+using Common.RepositoriesAbstractions;
 using Infrastructure.Contexts;
 using Infrastructure.Factories.Abstractions;
 using Microsoft.EntityFrameworkCore;

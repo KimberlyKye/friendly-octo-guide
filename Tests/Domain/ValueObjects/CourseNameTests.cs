@@ -1,4 +1,6 @@
-﻿namespace Tests.Domain.ValueObjects
+﻿using Common.Domain.ValueObjects;
+
+namespace Tests.Domain.ValueObjects
 {
     [TestFixture]
     public class CourseNameTests
