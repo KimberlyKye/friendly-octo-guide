@@ -39,6 +39,28 @@ namespace Domain.ValueObjects
         }
 
         /// <summary>
+        /// Инициализирует новый экземпляр периода.
+        /// </summary>
+        /// <param name="startDate">Начальная дата периода.</param>
+        /// <param name="endDate">Конечная дата периода.</param>
+        /// <exception cref="ArgumentException">
+        /// Выбрасывается, если начальная дата больше или равна конечной.
+        /// </exception>
+        public Duration(DateTime startDateTime, DateTime endDateTime)
+        {
+            var startDate = DateOnly.FromDateTime(startDateTime);
+            var endDate = DateOnly.FromDateTime(endDateTime);
+
+            if (startDate >= endDate)
+                throw new ArgumentException(
+                    "Начальная дата периода должна быть строго меньше конечной даты",
+                    nameof(startDate));
+
+            StartDate = startDate;
+            EndDate = endDate;
+        }
+
+        /// <summary>
         /// Деконструирует период на начальную и конечную даты.
         /// </summary>
         /// <param name="startDate">Начальная дата периода.</param>
