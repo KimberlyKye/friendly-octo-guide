@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Dto.Course.Responses;
 using WebApi.Dto.Lesson.Responses;
+using WebApi.Dto.Student.Requests;
 using WebApi.Dto.Teacher.Requests;
 
 namespace WebApi.Controllers
@@ -219,21 +220,29 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> AddStudentToCourse([FromBody] int courseId, [FromBody] int[] studentIds)
+        public async Task<IActionResult> AddStudentToCourse([FromBody] StudentsToCourseRequest data)
         {
-            if (courseId <= 0)
+            if (data is null)
+            {
+                return BadRequest("Некорректные параметры запроса");
+            }
+            if (data.studentIds is null)
+            {
+                return BadRequest("Нет студентов для добавления");
+            }
+            if (data.courseId <= 0)
             {
                 return BadRequest("courseId не может быть меньше или равен 0 ");
             }
-            var result = await _studentInfoService.AddStudentsToCourse(courseId, studentIds);
-            if (result.Count() == studentIds.Count())
+            var result = await _studentInfoService.AddStudentsToCourse(data.courseId, data.studentIds);
+            if (result.Count() == data.studentIds.Count())
             {
                 return Ok("Студенты успешно добавлены");
             }
 
-            var unsuccess = studentIds.Except(result);
+            var unsuccess = data.studentIds.Except(result);
 
-            if (unsuccess.Count() == studentIds.Count())
+            if (unsuccess.Count() == data.studentIds.Count())
             {
                 return BadRequest("Не удалось добавить всех студентов!");
             }
@@ -260,12 +269,27 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> RemoveStudentsFromCourse([FromBody] int courseId, [FromBody] int[] studentIds)
+        public async Task<IActionResult> RemoveStudentsFromCourse([FromBody] StudentsToCourseRequest data)
         {
+            if (data is null)
+            {
+                return BadRequest("Некорректные параметры запроса");
+            }
+
+            var courseId = data.courseId;
+            var studentIds = data.studentIds;
+
+            if (studentIds is null)
+            {
+                return BadRequest("Отсутствуют студенты для удаления");
+            }
+
+
             if (courseId <= 0)
             {
                 return BadRequest("courseId не может быть меньше или равен 0 ");
             }
+
             var result = await _studentInfoService.RemoveStudentsFromCourse(courseId, studentIds);
             if (result.Count() == studentIds.Count())
             {

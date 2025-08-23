@@ -2,15 +2,9 @@
 using Entities;
 using Infrastructure.Contexts;
 using Infrastructure.DataModels;
-using Infrastructure.Factories;
 using Infrastructure.Factories.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using RepositoriesAbstractions.Abstractions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Repositories
 {
@@ -39,7 +33,6 @@ namespace Infrastructure.Repositories
 
         public async Task<Student?> GetStudentById(int studentId)
         {
-
             var studentInfo = await _context.Users
                 .Where(student => student.Id == studentId && student.RoleId == (int)RoleEnum.Student)
                 .FirstOrDefaultAsync();
@@ -48,6 +41,7 @@ namespace Infrastructure.Repositories
 
             return await _studentFactory.CreateFromAsync(studentInfo);
         }
+
         public async Task<List<Entities.Course>> GetAllCourses(int studentId)
         {
             var coursesData = await (
@@ -148,27 +142,7 @@ namespace Infrastructure.Repositories
             return domainCourse;
         }
 
-        Task<Student?> IStudentInfoRepository.GetStudentById(int studentId)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<List<Entities.Course>> IStudentInfoRepository.GetAllCourses(int studentId)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<Entities.Course?> IStudentInfoRepository.GetCourseInfo(int courseId, int studentId)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<Entities.Course> IStudentInfoRepository.GetAllCourseInfo(int courseId, int studentId)
-        {
-            throw new NotImplementedException();
-        }
-
-        async Task<List<Student>> IStudentInfoRepository.GetAllStudentsByCourse(int courseId)
+        public async Task<List<Student>> GetAllStudentsByCourse(int courseId)
         {
             var students = await (
                 from sc in _context.StudentCourses
@@ -180,7 +154,7 @@ namespace Infrastructure.Repositories
             return students;
         }
 
-        async Task<List<Student>> IStudentInfoRepository.GetAllStudentsOutsideCourse(int courseId, int startRow, int endRow)
+        public async Task<List<Student>> GetAllStudentsOutsideCourse(int courseId, int startRow, int endRow)
         {
             // Получаем Id студентов, которые уже находятся в курсе
             var enrolledStudentIds = await _context.StudentCourses
@@ -202,7 +176,7 @@ namespace Infrastructure.Repositories
         }
 
 
-        async Task IStudentInfoRepository.AddStudentsToCourse(int courseId, int[] studentIds)
+        public async Task AddStudentsToCourse(int courseId, int[] studentIds)
         {
             using var transaction = await _context.Database.BeginTransactionAsync();
             try
@@ -225,7 +199,7 @@ namespace Infrastructure.Repositories
         }
 
 
-        async Task IStudentInfoRepository.RemoveStudentsFromCourse(int courseId, int[] studentIds)
+        public async Task RemoveStudentsFromCourse(int courseId, int[] studentIds)
         {
             using var transaction = await _context.Database.BeginTransactionAsync();
             try
@@ -245,13 +219,13 @@ namespace Infrastructure.Repositories
             }
         }
 
-        async Task<bool> IStudentInfoRepository.CheckIfUserInCourse(int userId, int courseId)
+        public async Task<bool> CheckIfUserInCourse(int userId, int courseId)
         {
             return await _context.StudentCourses
                 .AnyAsync(sc => sc.StudentId == userId && sc.CourseId == courseId);
         }
 
-        async Task<List<int>> IStudentInfoRepository.GetStudentIdsInCourse(int courseId, int[] studentIds)
+        public async Task<List<int>> GetStudentIdsInCourse(int courseId, int[] studentIds)
         {
             return await _context.StudentCourses
                 .Where(sc => sc.CourseId == courseId && studentIds.Contains(sc.StudentId))
@@ -259,7 +233,7 @@ namespace Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        async Task<List<int>> IStudentInfoRepository.GetStudentIdsNotInCourse(int courseId, int[] studentIds)
+        public async Task<List<int>> GetStudentIdsNotInCourse(int courseId, int[] studentIds)
         {
             var enrolledStudentIds = await _context.StudentCourses
     .Where(sc => sc.CourseId == courseId && studentIds.Contains(sc.StudentId))

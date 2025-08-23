@@ -85,6 +85,7 @@ namespace WebApi
             services.AddScoped<IHomeTaskRepository, HomeTaskRepository>();
             services.AddScoped<IStudentCalendarRepository, StudentCalendarRepository>();
             services.AddScoped<IStudentInfoRepository, StudentInfoRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
 
             // 2. Swagger
             services.AddEndpointsApiExplorer();
@@ -157,8 +158,8 @@ namespace WebApi
 
             // if (env.IsDevelopment())
             // {
-                app.UseSwagger();
-                app.UseSwaggerUI();
+            app.UseSwagger();
+            app.UseSwaggerUI();
             // }
 
             app.UseHttpsRedirection();
