@@ -43,7 +43,7 @@ namespace Infrastructure.Repositories
             return await _studentFactory.CreateFromAsync(studentInfo);
         }
 
-        public async Task<List<Entities.Course>> GetAllCourses(int studentId)
+        public async Task<List<Common.Domain.Entities.Course>> GetAllCourses(int studentId)
         {
             var coursesData = await (
                 from student in _context.Users.AsNoTracking()
@@ -82,8 +82,7 @@ namespace Infrastructure.Repositories
                 select new { course, teacher })
                 .FirstOrDefaultAsync();
 
-            if (coursesData is null) { return null; }
-            ;
+            if (courseData is null) { return null;};
 
             Score? averageScore;
             averageScore = await GetCourseAverageScore(courseId, studentId);

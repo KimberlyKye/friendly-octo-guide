@@ -2,6 +2,7 @@
 using Application.Models.Lesson;
 using Application.Models.Teacher.Responses;
 using Application.Services.Abstractions;
+using Common.Domain.Entities;
 using Common.Domain.ValueObjects.Enums;
 using RepositoriesAbstractions.Abstractions;
 
