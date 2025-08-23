@@ -1,4 +1,5 @@
 using Application.Models.Course;
+using Common.Domain.Entities;
 
 namespace Application.Services.Abstractions;
 

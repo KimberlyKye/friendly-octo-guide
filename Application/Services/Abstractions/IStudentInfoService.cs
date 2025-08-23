@@ -1,6 +1,7 @@
 ﻿using Application.Models.Course;
 using Application.Models.Lesson;
 using Application.Models.Teacher.Responses;
+using Common.Domain.Entities;
 
 
 namespace Application.Services.Abstractions

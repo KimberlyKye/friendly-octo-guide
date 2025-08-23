@@ -1,9 +1,10 @@
 using Application.Models.Course;
 using Application.Services.Abstractions;
-using Domain.ValueObjects;
-using Entities;
+using Common.Domain.ValueObjects;
+using Common.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Dto.Course.Requests;
+using WebApi.Dto.Course.Responses;
 
 namespace WebApi.Controllers;
 
@@ -228,7 +229,7 @@ public class CourseController : ControllerBase
                 new LessonName(request.Name),
                 request.Description,
                 request.Date,
-                new Domain.ValueObjects.File(request.Material)
+                new Common.Domain.ValueObjects.File(request.Material)
             ));
 
             if (updatedId <= 0)
