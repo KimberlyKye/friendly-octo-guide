@@ -10,7 +10,7 @@ namespace RepositoriesAbstractions.Abstractions
 
         Task<Course?> GetCourseInfo(int courseId, int studentId);
 
-        Task<Entities.Course> GetAllCourseInfo(int courseId, int studentId);
+        Task<Common.Domain.Entities.Course> GetAllCourseInfo(int courseId, int studentId);
 
         /// <summary>
         /// Получение списка студентов курса
