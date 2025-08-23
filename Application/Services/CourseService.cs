@@ -11,12 +11,15 @@ public class CourseService : ICourseService
 {
     private ICourseRepository _courseRepository;
     private ITeacherInfoRepository _teacherInfoRepository;
+    private IStudentInfoRepository _studentInfoRepository;
     public CourseService(
         ICourseRepository courseRepository,
-        ITeacherInfoRepository teacherInfoRepository)
+        ITeacherInfoRepository teacherInfoRepository,
+        IStudentInfoRepository studentInfoRepository)
     {
         _courseRepository = courseRepository;
         _teacherInfoRepository = teacherInfoRepository;
+        _studentInfoRepository = studentInfoRepository;
     }
 
     public async Task<int> AddCourseAsync(CreateCourseModel request)
@@ -24,7 +27,7 @@ public class CourseService : ICourseService
         Teacher? teacher = await _teacherInfoRepository.GetTeacherById(request.TeacherId);
         if (teacher is null)
         {
-            throw new ArgumentException($"������������� � ID {request.TeacherId} �� ����������", nameof(request.TeacherId));
+            throw new ArgumentException($"Пользователь с ID {request.TeacherId} не найден", nameof(request.TeacherId));
         }
         Course newCourse = await teacher.CreateCourse(0,
                                                         teacher,
@@ -35,5 +38,67 @@ public class CourseService : ICourseService
 
         return await _courseRepository.AddCourseAsync(newCourse);
     }
-    private ICourseRepository _repository;
+
+    public async Task<Course> GetCourseAsync(int courseId)
+    {
+        var checkedCourse = await _courseRepository.GetCourseAsync(courseId);
+        if (checkedCourse is null)
+        {
+            throw new ArgumentException("Course not found!");
+        }
+
+        return checkedCourse;
+    }
+
+    public async Task<Course[]> GetAllStudentCoursesAsync(int userId)
+    {
+        // Проверим, что студент существует
+        Student? student = await _studentInfoRepository.GetStudentById(userId);
+        if (student is null)
+        {
+            throw new ArgumentException($"Пользователь с ID {userId} не найден", nameof(userId));
+        }
+
+        return await _courseRepository.GetAllStudentCoursesAsync(student);
+    }
+
+    public async Task<Course[]> GetAllTeacherCoursesAsync(int userId)
+    {
+        // Проверим, что преподаватель существует
+        Teacher? teacher = await _teacherInfoRepository.GetTeacherById(userId);
+
+        if (teacher is null)
+        {
+            throw new ArgumentException($"Пользователь с ID {userId} не найден", nameof(userId));
+        }
+
+        return await _courseRepository.GetAllTeacherCoursesAsync(teacher);
+    }
+
+    public async Task<int> UpdateCourseAsync(Course course)
+    {
+        // Проверим, что курс существует
+        _ = await GetCourseAsync(course.Id);
+
+        return await _courseRepository.UpdateCourseAsync(course);
+    }
+
+    public async Task<Lesson> GetLessonByIdAsync(int id)
+    {
+        var checkedLesson = await _courseRepository.GetLessonByIdAsync(id);
+        if (checkedLesson is null)
+        {
+            throw new ArgumentException("Lesson not found!");
+        }
+
+        return checkedLesson;
+    }
+
+    public async Task<int> UpdateLesson(Lesson lesson)
+    {
+        // Проверим, что урок существует
+        _ = await GetLessonByIdAsync(lesson.Id);
+
+        return await _courseRepository.UpdateLesson(lesson);
+    }
 }

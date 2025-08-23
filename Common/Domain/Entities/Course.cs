@@ -22,7 +22,12 @@ namespace Common.Domain.Entities
         /// <summary>
         /// Преподаватель, ведущий курс
         /// </summary>
-        public Teacher Teacher { get; private set; }
+        public Teacher? Teacher { get; private set; }
+
+        /// <summary>
+        /// ID Преподавателя, ведущий курс
+        /// </summary>
+        public int? TeacherId { get; private set; }
 
         /// <summary>
         /// Название курса
@@ -87,6 +92,30 @@ namespace Common.Domain.Entities
             State = courseState;
             PassingScore = passingScore;
             AverageScore = averageScore;
+        }
+
+        /// <summary>
+        /// Инициализирует новый экземпляр курса
+        /// </summary>
+        /// <param name="id">Уникальный идентификатор курса</param>
+        /// <param name="teacherId">ID Преподавателя курса</param>
+        /// <param name="courseName">Название курса</param>
+        /// <param name="description">Описание курса</param>
+        /// <param name="duration">Продолжительность курса</param>
+        /// <exception cref="ArgumentNullException">Выбрасывается, если teacher, courseName, description или duration не заданы</exception>
+        public Course(int id,
+                     int teacherId,
+                     CourseName courseName,
+                     string description,
+                     Duration duration) : base(id)
+        {
+            TeacherId = teacherId;
+            Name = courseName ?? throw new ArgumentNullException(nameof(courseName));
+            Description = description ?? throw new ArgumentNullException(nameof(description));
+            Duration = duration == default ? throw new ArgumentNullException(nameof(duration)) : duration;
+            Lessons = _lessons.AsReadOnly();
+            Students = _students.AsReadOnly();
+            State = CourseState.Active; // Новые курсы по умолчанию создаются как актуальные
         }
 
         /// <summary>

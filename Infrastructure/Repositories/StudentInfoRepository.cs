@@ -2,6 +2,7 @@
 using Common.Domain.ValueObjects;
 using Common.Domain.ValueObjects.Enums;
 using Infrastructure.Contexts;
+using Infrastructure.DataModels;
 using Infrastructure.Factories.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using RepositoriesAbstractions.Abstractions;
@@ -33,7 +34,6 @@ namespace Infrastructure.Repositories
 
         public async Task<Student?> GetStudentById(int studentId)
         {
-
             var studentInfo = await _context.Users
                 .Where(student => student.Id == studentId && student.RoleId == (int)RoleEnum.Student)
                 .FirstOrDefaultAsync();
@@ -42,7 +42,8 @@ namespace Infrastructure.Repositories
 
             return await _studentFactory.CreateFromAsync(studentInfo);
         }
-        public async Task<List<Common.Domain.Entities.Course>> GetAllCourses(int studentId)
+
+        public async Task<List<Entities.Course>> GetAllCourses(int studentId)
         {
             var coursesData = await (
                 from student in _context.Users.AsNoTracking()
@@ -81,7 +82,8 @@ namespace Infrastructure.Repositories
                 select new { course, teacher })
                 .FirstOrDefaultAsync();
 
-            if (courseData is null) { return null; }
+            if (coursesData is null) { return null; }
+            ;
 
             Score? averageScore;
             averageScore = await GetCourseAverageScore(courseId, studentId);
@@ -154,6 +156,107 @@ namespace Infrastructure.Repositories
             }
 
             return domainCourse;
+        }
+
+        public async Task<List<Student>> GetAllStudentsByCourse(int courseId)
+        {
+            var students = await (
+                from sc in _context.StudentCourses
+                where sc.CourseId == courseId
+                join user in _context.Users on sc.StudentId equals user.Id
+                select _studentFactory.CreateFrom(user)
+            ).ToListAsync();
+
+            return students;
+        }
+
+        public async Task<List<Student>> GetAllStudentsOutsideCourse(int courseId, int startRow, int endRow)
+        {
+            // Получаем Id студентов, которые уже находятся в курсе
+            var enrolledStudentIds = await _context.StudentCourses
+                .Where(sc => sc.CourseId == courseId)
+                .Select(sc => sc.StudentId)
+                .ToListAsync();
+
+            // Получаем всех студентов (Role = 2), исключая тех, кто уже в курсе
+            var students = await _context.Users
+                .Where(user => user.RoleId == 2 && !enrolledStudentIds.Contains(user.Id))
+                .OrderBy(user => user.Id)  // Сортировка важна для корректной пагинации
+                .Skip(startRow)
+                .Take(endRow - startRow + 1)  // Пагинация
+                .ToListAsync();
+
+            // Преобразуем в Student модели
+            var result = students.Select(_studentFactory.CreateFrom).ToList();
+            return result;
+        }
+
+
+        public async Task AddStudentsToCourse(int courseId, int[] studentIds)
+        {
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                var entries = studentIds.Select(id => new StudentCourse
+                {
+                    CourseId = courseId,
+                    StudentId = id
+                });
+
+                _context.StudentCourses.AddRange(entries);
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
+        }
+
+
+        public async Task RemoveStudentsFromCourse(int courseId, int[] studentIds)
+        {
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                var entriesToRemove = await _context.StudentCourses
+                    .Where(sc => sc.CourseId == courseId && studentIds.Contains(sc.StudentId))
+                    .ToListAsync();
+
+                _context.StudentCourses.RemoveRange(entriesToRemove);
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
+        }
+
+        public async Task<bool> CheckIfUserInCourse(int userId, int courseId)
+        {
+            return await _context.StudentCourses
+                .AnyAsync(sc => sc.StudentId == userId && sc.CourseId == courseId);
+        }
+
+        public async Task<List<int>> GetStudentIdsInCourse(int courseId, int[] studentIds)
+        {
+            return await _context.StudentCourses
+                .Where(sc => sc.CourseId == courseId && studentIds.Contains(sc.StudentId))
+                .Select(sc => sc.StudentId)
+                .ToListAsync();
+        }
+
+        public async Task<List<int>> GetStudentIdsNotInCourse(int courseId, int[] studentIds)
+        {
+            var enrolledStudentIds = await _context.StudentCourses
+    .Where(sc => sc.CourseId == courseId && studentIds.Contains(sc.StudentId))
+    .Select(sc => sc.StudentId)
+    .ToListAsync();
+
+            return studentIds.Except(enrolledStudentIds).ToList();
         }
 
         public async Task<Score> GetCourseAverageScore(int courseId, int studentId)

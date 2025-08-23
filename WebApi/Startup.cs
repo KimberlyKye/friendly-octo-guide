@@ -80,6 +80,7 @@ namespace WebApi
             services.AddScoped<IHomeTaskRepository, HomeTaskRepository>();
             services.AddScoped<IStudentCalendarRepository, StudentCalendarRepository>();
             services.AddScoped<IStudentInfoRepository, StudentInfoRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
 
             // 2. Swagger
             services.AddEndpointsApiExplorer();

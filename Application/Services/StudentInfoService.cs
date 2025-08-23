@@ -16,6 +16,21 @@ namespace Application.Services
         {
             _studentInfoRepository = studentInfoRepository;
         }
+
+        public async Task<IEnumerable<int>> AddStudentsToCourse(int courseId, int[] studentIds)
+        {
+            // Получаем список студентов, которых ещё нет в курсе
+            var notEnrolledStudentIds = await _studentInfoRepository.GetStudentIdsNotInCourse(courseId, studentIds);
+
+            if (!notEnrolledStudentIds.Any())
+                return Array.Empty<int>();
+
+            // Добавляем их в курс
+            await _studentInfoRepository.AddStudentsToCourse(courseId, notEnrolledStudentIds.ToArray());
+
+            return notEnrolledStudentIds;
+        }
+
         public async Task<List<StudentAllCoursesModel>> GetAllCourses(int studentId)
         {
             var courses = await _studentInfoRepository.GetAllCourses(studentId);
@@ -32,6 +47,19 @@ namespace Application.Services
             }
             return result;
         }
+
+        public async Task<List<Student>> GetAllStudentsByCourse(int courseId)
+        {
+            var students = await _studentInfoRepository.GetAllStudentsByCourse(courseId);
+            return students;
+        }
+
+        public async Task<List<Student>> GetAllStudentsOutsideCourse(int courseId, int startRow, int endRow)
+        {
+            var students = await _studentInfoRepository.GetAllStudentsOutsideCourse(courseId, startRow, endRow);
+            return students;
+        }
+
         public async Task<CourseInfoForStudentModel?> GetCourseInfo(int courseId, int studentId)
         {
 
@@ -63,6 +91,22 @@ namespace Application.Services
                 HomeTask = lesson.HomeTask
             }).ToList();
         }
+
+        public async Task<IEnumerable<int>> RemoveStudentsFromCourse(int courseId, int[] studentIds)
+        {
+            // Получаем ID студентов, которые действительно находятся в курсе
+            var existingStudentIds = await _studentInfoRepository.GetStudentIdsInCourse(courseId, studentIds);
+
+            if (!existingStudentIds.Any())
+                return Array.Empty<int>();
+
+            // Удаляем их из курса
+            await _studentInfoRepository.RemoveStudentsFromCourse(courseId, existingStudentIds.ToArray());
+
+            return existingStudentIds;
+        }
+
+
 
         public async Task<List<LessonInfoByCourseModel>?> GetHomeworksInfo(int lessonId, int studentId)
         {

@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Dto.Course.Responses;
 using WebApi.Dto.Lesson.Responses;
+using WebApi.Dto.Student.Requests;
+using WebApi.Dto.Teacher.Requests;
 
 namespace WebApi.Controllers
 {
@@ -142,44 +144,167 @@ namespace WebApi.Controllers
 
             return Ok(response);
         }
+
         /// <summary>
-        /// Метод получения информации о сданных домашних работах
+        /// Метод получения списка студентов, участвующих в курсе
         /// </summary>
-        /// <param name="lessonId"></param>
-        /// <param name="studentId"></param>
-        /// <returns>Модель данных</returns>
+        /// <param name="courseId"></param>
+        /// <returns>Список студентов курса</returns>
         /// <remarks>
         /// Пример запроса:
-        ///
-        ///     GET /get-homeworks-info
-        ///     {
-        ///        "lessonId": 111,
-        ///        "studentId": 111,
-        ///     }
-        ///
-        /// </remarks>
-        /// <response code="200">Возвращает модель</response>
-        /// <response code="400">Некорректные параметры запроса</response>
-        /// <response code="404">Данные не найдены</response>
-        /// <response code="500">Если есть какие-то ошибки при запросе</response>
-        [HttpGet("get-homeworks-info")]
+        ///     GET /list/include-in-course/101
+        ///</remarks>
+        [HttpGet("list/include-in-course/{courseId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetHomeworksInfo(int lessonId, int studentId)
+        public async Task<IActionResult> GetStudentListByCourse(int courseId)
         {
-            if (lessonId <= 0 || studentId <= 0) { return BadRequest("lessonId или studentId не может быть меньше или равен 0 "); }
+            if (courseId <= 0)
+            {
+                return BadRequest("courseId не может быть меньше или равен 0 ");
+            }
+            var result = await _studentInfoService.GetAllStudentsByCourse(courseId);
+            if (result is null)
+            {
+                return Ok(result);
+            }
+            return Ok(result);
+        }
 
-            var result = await _studentInfoService.GetHomeworksInfo(lessonId, studentId);
-            if (result is null) { return NotFound(); }
-            ;
+        /// <summary>
+        /// Метод получения списка студентов, не участвующих в курсе
+        /// </summary>
+        /// <param name="courseId"></param>
+        /// <param name="startRow"></param>
+        /// <param name="endRow"></param>
+        /// <returns>Список студентов, готовых для добавления на курс</returns>
+        /// <remarks>
+        /// Пример запроса:
+        ///     GET /list/not-on-course/101
+        ///</remarks>
+        [HttpGet("list/not-on-course/{courseId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetStudentListOutsideFromCourse([FromRoute] int courseId, [FromQuery] int startRow, [FromQuery] int endRow)
+        {
+            if (courseId <= 0)
+            {
+                return BadRequest("courseId не может быть меньше или равен 0 ");
+            }
+            var result = await _studentInfoService.GetAllStudentsOutsideCourse(courseId, startRow, endRow);
+            if (result is null)
+            {
+                return Ok(result);
+            }
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Метод добавления студентов в курс
+        /// </summary>
+        /// <param name="courseId"></param>
+        /// <param name="studentIds"></param>
+        /// <returns>Возвращает сообщение об успешности/неуспешности операции</returns>
+        /// <remarks>
+        /// Пример запроса:
+        /// POST /add-to-course
+        /// {
+        ///    "courseId": 111,
+        ///    "studentIds": [1,2,3]
+        /// }
+        /// </remarks>
+        [HttpPost("add-to-course")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> AddStudentToCourse([FromBody] StudentsToCourseRequest data)
+        {
+            if (data is null)
+            {
+                return BadRequest("Некорректные параметры запроса");
+            }
+            if (data.studentIds is null)
+            {
+                return BadRequest("Нет студентов для добавления");
+            }
+            if (data.courseId <= 0)
+            {
+                return BadRequest("courseId не может быть меньше или равен 0 ");
+            }
+            var result = await _studentInfoService.AddStudentsToCourse(data.courseId, data.studentIds);
+            if (result.Count() == data.studentIds.Count())
+            {
+                return Ok("Студенты успешно добавлены");
+            }
+
+            var unsuccess = data.studentIds.Except(result);
+
+            if (unsuccess.Count() == data.studentIds.Count())
+            {
+                return BadRequest("Не удалось добавить всех студентов!");
+            }
+
+            return Ok("Студенты частично успешно добавлены, однако в процессе возникли проблемы. При необходимости обновите страницу и повторите операцию. Не удалось добавить следующее количество студентов: " + unsuccess.Count() + " с ID: " + string.Join(", ", unsuccess));
+        }
+
+        /// <summary>
+        /// Метод удаления студентов из курса
+        /// </summary>
+        /// <param name="courseId"></param>
+        /// <param name="studentIds"></param>
+        /// <returns> Возвращает сообщение об успешности/неуспешности операции</returns>
+        /// <remarks>
+        /// Пример запроса:
+        /// POST /remove-from-course
+        /// {
+        ///    "courseId": 111,
+        ///    "studentIds": [1,2,3]
+        /// }
+        /// </remarks>
+        [HttpPost("remove-from-course")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> RemoveStudentsFromCourse([FromBody] StudentsToCourseRequest data)
+        {
+            if (data is null)
+            {
+                return BadRequest("Некорректные параметры запроса");
+            }
+
+            var courseId = data.courseId;
+            var studentIds = data.studentIds;
+
+            if (studentIds is null)
+            {
+                return BadRequest("Отсутствуют студенты для удаления");
+            }
 
 
+            if (courseId <= 0)
+            {
+                return BadRequest("courseId не может быть меньше или равен 0 ");
+            }
 
+            var result = await _studentInfoService.RemoveStudentsFromCourse(courseId, studentIds);
+            if (result.Count() == studentIds.Count())
+            {
+                return Ok("Студенты успешно удалены");
+            }
+            var unsuccess = studentIds.Except(result);
 
+            if (unsuccess.Count() == studentIds.Count())
+            {
+                return BadRequest("Не удалось удалить всех студентов!");
+            }
 
-            return NotFound();
+            return Ok("Студенты частично успешно удалены, однако в процессе возникли проблемы. При необходимости обновите страницу и повторите операцию. Не удалось удалить следующее количество студентов: " + unsuccess.Count() + " с ID: " + string.Join(", ", unsuccess));
         }
 
     }

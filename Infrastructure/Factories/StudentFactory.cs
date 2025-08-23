@@ -18,6 +18,16 @@ namespace Infrastructure.Factories
                 birthDate: new BirthDate((DateTime)user.DateOfBirth)));
         }
 
+        public Student CreateFrom(User user)
+        {
+            return new Student(
+                id: user.Id,
+                name: new FullName(user.Name, user.Surname),
+                phoneNumber: new PhoneNumber(user.PhoneNumber),
+                email: new Email(user.Email),
+                birthDate: new BirthDate((DateTime)user.DateOfBirth));
+        }
+
         public Task<User> CreateDataModelAsync(Student student)
         {
             return Task.FromResult(new User
@@ -32,6 +42,7 @@ namespace Infrastructure.Factories
                 Password = student.Password
             });
         }
+
 
     }
 }
