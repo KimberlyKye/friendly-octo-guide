@@ -42,7 +42,8 @@ namespace Infrastructure.Contexts
                 .ApplyConfiguration(new CoursesConfiguration())
                 .ApplyConfiguration(new LessonConfiguration())
                 .ApplyConfiguration(new HomeTaskConfiguration())
-                .ApplyConfiguration(new HomeWorkConfiguration());
+                .ApplyConfiguration(new HomeWorkConfiguration())
+                .ApplyConfiguration(new StudentCourseConfiguration());
 
 
             #endregion

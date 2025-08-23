@@ -14,7 +14,7 @@ namespace Infrastructure.Configurations
             builder.Property(hw => hw.Id)
               .ValueGeneratedOnAdd(); // Автоинкремент
 
-            builder.HasOne<StudentCourse>() //поменять на User, создать конфиг для  HomeTask и миграцию откат-накат, перенести модели в Domain
+            builder.HasOne<User>()
                .WithMany()
                .HasForeignKey(hw => hw.StudentId)
                .OnDelete(DeleteBehavior.Cascade);
