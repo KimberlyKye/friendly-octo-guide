@@ -2,7 +2,7 @@
 {
     public class StudentCalendarResponseModel
     {
-        public CalendarLessonModel[] CalendarLessonModels { get; set; } = new CalendarLessonModel[0];
-        public CalendarHomeTaskModel[] CalendarHomeTaskModels { get; set; } = new CalendarHomeTaskModel[0];
+        public CalendarLessonModel[] CalendarLessonModels { get; set; } = Array.Empty<CalendarLessonModel>();
+        public CalendarHomeTaskModel[] CalendarHomeTaskModels { get; set; } = Array.Empty<CalendarHomeTaskModel>();
     }
 }

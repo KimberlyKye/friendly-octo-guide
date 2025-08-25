@@ -33,29 +33,7 @@ namespace Application.Services
                 throw new ArgumentNullException($"Преподаватель с ID {request.TeacherId} не существует", nameof(request.TeacherId));
             }
 
-            IReadOnlyCollection<Course>? courses = await _teacherCalendarRepository.GetPeriodCalendarData(request.TeacherId, request.StartDate, request.EndDate);
-            if (!courses.Any())
-            {
-                return new TeacherCalendarResponseModel
-                {
-                    CalendarLessonModels = Array.Empty<CalendarLessonModel>()
-                };
-            }
-
-            var calendarLessons = courses.SelectMany(course =>
-                    course.Lessons.Select(lesson => new CalendarLessonModel
-                    {
-                        CourseId = course.Id,
-                        CourseName = course.Name.Value,
-                        LessonId = lesson.Id,
-                        LessonDate = lesson.Date,
-                        LessonName = lesson.Name
-                    })).ToArray();
-
-            return new TeacherCalendarResponseModel
-            {
-                CalendarLessonModels = calendarLessons
-            };
+            return await _teacherCalendarRepository.GetPeriodCalendarData(request.TeacherId, request.StartDate, request.EndDate);
         }
     }
 }
