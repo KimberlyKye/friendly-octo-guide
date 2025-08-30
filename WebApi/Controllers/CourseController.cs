@@ -40,12 +40,12 @@ public class CourseController : ControllerBase
         {
             var createdCourseId = await _courseService.AddCourseAsync(new CreateCourseModel()
             {
-                StateId = request.StateId,
+                //StateId = request.StateId,
                 TeacherId = request.TeacherId,
                 Title = request.Title,
                 Description = request.Description,
-                StartDate = request.StartDate,
-                EndDate = request.EndDate,
+                StartDate = DateOnly.FromDateTime(request.StartDate),
+                EndDate = DateOnly.FromDateTime(request.EndDate),
                 PassingScore = request.PassingScore
             });
             return StatusCode(201, createdCourseId);

@@ -129,7 +129,7 @@ namespace WebApi
             services.AddTransient<IHomeTaskFactory, HomeTaskFactory>();
             services.AddTransient<ITeacherFactory, TeacherFactory>();
             services.AddTransient<IFileFactory, FileFactory>();
-            services.AddTransient<IBaseFactory<Common.Domain.Entities.HomeWork, Infrastructure.DataModels.HomeWork>, HomeWorkFactory>();
+            services.AddTransient<IHomeWorkFactory, HomeWorkFactory>();
             services.AddTransient<IHomeTaskFactory, HomeTaskFactory>();
 
             // 5. MVC

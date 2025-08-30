@@ -40,16 +40,23 @@ namespace Infrastructure.Factories
         {
             var materialPath = _fileFactory.GetFullPath(domainEntity.Material);
 
-            return Task.FromResult(new DataModels.Lesson
+            var dataModel = new DataModels.Lesson
             {
-                Id = domainEntity.Id,
+                // НЕ присваиваем Id если он равен 0 - база сама сгенерирует
                 CourseId = domainEntity.CourseId,
                 Title = domainEntity.Name.Value,
                 Description = domainEntity.Description,
                 Date = domainEntity.Date,
                 Material = materialPath,
-                Score = (int)domainEntity.Score
-            });
+                Score = domainEntity.Score?.Value ?? 0
+            };
+
+            if (domainEntity.Id > 0)
+            {
+                dataModel.Id = domainEntity.Id;
+            }
+
+            return Task.FromResult(dataModel);
         }
     }
 }

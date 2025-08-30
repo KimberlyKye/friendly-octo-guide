@@ -71,12 +71,12 @@ namespace Common.Domain.ValueObjects
             Проверка на наличие только буквенных символов и пробелов (для случаев, когда имя или фамилия могут состоять из нескольких слов).
             */
 
-            if (!Regex.IsMatch(firstName, @"^[a-zA-Zа-яА-Я\s]+$"))
+            if (!Regex.IsMatch(firstName, @"^[a-zA-Zа-яА-ЯёЁ\s\-]+$"))
             {
                 throw new ArgumentException("Имя должно содержать только буквы и пробелы", nameof(firstName));
             }
 
-            if (!Regex.IsMatch(lastName, @"^[a-zA-Zа-яА-Яs]+$"))
+            if (!Regex.IsMatch(lastName, @"^[a-zA-Zа-яА-ЯёЁ\s\-]+$"))
             {
                 throw new ArgumentException("Фамилия должна содержать только буквы и пробелы", nameof(lastName));
             }

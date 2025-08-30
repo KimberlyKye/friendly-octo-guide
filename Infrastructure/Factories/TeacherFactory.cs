@@ -24,9 +24,8 @@ namespace Infrastructure.Factories
 
         public Task<User> CreateDataModelAsync(Teacher teacher)
         {
-            return Task.FromResult(new User
+            var user = new User
             {
-                Id = teacher.Id,
                 RoleId = (int)RoleEnum.Teacher,
                 Name = teacher.Name.FirstName,
                 Surname = teacher.Name.LastName,
@@ -34,7 +33,15 @@ namespace Infrastructure.Factories
                 Password = teacher.Password,
                 PhoneNumber = teacher.PhoneNumber,
                 DateOfBirth = teacher.DateOfBirth.Date.ToDateTime(TimeOnly.MinValue)
-            });
+            };
+
+            // “олько если teacher.Id имеет осмысленное значение
+            if (teacher.Id > 0)
+            {
+                user.Id = teacher.Id;
+            }
+
+            return Task.FromResult(user);
         }
     }
 }

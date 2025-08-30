@@ -4,6 +4,7 @@ using Application.Models.Teacher.Responses;
 using Application.Services.Abstractions;
 using Common.Domain.Entities;
 using Common.Domain.ValueObjects.Enums;
+using Common.Domain.ValueObjects;
 using RepositoriesAbstractions.Abstractions;
 
 namespace Application.Services
@@ -73,7 +74,9 @@ namespace Application.Services
                 Teacher = course.Teacher,
                 Name = course.Name,
                 Description = course.Description,
-                Duration = course.Duration
+                Duration = course.Duration,
+                PassingScore = course.PassingScore,
+                AverageScore = course.AverageScore ?? (Score)0
             };
         }
 
@@ -89,7 +92,9 @@ namespace Application.Services
                 Description = lesson.Description,
                 Date = lesson.Date,
                 Material = lesson.Material,
-                HomeTask = lesson.HomeTask
+                HomeTask = lesson.HomeTask,
+                HomeWorks = lesson.HomeTask?.HomeWorks?.ToList()
+
             }).ToList();
         }
 

@@ -3,6 +3,7 @@ using Common.Domain.ValueObjects;
 using Common.Domain.ValueObjects.Enums;
 using Infrastructure.Contexts;
 using Infrastructure.DataModels;
+using Infrastructure.Factories;
 using Infrastructure.Factories.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using RepositoriesAbstractions.Abstractions;
@@ -16,6 +17,7 @@ namespace Infrastructure.Repositories
         private readonly ICourseFactory _courseFactory;
         private readonly ILessonFactory _lessonFactory;
         private readonly IHomeTaskFactory _homeTaskFactory;
+        private readonly IHomeWorkFactory _homeWorkFactory;
 
 
         public StudentInfoRepository(
@@ -23,13 +25,15 @@ namespace Infrastructure.Repositories
             IStudentFactory studentFactory,
             ICourseFactory courseFactory,
             ILessonFactory lessonFactory,
-            IHomeTaskFactory homeTaskFactory)
+            IHomeTaskFactory homeTaskFactory,
+            IHomeWorkFactory homeWorkFactory)
         {
             _context = context;
             _studentFactory = studentFactory;
             _courseFactory = courseFactory;
             _lessonFactory = lessonFactory;
             _homeTaskFactory = homeTaskFactory;
+            _homeWorkFactory = homeWorkFactory;
         }
 
         public async Task<Student?> GetStudentById(int studentId)
@@ -97,16 +101,18 @@ namespace Infrastructure.Repositories
             var coursesData = await (
                 from course in _context.Courses.AsNoTracking()
                 from studentCourse in _context.StudentCourses
-                    .Where(sc => sc.CourseId == course.Id
-                              && sc.StudentId == studentId)
+                    .Where(sc => sc.CourseId == course.Id && sc.StudentId == studentId)
                 from lessons in _context.Lessons
                     .Where(l => l.CourseId == course.Id)
                 from lessonScore in _context.LessonScores
-                    .Where(lS => lS.LessonId == lessons.Id
-                              && lS.StudentId == studentId)
+                    .Where(lS => lS.LessonId == lessons.Id && lS.StudentId == studentId)
                     .DefaultIfEmpty()
                 from homeTasks in _context.HomeTasks
                     .Where(hTs => hTs.LessonId == lessons.Id)
+                    .DefaultIfEmpty()
+                from homeWorks in _context.HomeWorks
+                    .Where(hWr => hWr.HomeTaskId == homeTasks.Id && hWr.StudentId == studentId)
+                    .DefaultIfEmpty()
                 from teacher in _context.Users
                     .Where(t => t.Id == course.TeacherId && t.RoleId == (int)RoleEnum.Teacher)
                 where course.Id == courseId
@@ -114,7 +120,7 @@ namespace Infrastructure.Repositories
                 {
                     Teacher = teacher,
                     Course = course,
-                    Lesson = new DataModels.Lesson // Создаем Lesson с Score
+                    Lesson = new DataModels.Lesson
                     {
                         Id = lessons.Id,
                         CourseId = lessons.CourseId,
@@ -124,32 +130,58 @@ namespace Infrastructure.Repositories
                         Material = lessons.Material,
                         Score = lessonScore != null ? lessonScore.Score : 0
                     },
-                    HomeTask = homeTasks
+                    HomeTask = homeTasks,
+                    HomeWork = homeWorks
                 })
                 .ToListAsync();
 
             if (!coursesData.Any())
                 return null;
 
-            // Упрощенная обработка результатов
             var firstRecord = coursesData.First();
             var domainCourse = await _courseFactory.CreateFrom(firstRecord.Course, firstRecord.Teacher);
 
-            // Группируем уроки с заданиями
+            // Группируем сначала по урокам, затем по HomeTask, и собираем все HomeWork
             var lessonsWithTasks = coursesData
                 .GroupBy(x => x.Lesson.Id)
-                .Select(g => new
+                .Select(lessonGroup => new
                 {
-                    Lesson = g.First().Lesson, // Уже содержит Score
-                    HomeTasks = g.Select(x => x.HomeTask).Where(ht => ht != null).ToList()
+                    Lesson = lessonGroup.First().Lesson,
+                    HomeTasks = lessonGroup
+                        .Where(x => x.HomeTask != null)
+                        .GroupBy(x => x.HomeTask.Id)
+                        .Select(htGroup => new
+                        {
+                            HomeTask = htGroup.First().HomeTask,
+                            HomeWorks = htGroup
+                                .Where(x => x.HomeWork != null)
+                                .Select(x => x.HomeWork)
+                                .Distinct() // Убираем дубликаты, если есть
+                                .ToList()
+                        }).ToList()
                 });
 
             foreach (var lessonGroup in lessonsWithTasks)
             {
-                var domainLesson = await _lessonFactory.CreateAsync(
-                    lessonGroup.Lesson);
-                    //,
-                    //lessonGroup.HomeTasks);
+                var domainLesson = await _lessonFactory.CreateAsync(lessonGroup.Lesson);
+
+                // Добавляем HomeTask со всеми его HomeWorks
+                foreach (var homeTaskGroup in lessonGroup.HomeTasks)
+                {
+                    if (homeTaskGroup.HomeTask != null)
+                    {
+                        var domainHomeTask = await _homeTaskFactory.CreateAsync(homeTaskGroup.HomeTask);
+
+                        // Добавляем все HomeWorks для этого HomeTask
+                        foreach (var homeWork in homeTaskGroup.HomeWorks)
+                        {
+                            var domainHomeWork = await _homeWorkFactory.CreateAsync(homeWork);
+                            domainHomeTask.AddHomeWork(domainHomeWork);
+                        }
+
+                        domainLesson.HomeTask = domainHomeTask;
+                    }
+                }
 
                 domainCourse.AddLesson(domainLesson);
             }
@@ -251,9 +283,9 @@ namespace Infrastructure.Repositories
         public async Task<List<int>> GetStudentIdsNotInCourse(int courseId, int[] studentIds)
         {
             var enrolledStudentIds = await _context.StudentCourses
-    .Where(sc => sc.CourseId == courseId && studentIds.Contains(sc.StudentId))
-    .Select(sc => sc.StudentId)
-    .ToListAsync();
+                .Where(sc => sc.CourseId == courseId && studentIds.Contains(sc.StudentId))
+                .Select(sc => sc.StudentId)
+                .ToListAsync();
 
             return studentIds.Except(enrolledStudentIds).ToList();
         }
@@ -277,7 +309,7 @@ namespace Infrastructure.Repositories
 
         public async Task<Common.Domain.Entities.Lesson?> GetHomeworksInfo(int lessonId, int studentId)
         {
-            var lessonData = await (
+            var homeWorksData = await (
                 from lesson in _context.Lessons.AsNoTracking()
                 from homeTasks in _context.HomeTasks
                     .Where(hTs => hTs.LessonId == lessonId)
@@ -290,21 +322,12 @@ namespace Infrastructure.Repositories
                     .DefaultIfEmpty()
                 where lesson.Id == lessonId
                 select new
-                {
-                    homeTasks,
+                {                    
                     homeWorks
                 })
-                .FirstOrDefaultAsync();
+                .ToListAsync();
 
-
-            if (lessonData is null) { return null; }
-
-
-
-
-
-
-            return null;
+            return null; // homeWorksData;
         }
     }
 }

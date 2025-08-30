@@ -72,7 +72,9 @@ namespace WebApi.Controllers
                 LessonName = lessonName,
                 LessonDescription = request.LessonDescription,
                 LessonStartDate = request.LessonStartDate,
-                Material = request.Material,
+                Material = request.MaterialPath != null ?
+                    new Common.Domain.ValueObjects.File(request.MaterialPath, request.MaterialName!, request.MaterialExtension!) :
+                    null
             };
 
             var result = await _teacherService.CreateLesson(requestModel);

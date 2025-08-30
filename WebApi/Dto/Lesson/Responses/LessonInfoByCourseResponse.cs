@@ -11,5 +11,6 @@ namespace WebApi.Dto.Lesson.Responses
         public DateTime Date { get; set; }
         public Common.Domain.ValueObjects.File? Material { get; set; }
         public HomeTask? HomeTask { get; set; }
+        public List<Common.Domain.Entities.HomeWork>? HomeWorks { get; set; }
     }
 }

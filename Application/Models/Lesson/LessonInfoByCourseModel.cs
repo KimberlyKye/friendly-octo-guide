@@ -11,5 +11,6 @@ namespace Application.Models.Lesson
         public DateTime Date { get; set; }
         public Common.Domain.ValueObjects.File? Material { get; set; }
         public HomeTask? HomeTask { get; set; }
+        public List<HomeWork>? HomeWorks { get; set; }
     }
 }

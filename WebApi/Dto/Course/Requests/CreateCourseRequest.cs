@@ -8,11 +8,11 @@ namespace WebApi.Dto.Course.Requests;
 /// </summary>
 public class CreateCourseRequest
 {
-    /// <summary>
-    /// Состояние курса
-    /// </summary>
-    [Required(ErrorMessage = "Состояние обязательно")]
-    public int StateId { get; set; }
+    ///// <summary>
+    ///// Состояние курса
+    ///// </summary>
+    //[Required(ErrorMessage = "Состояние обязательно")]
+    //public int StateId { get; set; }
 
     /// <summary>
     /// Id учителя
@@ -38,7 +38,7 @@ public class CreateCourseRequest
     [Required(ErrorMessage = "Дата начала курса")]
     [DataType(DataType.Date)]
     [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
-    public DateOnly StartDate { get; set; }
+    public DateTime StartDate { get; set; }
 
     /// <summary>
     /// Дата окончания
@@ -46,7 +46,7 @@ public class CreateCourseRequest
     [Required(ErrorMessage = "Дата окончания курса")]
     [DataType(DataType.Date)]
     [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
-    public DateOnly EndDate { get; set; }
+    public DateTime EndDate { get; set; }
 
     /// <summary>
     /// PassingScore

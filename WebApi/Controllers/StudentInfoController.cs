@@ -96,7 +96,9 @@ namespace WebApi.Controllers
                 Teacher = result.Teacher,
                 Name = result.Name,
                 Description = result.Description,
-                Duration = result.Duration
+                Duration = result.Duration,
+                PassingScore = result.PassingScore,
+                AverageScore = result.AverageScore
             });
         }
         /// <summary>
@@ -139,7 +141,8 @@ namespace WebApi.Controllers
                 Description = lesson.Description,
                 Date = lesson.Date,
                 Material = lesson.Material,
-                HomeTask = lesson.HomeTask
+                HomeTask = lesson.HomeTask,
+                HomeWorks = lesson.HomeWorks
             }).ToList();
 
             return Ok(response);
