@@ -34,15 +34,14 @@ namespace Application.Services
                 throw new ArgumentException($"Студент с ID {request.StudentId} не существует", nameof(request.StudentId));
             }
 
-            var lessonsTask = _studentCalendarRepository.GetLessonsAsync(request.StudentId, request.StartDate, request.EndDate);
-            var homeTasksTask = _studentCalendarRepository.GetHomeTasksAsync(request.StudentId, request.StartDate, request.EndDate);
+            var lessonsTask = await _studentCalendarRepository.GetLessonsAsync(request.StudentId, request.StartDate, request.EndDate);
+            var homeTasksTask = await _studentCalendarRepository.GetHomeTasksAsync(request.StudentId, request.StartDate, request.EndDate);
 
-            await Task.WhenAll(lessonsTask, homeTasksTask);
 
             return new StudentCalendarResponseModel
             {
-                CalendarLessonModels = await lessonsTask,
-                CalendarHomeTaskModels = await homeTasksTask
+                CalendarLessonModels = lessonsTask,
+                CalendarHomeTaskModels = homeTasksTask
             };            
         }
     }
