@@ -2,6 +2,6 @@
 {
     public class TeacherCalendarResponseModel
     {
-        public CalendarLessonModel[] CalendarLessonModels { get; set; } = new CalendarLessonModel[0];
+        public CalendarLessonModel[] CalendarLessonModels { get; set; } = Array.Empty<CalendarLessonModel>();
     }
 }
