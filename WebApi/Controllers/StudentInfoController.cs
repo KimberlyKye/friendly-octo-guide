@@ -42,7 +42,7 @@ namespace WebApi.Controllers
         /// </remarks>
         /// <response code="200">Возвращает модель</response>
         /// <response code="400">Некорректные параметры запроса</response>
-        /// <response code="500">Если есть какие-то ошибки при создании</response>        
+        /// <response code="500">Если есть какие-то ошибки при запросе</response>
         [HttpGet("get-all-courses")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -67,14 +67,15 @@ namespace WebApi.Controllers
         ///
         ///     GET /get-course-info
         ///     {
-        ///        "courseId": 111
+        ///        "courseId": 111,
+        ///        "studentId": 111
         ///     }
         ///
         /// </remarks>
         /// <response code="200">Возвращает модель</response>
         /// <response code="400">Некорректные параметры запроса</response>
-        /// <response code="404">Курс не найден</response>
-        /// <response code="500">Если есть какие-то ошибки при создании</response>        
+        /// <response code="404">Данные не найдены</response>
+        /// <response code="500">Если есть какие-то ошибки при запросе</response>
         [HttpGet("get-course-info")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -82,7 +83,7 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetCourseInfo(int courseId, int studentId)
         {
-            if (courseId <= 0) { return BadRequest("courseId не может быть меньше или равен 0 "); }
+            if (courseId <= 0 || studentId <= 0) { return BadRequest("courseId или studentId не может быть меньше или равен 0 "); }
 
             var result = await _studentInfoService.GetCourseInfo(courseId, studentId);
 
@@ -95,28 +96,31 @@ namespace WebApi.Controllers
                 Teacher = result.Teacher,
                 Name = result.Name,
                 Description = result.Description,
-                Duration = result.Duration
+                Duration = result.Duration,
+                PassingScore = result.PassingScore,
+                AverageScore = result.AverageScore
             });
         }
         /// <summary>
-        /// Метод получения информации о курсе (без уроков и ДЗ)
+        /// Метод получения информации о уроках в курсе
         /// </summary>
         /// <param name="courseId"></param>
         /// <param name="studentId"></param>
-        /// <returns>Модель курса</returns>
+        /// <returns>Модель данных</returns>
         /// <remarks>
         /// Пример запроса:
         ///
         ///     GET /get-lessons-info-by-course
         ///     {
-        ///        "courseId": 111
+        ///        "courseId": 111,
+        ///        "studentId": 111
         ///     }
         ///
         /// </remarks>
         /// <response code="200">Возвращает модель</response>
         /// <response code="400">Некорректные параметры запроса</response>
-        /// <response code="404">Курс не найден</response>
-        /// <response code="500">Если есть какие-то ошибки при создании</response>        
+        /// <response code="404">Данные не найдены</response>
+        /// <response code="500">Если есть какие-то ошибки при запросе</response>
         [HttpGet("get-lessons-info-by-course")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -124,7 +128,7 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetLessonsInfoByCourse(int courseId, int studentId)
         {
-            if (courseId <= 0) { return BadRequest("courseId не может быть меньше или равен 0 "); }
+            if (courseId <= 0 || studentId <= 0) { return BadRequest("courseId или studentId не может быть меньше или равен 0 "); }
 
             var result = await _studentInfoService.GetLessonsInfoByCourse(courseId, studentId);
             if (result is null) { return NotFound(); }
@@ -137,7 +141,8 @@ namespace WebApi.Controllers
                 Description = lesson.Description,
                 Date = lesson.Date,
                 Material = lesson.Material,
-                HomeTasks = lesson.HomeTasks
+                HomeTask = lesson.HomeTask,
+                HomeWorks = lesson.HomeWorks
             }).ToList();
 
             return Ok(response);

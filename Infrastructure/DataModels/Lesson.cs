@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Infrastructure.DataModels
+﻿namespace Infrastructure.DataModels
 {
     public class Lesson
     {
@@ -15,5 +8,6 @@ namespace Infrastructure.DataModels
         public string Description { get; set; }
         public DateTime Date { get; set; }
         public string Material { get; set; }
+        public int Score { get; set; }
     }
 }

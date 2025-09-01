@@ -1,11 +1,8 @@
-using Domain.ValueObjects.Enums;
-using Entities;
+using Common.RepositoriesAbstractions.Abstractions;
 using Infrastructure.Contexts;
-using Infrastructure.DataModels;
-using Infrastructure.Factories;
-using Infrastructure.Factories.Abstractions;
 using Microsoft.EntityFrameworkCore;
-using RepositoriesAbstractions.Abstractions;
+using Common.Domain.Entities;
+using Infrastructure.Factories.Abstractions;
 
 namespace Infrastructure.Repositories;
 
@@ -32,7 +29,7 @@ public class CourseRepository : ICourseRepository
         _studentFactory = studentFactory;
     }
 
-    public async Task<int> AddCourseAsync(Entities.Course course)
+    public async Task<int> AddCourseAsync(Common.Domain.Entities.Course course)
     {
         var courseDataModel = _courseFactory.MapTo(course);
 
@@ -41,7 +38,7 @@ public class CourseRepository : ICourseRepository
         return courseDataModel.Id;
     }
 
-    public async Task<Entities.Course[]> GetAllStudentCoursesAsync(Student student)
+    public async Task<Common.Domain.Entities.Course[]> GetAllStudentCoursesAsync(Student student)
     {
         // 1. Получаем студента
         var s = await _studentFactory.CreateDataModelAsync(student);
@@ -65,7 +62,7 @@ public class CourseRepository : ICourseRepository
     }
 
 
-    public async Task<Entities.Course[]> GetAllTeacherCoursesAsync(Teacher teacher)
+    public async Task<Common.Domain.Entities.Course[]> GetAllTeacherCoursesAsync(Teacher teacher)
     {
         // 1. Получаем преподавателя
         var t = await _teacherFactory.CreateDataModelAsync(teacher);
@@ -83,7 +80,7 @@ public class CourseRepository : ICourseRepository
     }
 
 
-    public async Task<Entities.Course> GetCourseAsync(int courseId)
+    public async Task<Common.Domain.Entities.Course> GetCourseAsync(int courseId)
     {
         var courseDataModel = await _context.Courses.FindAsync(courseId);
         if (courseDataModel != null)
@@ -95,7 +92,7 @@ public class CourseRepository : ICourseRepository
         return null;
     }
 
-    public async Task<Entities.Lesson> GetLessonByIdAsync(int id)
+    public async Task<Common.Domain.Entities.Lesson> GetLessonByIdAsync(int id)
     {
         var lesson = await _context.Lessons.FindAsync(id);
         if (lesson != null)
@@ -106,7 +103,7 @@ public class CourseRepository : ICourseRepository
         return null;
     }
 
-    public async Task<int> UpdateCourseAsync(Entities.Course course)
+    public async Task<int> UpdateCourseAsync(Common.Domain.Entities.Course course)
     {
         var dataModel = _courseFactory.MapTo(course);
         _ = _context.Courses.Update(dataModel);
@@ -114,7 +111,7 @@ public class CourseRepository : ICourseRepository
         return dataModel.Id;
     }
 
-    public async Task<int> UpdateLesson(Entities.Lesson lesson)
+    public async Task<int> UpdateLesson(Common.Domain.Entities.Lesson lesson)
     {
         var dataModel = await _lessonFactory.CreateDataModelAsync(lesson);
         _ = _context.Lessons.Update(dataModel);

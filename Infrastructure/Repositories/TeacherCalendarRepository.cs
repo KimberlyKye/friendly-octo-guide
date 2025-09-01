@@ -1,9 +1,6 @@
-﻿using Domain.ValueObjects;
-using Domain.ValueObjects.Enums;
-using Entities;
+﻿using Common.Domain.ValueObjects.Enums;
+using Common.Models.Calendar.Responses;
 using Infrastructure.Contexts;
-using Infrastructure.DataModels;
-using Infrastructure.Factories;
 using Infrastructure.Factories.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using RepositoriesAbstractions.Abstractions;
@@ -28,48 +25,31 @@ namespace Infrastructure.Repositories
             _courseFactory = courseFactory;
             _lessonFactory = lessonFactory;
         }
-        public async Task<IReadOnlyCollection<Entities.Course>> GetPeriodCalendarData(int teacherId, DateTime startDate, DateTime endDate)
-        {  
-            var data = await (
+        public async Task<TeacherCalendarResponseModel> GetPeriodCalendarData(int teacherId, DateTime startDate, DateTime endDate)
+        {
+            var calendarLessons = await (
                 from teacher in _context.Users.AsNoTracking()
                 from course in _context.Courses.Where(c => c.TeacherId == teacher.Id
                                                         && c.StateId == (int)CourseState.Active)
                 from lesson in _context.Lessons.Where(l => l.CourseId == course.Id
                                                         && l.Date >= startDate.ToUniversalTime()
                                                         && l.Date <= endDate.ToUniversalTime())
-                where teacher.Id == teacherId
-                            && teacher.RoleId == (int)RoleEnum.Teacher
-                select new
+                where teacher.Id == teacherId 
+                   && teacher.RoleId == (int)RoleEnum.Teacher
+                select new CalendarLessonModel
                 {
-                    Teacher = teacher,
-                    Course = course,
-                    Lesson = lesson
+                    CourseId = course.Id,
+                    CourseName = course.Title,
+                    LessonId = lesson.Id,
+                    LessonDate = lesson.Date,
+                    LessonName = lesson.Title
                 })
-                .ToListAsync();
+                .ToArrayAsync();
 
-            // Группируем данные по курсам
-            var groupedData = data
-                .GroupBy(x => x.Course.Id)
-                .Select(g => new
-                {
-                    Course = g.First().Course,
-                    Teacher = g.First().Teacher,
-                    Lessons = g.Select(x => x.Lesson).ToList()
-                });
-
-            var result = new List<Entities.Course>();
-
-            foreach (var group in groupedData)
-            {                
-                var domainCourse = await _courseFactory.CreateFrom(group.Course, group.Teacher);
-
-                var domainLessons = group.Lessons
-                    .Select(lesson => _lessonFactory.CreateAsync(lesson, null).Result)
-                    .ToList();
-                domainCourse.AddLessons(domainLessons);
-                result.Add(domainCourse);                
-            }
-            return result.AsReadOnly();            
+            return new TeacherCalendarResponseModel
+            {
+                CalendarLessonModels = calendarLessons
+            };
         }
     }
 }

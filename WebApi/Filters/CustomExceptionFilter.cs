@@ -1,6 +1,6 @@
-using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using System.ComponentModel.DataAnnotations;
 
 namespace WebApi.Filters;
 

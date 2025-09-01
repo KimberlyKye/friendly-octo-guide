@@ -1,5 +1,5 @@
+using Application.Services.Abstractions;
 using Microsoft.Extensions.Options;
-using Application.Models;
 
 namespace Application.Services;
 
@@ -10,7 +10,7 @@ public class LocalFileStorageService : IFileStorageService
     public LocalFileStorageService(IOptions<FileStorageOptions> options)
     {
         _storagePath = options.Value.RootPath;
-    
+
         Directory.CreateDirectory(_storagePath);
     }
 

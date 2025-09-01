@@ -1,5 +1,5 @@
-using Domain.ValueObjects.Enums;
-using Entities;
+using Common.Domain.ValueObjects.Enums;
+using Common.Domain.Entities;
 using Infrastructure.Contexts;
 using Infrastructure.Factories.Abstractions;
 using Microsoft.EntityFrameworkCore;

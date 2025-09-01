@@ -1,14 +1,10 @@
-﻿using Domain.ValueObjects;
-using Infrastructure.DataModels;
-using Infrastructure.Factories.Abstractions;
-using System;
-using System.IO;
+﻿using Infrastructure.Factories.Abstractions;
 
 namespace Infrastructure.Factories
 {
     public class FileFactory : IFileFactory
     {
-        public Domain.ValueObjects.File? Create(string? fullPath)
+        public Common.Domain.ValueObjects.File? Create(string? fullPath)
         {
             if (string.IsNullOrWhiteSpace(fullPath))
                 throw new ArgumentNullException(nameof(fullPath));
@@ -27,7 +23,7 @@ namespace Infrastructure.Factories
                     throw new ArgumentException("Invalid file path structure");
                 }
 
-                return new Domain.ValueObjects.File(dirPath, fileName, extension);
+                return new Common.Domain.ValueObjects.File(dirPath, fileName, extension);
             }
             catch (Exception ex)
             {
@@ -35,7 +31,7 @@ namespace Infrastructure.Factories
             }
         }
 
-        public string? GetFullPath(Domain.ValueObjects.File? file)
+        public string? GetFullPath(Common.Domain.ValueObjects.File? file)
         {
             if (file is null)
                 throw new ArgumentNullException(nameof(file));

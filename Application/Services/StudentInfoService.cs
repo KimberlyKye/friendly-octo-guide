@@ -1,11 +1,11 @@
-﻿using Application.Services.Abstractions;
-using Application.Models.Teacher.Responses;
-using RepositoriesAbstractions.Abstractions;
-using Domain.ValueObjects.Enums;
-using Entities;
-using Application.Models.Course;
-using Domain.ValueObjects;
+﻿using Application.Models.Course;
 using Application.Models.Lesson;
+using Application.Models.Teacher.Responses;
+using Application.Services.Abstractions;
+using Common.Domain.Entities;
+using Common.Domain.ValueObjects.Enums;
+using Common.Domain.ValueObjects;
+using RepositoriesAbstractions.Abstractions;
 
 namespace Application.Services
 {
@@ -74,13 +74,16 @@ namespace Application.Services
                 Teacher = course.Teacher,
                 Name = course.Name,
                 Description = course.Description,
-                Duration = course.Duration
+                Duration = course.Duration,
+                PassingScore = course.PassingScore,
+                AverageScore = course.AverageScore ?? (Score)0
             };
         }
+
         public async Task<List<LessonInfoByCourseModel>?> GetLessonsInfoByCourse(int courseId, int studentId)
         {
             var course = await _studentInfoRepository.GetAllCourseInfo(courseId, studentId);
-            if (course is null) { return null!; }
+            if (course is null) { return null; }
 
             return course.Lessons.Select(lesson => new LessonInfoByCourseModel
             {
@@ -89,7 +92,9 @@ namespace Application.Services
                 Description = lesson.Description,
                 Date = lesson.Date,
                 Material = lesson.Material,
-                HomeTasks = lesson.HomeTasks.ToList()
+                HomeTask = lesson.HomeTask,
+                HomeWorks = lesson.HomeTask?.HomeWorks?.ToList()
+
             }).ToList();
         }
 
@@ -108,5 +113,15 @@ namespace Application.Services
         }
 
 
+
+        public async Task<List<LessonInfoByCourseModel>?> GetHomeworksInfo(int lessonId, int studentId)
+        {
+            var lesson = await _studentInfoRepository.GetHomeworksInfo(lessonId, studentId);
+            if (lesson is null) { return null!; }
+
+
+
+            return null;
+        }
     }
 }

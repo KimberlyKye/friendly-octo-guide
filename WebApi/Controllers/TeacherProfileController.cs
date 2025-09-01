@@ -1,5 +1,4 @@
-﻿using Application.Models.Student;
-using Application.Models.Teacher;
+﻿using Application.Models.Teacher;
 using Application.Services.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Dto.Teacher;

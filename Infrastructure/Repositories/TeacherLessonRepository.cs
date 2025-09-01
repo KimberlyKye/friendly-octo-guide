@@ -1,11 +1,5 @@
-﻿using Entities;
-using Infrastructure.DataModels;
-using Infrastructure.Contexts;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
+﻿using Infrastructure.Contexts;
 using Infrastructure.Factories.Abstractions;
-using Infrastructure.Factories;
-using Domain.ValueObjects.Enums;
 using RepositoriesAbstractions.Abstractions;
 
 namespace Infrastructure.Repositories;
@@ -24,16 +18,16 @@ public class TeacherLessonRepository : ITeacherLessonRepository
         _context = context;
         _teacherFactory = teacherFactory;
         _lessonFactory = lessonFactory;
-    }    
-    public async Task<int> AddLesson(Entities.Lesson lesson)
-    {   
+    }
+    public async Task<int> AddLesson(Common.Domain.Entities.Lesson lesson)
+    {
         var lessonDataModel = await _lessonFactory.CreateDataModelAsync(lesson);
 
         await _context.Lessons.AddAsync(lessonDataModel);
 
         await _context.SaveChangesAsync();
 
-        return lessonDataModel.Id;        
+        return lessonDataModel.Id;
     }
     //public async Task<CalendarResponseModel> GetCalendarData(GetCalendarDataRequestModel requestDto)
     //{

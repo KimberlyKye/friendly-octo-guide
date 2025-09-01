@@ -1,10 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Application.Services.Abstractions;
-using Entities;
-using RepositoriesAbstractions;
+using Common.Domain.Entities;
+using Common.RepositoriesAbstractions;
 
 namespace Application.Services
 {

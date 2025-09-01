@@ -1,7 +1,7 @@
-﻿using Infrastructure.Contexts;
-using RepositoriesAbstractions.Abstractions;
+﻿using Common.Domain.ValueObjects.Enums;
+using Common.RepositoriesAbstractions.Abstractions;
+using Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
-using Domain.ValueObjects.Enums;
 
 namespace Infrastructure.Repositories
 {

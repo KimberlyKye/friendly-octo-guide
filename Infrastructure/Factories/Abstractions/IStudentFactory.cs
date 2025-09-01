@@ -1,4 +1,4 @@
-using Entities;
+using Common.Domain.Entities;
 using Infrastructure.DataModels;
 
 namespace Infrastructure.Factories.Abstractions

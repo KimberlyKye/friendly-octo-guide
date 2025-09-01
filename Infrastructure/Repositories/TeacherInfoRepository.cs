@@ -1,10 +1,9 @@
-﻿using Domain.ValueObjects.Enums;
-using Entities;
+﻿using Common.Domain.Entities;
+using Common.Domain.ValueObjects.Enums;
 using Infrastructure.Contexts;
-using RepositoriesAbstractions.Abstractions;
-using Microsoft.EntityFrameworkCore;
 using Infrastructure.Factories.Abstractions;
-using Infrastructure.Factories;
+using Microsoft.EntityFrameworkCore;
+using RepositoriesAbstractions.Abstractions;
 
 namespace Infrastructure.Repositories
 {
@@ -23,14 +22,14 @@ namespace Infrastructure.Repositories
         }
         public async Task<Teacher?> GetTeacherById(int teacherId)
         {
-            
+
             var teacherInfo = await _context.Users
                 .Where(teacher => teacher.Id == teacherId && teacher.RoleId == (int)RoleEnum.Teacher)
                 .FirstOrDefaultAsync();
 
             if (teacherInfo is null) { return null; }
 
-            return await _teacherFactory.CreateFrom(teacherInfo);            
+            return await _teacherFactory.CreateFrom(teacherInfo);
         }
     }
 }

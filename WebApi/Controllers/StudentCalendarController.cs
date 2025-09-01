@@ -1,9 +1,7 @@
-﻿using Application.Models.Calendar.Requests;
-using Application.Models.Teacher.Responses;
-using Application.Services;
-using Application.Services.Abstractions;
+﻿using Application.Services.Abstractions;
+using Common.Models.Calendar.Requests;
+using Common.Models.Calendar.Responses;
 using Microsoft.AspNetCore.Mvc;
-using WebApi.Dto.Calendar.Requests;
 
 namespace WebApi.Controllers
 {

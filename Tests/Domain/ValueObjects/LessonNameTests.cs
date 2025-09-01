@@ -1,6 +1,4 @@
-﻿using Domain.ValueObjects;
-using NUnit.Framework;
-using System;
+﻿using Common.Domain.ValueObjects;
 
 namespace Tests.Domain.ValueObjects
 {

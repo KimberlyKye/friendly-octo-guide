@@ -163,6 +163,9 @@ namespace Infrastructure.Migrations
                     b.Property<string>("Material")
                         .HasColumnType("text");
 
+                    b.Property<int>("Score")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(200)
@@ -287,7 +290,14 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("StudentCourses");
+                    b.HasIndex("CourseId");
+
+                    b.HasIndex("StudentId");
+
+                    b.HasIndex("StudentId", "CourseId")
+                        .IsUnique();
+
+                    b.ToTable("StudentCourses", (string)null);
                 });
 
             modelBuilder.Entity("Infrastructure.DataModels.StudentFavoriteCourse", b =>
@@ -390,7 +400,7 @@ namespace Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Infrastructure.DataModels.StudentCourse", null)
+                    b.HasOne("Infrastructure.DataModels.User", null)
                         .WithMany()
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -411,6 +421,21 @@ namespace Infrastructure.Migrations
                     b.HasOne("Infrastructure.DataModels.Lesson", null)
                         .WithMany()
                         .HasForeignKey("LessonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Infrastructure.DataModels.User", null)
+                        .WithMany()
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Infrastructure.DataModels.StudentCourse", b =>
+                {
+                    b.HasOne("Infrastructure.DataModels.Course", null)
+                        .WithMany()
+                        .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

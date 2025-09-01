@@ -1,9 +1,8 @@
-﻿using RepositoriesAbstractions.Abstractions;
+﻿using Application.Models.Teacher.Requests;
 using Application.Services.Abstractions;
-using Entities;
-using Domain.ValueObjects;
-using Application.Models.Teacher.Requests;
-using Application.Models.Teacher.Responses;
+using Common.Domain.Entities;
+using Common.RepositoriesAbstractions.Abstractions;
+using RepositoriesAbstractions.Abstractions;
 
 namespace Application.Services;
 
@@ -14,7 +13,7 @@ public class TeacherLessonService : ITeacherLessonService
     private readonly ITeacherInfoRepository _teacherInfoRepository;
 
     public TeacherLessonService(
-        ITeacherLessonRepository teacherLessonRepository, 
+        ITeacherLessonRepository teacherLessonRepository,
         ICourseInfoRepository courseInfoRepository,
         ITeacherInfoRepository teacherInfoRepository)
     {
@@ -22,11 +21,11 @@ public class TeacherLessonService : ITeacherLessonService
         _courseInfoRepository = courseInfoRepository;
         _teacherInfoRepository = teacherInfoRepository;
     }
-    
+
     public async Task<int> CreateLesson(CreateLessonModel request)
     {
         Teacher? teacher = await _teacherInfoRepository.GetTeacherById(request.TeacherId);
-        if (teacher is null) 
+        if (teacher is null)
         {
             throw new ArgumentNullException($"Преподаватель с ID {request.TeacherId} не существует", nameof(request.TeacherId));
         }
@@ -39,14 +38,14 @@ public class TeacherLessonService : ITeacherLessonService
             throw new ArgumentNullException($"Курс с ID {request.CourseId} не не принадлежит преподавателю с ID {request.TeacherId}", nameof(request.CourseId));
         }
 
-        Lesson newLesson = await teacher.CreateLesson(  0,
+        Lesson newLesson = await teacher.CreateLesson(0,
                                                         request.CourseId,
                                                         request.LessonName,
                                                         request.LessonDescription,
                                                         request.LessonStartDate,
                                                         request.Material,
-                                                        request.HomeTasks);
+                                                        request.HomeTask);
 
         return await _teacherLessonRepository.AddLesson(newLesson);
-    }    
+    }
 }

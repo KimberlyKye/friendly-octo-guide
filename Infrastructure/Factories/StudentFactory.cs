@@ -1,10 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Domain.ValueObjects;
-using Domain.ValueObjects.Enums;
-using Entities;
+using Common.Domain.Entities;
+using Common.Domain.ValueObjects;
+using Common.Domain.ValueObjects.Enums;
 using Infrastructure.DataModels;
 using Infrastructure.Factories.Abstractions;
 

@@ -14,7 +14,7 @@ namespace Infrastructure.Configurations
             builder.Property(hw => hw.Id)
               .ValueGeneratedOnAdd(); // Автоинкремент
 
-            builder.HasOne<StudentCourse>()
+            builder.HasOne<User>()
                .WithMany()
                .HasForeignKey(hw => hw.StudentId)
                .OnDelete(DeleteBehavior.Cascade);

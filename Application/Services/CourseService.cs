@@ -1,7 +1,8 @@
 using Application.Models.Course;
 using Application.Services.Abstractions;
-using Entities;
-using Microsoft.VisualBasic;
+using Common.Domain.Entities;
+using Common.Domain.ValueObjects;
+using Common.RepositoriesAbstractions.Abstractions;
 using RepositoriesAbstractions.Abstractions;
 
 namespace Application.Services;
@@ -30,9 +31,10 @@ public class CourseService : ICourseService
         }
         Course newCourse = await teacher.CreateCourse(0,
                                                         teacher,
-                                                        new Domain.ValueObjects.CourseName(request.Title),
+                                                        new Common.Domain.ValueObjects.CourseName(request.Title),
                                                         request.Description,
-                                                        new Domain.ValueObjects.Duration(request.StartDate, request.EndDate));
+                                                        new Common.Domain.ValueObjects.Duration(request.StartDate, request.EndDate),
+                                                        new Score(request.PassingScore));
 
         return await _courseRepository.AddCourseAsync(newCourse);
     }

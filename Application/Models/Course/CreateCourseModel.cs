@@ -8,7 +8,7 @@ public class CreateCourseModel
     /// <summary>
     /// Состояние курса
     /// </summary>
-    public int StateId {  get; set; }
+    public int StateId { get; set; }
 
     /// <summary>
     /// Id учителя
@@ -18,7 +18,7 @@ public class CreateCourseModel
     /// <summary>
     /// Заголовок
     /// </summary>
-    public string Title {  get; set; }
+    public string Title { get; set; }
 
     /// <summary>
     /// Описание
@@ -33,7 +33,7 @@ public class CreateCourseModel
     /// <summary>
     /// Дата окончания
     /// </summary>
-    public DateOnly EndDate { get; set;}
+    public DateOnly EndDate { get; set; }
 
     /// <summary>
     /// PassingScore

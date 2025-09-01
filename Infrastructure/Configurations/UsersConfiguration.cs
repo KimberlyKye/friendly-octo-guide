@@ -1,8 +1,6 @@
 ﻿using Infrastructure.DataModels;
-using Infrastructure.Migrations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Infrastructure.Configurations
 {
@@ -21,21 +19,21 @@ namespace Infrastructure.Configurations
             // Настройка свойств
             builder.Property(c => c.Name)
                 .IsRequired()
-                .HasMaxLength(200); 
+                .HasMaxLength(200);
 
             builder.Property(c => c.Surname)
                 .IsRequired()
-                .HasMaxLength(200); 
+                .HasMaxLength(200);
 
             builder.Property(c => c.DateOfBirth)
                 .IsRequired()
                 .HasColumnType("date"); // Для DateOnly в PostgreSQL
 
-            builder.Property(c => c.PhoneNumber) 
+            builder.Property(c => c.PhoneNumber)
             .IsRequired()
             .HasMaxLength(12);
 
-            builder.Property(c => c.Email) 
+            builder.Property(c => c.Email)
                 .IsRequired()
                 .HasMaxLength(100);
 
@@ -49,7 +47,7 @@ namespace Infrastructure.Configurations
                 .WithMany()
                 .HasForeignKey(c => c.RoleId)
                 .OnDelete(DeleteBehavior.Restrict);
-                        
+
         }
     }
 }

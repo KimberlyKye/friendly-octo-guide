@@ -1,7 +1,7 @@
 ﻿using Application.Models.Course;
 using Application.Models.Lesson;
 using Application.Models.Teacher.Responses;
-using Entities;
+using Common.Domain.Entities;
 
 
 namespace Application.Services.Abstractions
@@ -43,5 +43,7 @@ namespace Application.Services.Abstractions
         /// <param name="studentIds"></param>
         /// <returns></returns>
         Task<IEnumerable<int>> RemoveStudentsFromCourse(int courseId, int[] studentIds);
+        Task<List<LessonInfoByCourseModel>?> GetHomeworksInfo(int lessonId, int studentId);
+
     }
 }

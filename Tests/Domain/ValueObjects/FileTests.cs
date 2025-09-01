@@ -1,7 +1,4 @@
-﻿using Domain.ValueObjects;
-using NUnit.Framework;
-using System;
-using File = Domain.ValueObjects.File;
+﻿using File = Common.Domain.ValueObjects.File;
 
 namespace Tests.Domain.ValueObjects
 {

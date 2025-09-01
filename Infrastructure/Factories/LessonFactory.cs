@@ -1,13 +1,5 @@
-// Infrastructure/Factories/LessonFactory.cs
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Domain.ValueObjects;
-using Entities;
-using Infrastructure.DataModels;
+using Common.Domain.ValueObjects;
 using Infrastructure.Factories.Abstractions;
-using File = Domain.ValueObjects.File;
 
 namespace Infrastructure.Factories
 {
@@ -24,45 +16,47 @@ namespace Infrastructure.Factories
             _fileFactory = fileFactory ?? throw new ArgumentNullException(nameof(fileFactory));
         }
 
-        public async Task<Entities.Lesson> CreateAsync(DataModels.Lesson dataModel, IEnumerable<DataModels.HomeTask>? homeTasks = null)
+        public async Task<Common.Domain.Entities.Lesson> CreateAsync(DataModels.Lesson lesson, DataModels.HomeTask? homeTask = null)
         {
-            var material = _fileFactory.Create(dataModel.Material);
-            var domainHomeTasks = homeTasks != null
-                ? await CreateHomeTasksAsync(homeTasks)
+            var material = _fileFactory.Create(lesson.Material);
+            var domainHomeTask = homeTask != null
+                ? await _homeTaskFactory.CreateAsync(homeTask)
+                : null;
+            Score? pScore = lesson.Score != 0
+                ? new Score(lesson.Score)
                 : null;
 
-            return new Entities.Lesson(
-                id: dataModel.Id,
-                courseId : dataModel.CourseId,
-                lessonName: new LessonName(dataModel.Title),
-                description: dataModel.Description,
-                date: dataModel.Date,
+            return new Common.Domain.Entities.Lesson(
+                id: lesson.Id,
+                courseId: lesson.CourseId,
+                lessonName: new LessonName(lesson.Title),
+                description: lesson.Description,
+                date: lesson.Date,
                 material: material,
-                homeTasks: domainHomeTasks);
+                homeTask: domainHomeTask,
+                score: pScore);
         }
-
-        public Task<DataModels.Lesson> CreateDataModelAsync(Entities.Lesson domainEntity)
+        public Task<DataModels.Lesson> CreateDataModelAsync(Common.Domain.Entities.Lesson domainEntity)
         {
             var materialPath = _fileFactory.GetFullPath(domainEntity.Material);
 
-            return Task.FromResult(new DataModels.Lesson
+            var dataModel = new DataModels.Lesson
             {
-                Id = domainEntity.Id,
+                // НЕ присваиваем Id если он равен 0 - база сама сгенерирует
                 CourseId = domainEntity.CourseId,
                 Title = domainEntity.Name.Value,
                 Description = domainEntity.Description,
                 Date = domainEntity.Date,
-                Material = materialPath
-            });
-        }
+                Material = materialPath,
+                Score = domainEntity.Score?.Value ?? 0
+            };
 
-        private async Task<List<Entities.HomeTask>> CreateHomeTasksAsync(IEnumerable<DataModels.HomeTask> homeTasks)
-        {
-            var tasks = homeTasks
-                .Where(h => h != null)
-                .Select(ht => _homeTaskFactory.CreateAsync(ht));
+            if (domainEntity.Id > 0)
+            {
+                dataModel.Id = domainEntity.Id;
+            }
 
-            return (await Task.WhenAll(tasks)).ToList();
+            return Task.FromResult(dataModel);
         }
     }
 }

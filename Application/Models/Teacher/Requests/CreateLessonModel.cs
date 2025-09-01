@@ -1,11 +1,5 @@
-﻿using Domain.ValueObjects;
-using Entities;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Common.Domain.Entities;
+using Common.Domain.ValueObjects;
 
 namespace Application.Models.Teacher.Requests
 {
@@ -16,7 +10,8 @@ namespace Application.Models.Teacher.Requests
         public required LessonName LessonName { get; init; }
         public required string LessonDescription { get; init; }
         public required DateTime LessonStartDate { get; init; }
-        public required Domain.ValueObjects.File? Material { get; init; }
-        public List<HomeTask>? HomeTasks { get; init; }
+        public Score PassingScore { get; init; }
+        public required Common.Domain.ValueObjects.File? Material { get; init; }
+        public HomeTask? HomeTask { get; init; }
     }
 }

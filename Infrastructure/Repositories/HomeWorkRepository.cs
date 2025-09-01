@@ -1,18 +1,19 @@
 namespace Infrastructure.Repositories;
 
-using Entities;
-using RepositoriesAbstractions;
-using Microsoft.EntityFrameworkCore;
+using Common.Domain.Entities;
+using Common.RepositoriesAbstractions;
 using Infrastructure.Contexts;
 using Infrastructure.Factories.Abstractions;
+using Microsoft.EntityFrameworkCore;
 
 public class HomeWorkRepository : IHomeWorkRepository
 {
     private readonly AppDbContext _context;
-    private readonly IBaseFactory<Entities.HomeWork, DataModels.HomeWork> _homeWorkFactory;
+    private readonly IHomeWorkFactory _homeWorkFactory;//IBaseFactory<Common.Domain.Entities.HomeWork, DataModels.HomeWork> _homeWorkFactory;
 
 
-    public HomeWorkRepository(AppDbContext context, IBaseFactory<Entities.HomeWork, DataModels.HomeWork> homeWorkFactory)
+    public HomeWorkRepository(AppDbContext context,
+                              IHomeWorkFactory homeWorkFactory)//IBaseFactory<Common.Domain.Entities.HomeWork, DataModels.HomeWork> homeWorkFactory)
     {
         _context = context;
         _homeWorkFactory = homeWorkFactory;

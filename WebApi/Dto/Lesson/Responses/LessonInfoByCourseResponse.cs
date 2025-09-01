@@ -1,5 +1,5 @@
-﻿using Domain.ValueObjects;
-using Entities;
+﻿using Common.Domain.Entities;
+using Common.Domain.ValueObjects;
 
 namespace WebApi.Dto.Lesson.Responses
 {
@@ -9,7 +9,8 @@ namespace WebApi.Dto.Lesson.Responses
         public LessonName LessonName { get; set; }
         public string Description { get; set; }
         public DateTime Date { get; set; }
-        public Domain.ValueObjects.File? Material { get; set; }
-        public List<HomeTask> HomeTasks { get; set; }
+        public Common.Domain.ValueObjects.File? Material { get; set; }
+        public HomeTask? HomeTask { get; set; }
+        public List<Common.Domain.Entities.HomeWork>? HomeWorks { get; set; }
     }
 }

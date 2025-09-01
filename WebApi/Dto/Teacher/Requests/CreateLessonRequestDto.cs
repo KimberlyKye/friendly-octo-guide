@@ -1,7 +1,5 @@
-﻿using Entities;
-using Domain.ValueObjects;
-using System.ComponentModel.DataAnnotations;
-using File = Domain.ValueObjects.File;
+﻿using System.ComponentModel.DataAnnotations;
+using File = Common.Domain.ValueObjects.File;
 
 namespace WebApi.Dto.Teacher.Requests
 {
@@ -30,8 +28,9 @@ namespace WebApi.Dto.Teacher.Requests
         /// </summary>
         [Required(ErrorMessage = "Название занятия обязателено")]
         [StringLength(100, MinimumLength = 2, ErrorMessage = "Длина названия должна быть от 2 до 100 символов.")]
-        [RegularExpression(@"^[\p{L}\d\s\-,.:;!?()_№]+$",
-        ErrorMessage = "Название может содержать только буквы, цифры, пробелы и ,.-:;!?()_№")]
+        [RegularExpression(@"^[\p{L}\d\s\-,.:;!?+()_№#]+$",
+        ErrorMessage = "Название может содержать только буквы, цифры, пробелы и ,.-:;!?()_№#")]
+
         public string LessonName { get; set; }
 
         /// <summary>
@@ -47,8 +46,18 @@ namespace WebApi.Dto.Teacher.Requests
         public DateTime LessonStartDate { get; set; }
 
         /// <summary>
-        /// Учебные материалы, прилагаемые к занятию
+        /// Учебные материалы - путь
         /// </summary>
-        public File? Material { get; set; }
+        public string? MaterialPath { get; set; }
+
+        /// <summary>
+        /// Учебные материалы - расширение
+        /// </summary>
+        public string? MaterialExtension { get; set; }
+
+        /// <summary>
+        /// Учебные материалы - название
+        /// </summary>
+        public string? MaterialName { get; set; }
     }
 }

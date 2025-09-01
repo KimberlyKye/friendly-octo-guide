@@ -1,4 +1,4 @@
-﻿using Domain.ValueObjects;
+﻿using Common.Domain.ValueObjects;
 
 namespace Tests.Domain.ValueObjects
 {

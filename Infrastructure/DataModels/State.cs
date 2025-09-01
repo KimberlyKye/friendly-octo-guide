@@ -1,8 +1,4 @@
-﻿
-
-using System.ComponentModel.DataAnnotations;
-
-namespace Infrastructure.DataModels
+﻿namespace Infrastructure.DataModels
 {
     public class State
     {

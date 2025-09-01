@@ -1,35 +1,30 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 namespace WebApi.Middleware
 {
-   public class LoggingMiddleware
-{
-    private readonly RequestDelegate _next;
-    private readonly ILogger<LoggingMiddleware> _logger;
-
-    public LoggingMiddleware(RequestDelegate next, ILogger<LoggingMiddleware> logger)
+    public class LoggingMiddleware
     {
-        _next = next;
-        _logger = logger;
-    }
+        private readonly RequestDelegate _next;
+        private readonly ILogger<LoggingMiddleware> _logger;
 
-    public async Task InvokeAsync(HttpContext context)
-    {
-        _logger.LogInformation($"Request: {context.Request.Path}");
-
-        try
+        public LoggingMiddleware(RequestDelegate next, ILogger<LoggingMiddleware> logger)
         {
-            await _next(context);
-            _logger.LogInformation($"Response: {context.Response.StatusCode}");
+            _next = next;
+            _logger = logger;
         }
-        catch (Exception ex)
+
+        public async Task InvokeAsync(HttpContext context)
         {
-            _logger.LogError(ex, "Unhandled exception");
-            throw; // или обработать ошибку
+            _logger.LogInformation($"Request: {context.Request.Path}");
+
+            try
+            {
+                await _next(context);
+                _logger.LogInformation($"Response: {context.Response.StatusCode}");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unhandled exception");
+                throw; // или обработать ошибку
+            }
         }
     }
-}
 }

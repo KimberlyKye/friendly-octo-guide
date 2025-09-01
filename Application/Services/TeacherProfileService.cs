@@ -1,9 +1,8 @@
 ﻿using Application.Models.Teacher;
 using Application.Services.Abstractions;
-using Domain.ValueObjects;
-using Entities;
+using Common.Domain.Entities;
+using Common.Domain.ValueObjects;
 using RepositoriesAbstractions.Abstractions;
-using System.ComponentModel;
 
 namespace Application.Services
 {

@@ -37,7 +37,7 @@ public class LessonResponse
     /// <value></value>
     public string? MaterialName { get; set; }
 
-    public LessonResponse(Entities.Lesson lesson)
+    public LessonResponse(Common.Domain.Entities.Lesson lesson)
     {
         this.Id = lesson.Id;
         this.CourseId = lesson.CourseId;
