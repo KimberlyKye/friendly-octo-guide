@@ -16,6 +16,7 @@ using Serilog;
 using System.Reflection;
 using WebApi.Filters;
 using WebApi.Middleware;
+using DotNetEnv;
 
 namespace WebApi
 {
@@ -31,6 +32,9 @@ namespace WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Загружаем .env файл в начале
+            Env.Load();
+
             services.AddCors();
             services.AddScoped<CustomExceptionFilter>();
             services.AddLogging();
